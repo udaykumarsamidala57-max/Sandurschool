@@ -88,12 +88,13 @@ public class HomePageServlet extends HttpServlet {
                 }
             }
 
-            // 5. LOAD SECTIONS + IMAGES
+            // 5. LOAD SECTIONS + IMAGES (INCLUDING HEADING1 & HEADING2)
             if (pageBean.getId() != null) {
                 String sectionAndImageSql =
                         "SELECT " +
                         "s.id AS sec_id, s.page_id, s.section_type, s.sequence_order AS sec_seq, s.title AS sec_title, s.content, " +
-                        "img.id AS img_id, img.image_type, img.alt_text, img.sequence_order AS img_seq " +
+                        "img.id AS img_id, img.image_type, img.alt_text, img.sequence_order AS img_seq, " +
+                        "img.Heading1 AS img_h1, img.Heading2 AS img_h2 " +
                         "FROM sections s " +
                         "LEFT JOIN section_images img ON s.id = img.section_id " +
                         "WHERE s.page_id = ? " +
@@ -134,6 +135,10 @@ public class HomePageServlet extends HttpServlet {
                                 image.setImageType(rs.getString("image_type"));
                                 image.setAltText(rs.getString("alt_text"));
                                 image.setSequenceOrder(rs.getInt("img_seq"));
+                                
+                                // SET HEADING 1 AND HEADING 2 FROM DB
+                                image.setHeading1(rs.getString("img_h1"));
+                                image.setHeading2(rs.getString("img_h2"));
 
                                 section.getImages().add(image);
                             }

@@ -27,7 +27,134 @@
 
     box-sizing: border-box;
 }
+/* =========================================================
+   DISTINCT IMAGE HEADING
+========================================================= */
 
+.distinct-overlay {
+
+    position: absolute;
+
+    left: 28px;
+
+    right: 20px;
+
+    bottom: 28px;
+
+    z-index: 2;
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.distinct-overlay .image-heading1 {
+    position: absolute;  /* Pins it relative to .distinct-overlay */
+    bottom: 28px;        /* Distance from the bottom of the card */
+    left: 28px;          /* Distance from the left edge */
+    right: 28px;         /* Keeps it within the card boundaries */
+
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+
+    text-shadow:
+        0 2px 3px rgba(0, 0, 0, 0.95),
+        0 3px 8px rgba(0, 0, 0, 0.85);
+
+    opacity: 1;
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+
+/* =========================================================
+   SUB HEADING / DESCRIPTION
+========================================================= */
+
+.distinct-overlay .image-heading2 {
+
+    margin: 6px 0 0 0;
+
+    color: #ffffff;
+
+    font-family: "Calibri", sans-serif;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    text-align: left;
+
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.9);
+
+    opacity: 1;
+
+    transform: none;
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+
+/* =========================================================
+   OPTIONAL HOVER EFFECT
+========================================================= */
+
+.distinct-card:hover .image-heading1 {
+
+    transform: translateY(-2px);
+
+}
+
+.distinct-card:hover .image-heading2 {
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .distinct-overlay {
+
+        left: 20px;
+
+        bottom: 20px;
+
+    }
+
+    .distinct-overlay .image-heading1 {
+
+        font-size: 20px;
+
+    }
+
+    .distinct-overlay .image-heading2 {
+
+        font-size: 14px;
+
+    }
+
+}
 
 /* =========================================================
    ORANGE BACKGROUND

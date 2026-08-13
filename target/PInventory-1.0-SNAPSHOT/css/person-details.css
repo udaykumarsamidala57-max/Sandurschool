@@ -1,0 +1,228 @@
+/* =========================================================
+   PERSON DETAILS SECTION
+========================================================= */
+
+.person-details-section {
+
+    width: calc(100% - 104px);
+    max-width: 1190px;
+
+    margin: 42px auto 70px;
+
+    display: grid;
+
+    grid-template-columns: 410px 1fr;
+
+    column-gap: 40px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   PERSON IMAGE
+========================================================= */
+
+.person-details-image {
+
+    width: 100%;
+
+    overflow: hidden;
+}
+
+
+.person-details-image img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    aspect-ratio: 3 / 4;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   PERSON CONTENT
+========================================================= */
+
+.person-details-content {
+
+    padding-top: 0;
+}
+
+
+.person-details-content h2 {
+
+    margin: 0 0 20px;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 32px;
+
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+}
+
+
+.person-details-content h3 {
+
+    margin: 0 0 18px;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 25px;
+
+    line-height: 1.35;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.person-description {
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 16px;
+
+    line-height: 1.75;
+
+    color: #222;
+
+    text-align: left;
+}
+
+
+.person-description p {
+
+    margin: 0 0 12px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .person-details-section {
+
+        width: calc(100% - 50px);
+
+        grid-template-columns: 350px 1fr;
+
+        column-gap: 30px;
+
+    }
+
+
+    .person-details-content h2 {
+
+        font-size: 28px;
+
+    }
+
+
+    .person-details-content h3 {
+
+        font-size: 22px;
+
+    }
+
+
+    .person-description {
+
+        font-size: 15px;
+
+        line-height: 1.7;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .person-details-section {
+
+        width: calc(100% - 40px);
+
+        margin: 40px auto 50px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 28px;
+
+    }
+
+
+    .person-details-image {
+
+        width: 100%;
+
+    }
+
+
+    .person-details-image img {
+
+        width: 100%;
+
+        max-height: 550px;
+
+        object-fit: cover;
+
+    }
+
+
+    .person-details-content {
+
+        width: 100%;
+
+    }
+
+
+    .person-details-content h2 {
+
+        font-size: 27px;
+
+        margin-bottom: 16px;
+
+    }
+
+
+    .person-details-content h3 {
+
+        font-size: 21px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .person-description {
+
+        font-size: 15px;
+
+        line-height: 1.7;
+
+    }
+
+}
