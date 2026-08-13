@@ -1,9 +1,9 @@
 package com.servlet;
 
+import com.bean.DBUtil;
 import com.bean.PageBean;
 import com.bean.PageBean.Section;
 import com.bean.PageBean.SectionImage;
-import com.bean.DBUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,19 +24,41 @@ import java.util.Map;
 @WebServlet("/homepage")
 public class HomePageServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-    	
-        PageBean pageBean = new PageBean();
-        String pageSlug = "home";
 
+        // 1. Get dynamic page slug from request parameter (e.g., /homepage?slug=about-us)
+        String pageSlug = request.getParameter("slug");
+        
+        // Fallback to "home" if no slug parameter is passed
+        if (pageSlug == null || pageSlug.trim().isEmpty()) {
+            pageSlug = "home";
+        }
+
+        PageBean pageBean = new PageBean();
+        List<PageBean> pagesList = new ArrayList<>();
         List<Map<String, Object>> newsList = new ArrayList<>();
         List<Map<String, Object>> eventList = new ArrayList<>();
 
         try (Connection conn = DBUtil.getConnection("SRS")) {
             
-            // 1. Fetch Page Data
+            // 2. Fetch Navigation Header Pages (Populates pagesList for header navigation)
+            String navSql = "SELECT id, title, slug FROM pages ORDER BY title ASC";
+            try (PreparedStatement psNav = conn.prepareStatement(navSql);
+                 ResultSet rsNav = psNav.executeQuery()) {
+                while (rsNav.next()) {
+                    PageBean navPage = new PageBean();
+                    navPage.setId(rsNav.getLong("id"));
+                    navPage.setTitle(rsNav.getString("title"));
+                    navPage.setSlug(rsNav.getString("slug"));
+                    pagesList.add(navPage);
+                }
+            }
+
+            // 3. Fetch Selected Dynamic Page Data
             String pageSql = "SELECT id, title, slug FROM pages WHERE slug = ?";
             try (PreparedStatement psPage = conn.prepareStatement(pageSql)) {
                 psPage.setString(1, pageSlug);
@@ -48,7 +71,7 @@ public class HomePageServlet extends HttpServlet {
                 }
             }
 
-            // 2. Fetch Sections for the Page
+            // 4. Fetch Sections for the Selected Page
             if (pageBean.getId() != null) {
                 String sectionSql = "SELECT id, page_id, section_type, sequence_order, title, content " +
                                     "FROM sections WHERE page_id = ? ORDER BY sequence_order ASC";
@@ -65,7 +88,7 @@ public class HomePageServlet extends HttpServlet {
                             section.setTitle(rsSec.getString("title"));
                             section.setContent(rsSec.getString("content"));
                             
-                            // 3. Fetch Image metadata for Section
+                            // 5. Fetch Image metadata for Section
                             String imgSql = "SELECT id, section_id, image_type, alt_text, sequence_order " +
                                             "FROM section_images WHERE section_id = ? ORDER BY sequence_order ASC";
                             try (PreparedStatement psImg = conn.prepareStatement(imgSql)) {
@@ -89,7 +112,7 @@ public class HomePageServlet extends HttpServlet {
                 }
             }
 
-            // 4. Fetch News (Fallback safe fetch)
+            // 6. Fetch News Items
             try {
                 String newsSql = "SELECT title, description, image, link FROM news ORDER BY id DESC LIMIT 5";
                 try (PreparedStatement psNews = conn.prepareStatement(newsSql);
@@ -103,11 +126,9 @@ public class HomePageServlet extends HttpServlet {
                         newsList.add(news);
                     }
                 }
-            } catch (Exception e) {
-                // Ignore if table does not exist yet
-            }
+            } catch (Exception ignored) {}
 
-            // 5. Fetch Events (Fallback safe fetch)
+            // 7. Fetch Events Items
             try {
                 String eventSql = "SELECT title, description, event_date FROM events ORDER BY event_date ASC LIMIT 5";
                 try (PreparedStatement psEv = conn.prepareStatement(eventSql);
@@ -120,19 +141,19 @@ public class HomePageServlet extends HttpServlet {
                         eventList.add(event);
                     }
                 }
-            } catch (Exception e) {
-                // Ignore if table does not exist yet
-            }
+            } catch (Exception ignored) {}
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Pass attributes to JSP
+        // Set request attributes for JSP rendering
         request.setAttribute("pageData", pageBean);
+        request.setAttribute("pagesList", pagesList); // Navigation menu list
         request.setAttribute("newsList", newsList);
         request.setAttribute("eventList", eventList);
 
+        // Forward to Home.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("/Home.jsp");
         dispatcher.forward(request, response);
     }

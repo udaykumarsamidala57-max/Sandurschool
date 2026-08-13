@@ -1,330 +1,547 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    isELIgnored="false" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Sections & Image Loader</title>
-    
-    <!-- External Section Stylesheet -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sections.css">
-    
-    <!-- Typography / Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--sec-bg-light, #f7f5f2);
-            color: var(--sec-text-dark, #222222);
-        }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title><c:out value="${pageData.title != null ? pageData.title : 'Home'}" /> - Sandur Residential School</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ================= NON-INTRUSIVE FOOTER PINNING ================= */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: #f7f5f2;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto; /* top-strip, header, main, footer */
+}
+
+.main-content {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 6%;
+}
+
+/* ================= TOP STRIP ================= */
+
+.top-strip{
+    width:100%;
+    height:8px;
+    background:#FA8405;
+}
+
+/* ================= HEADER ================= */
+
+.top-header{
+    background:white;
+    padding:20px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.logo-area img{
+    width:90px;
+}
+
+.logo-area h1{
+    font-family:'Merriweather',serif;
+    font-size:38px;
+    color:#5b2d0a;
+}
+
+.top-links{
+    display:flex;
+    gap:30px;
+}
+
+.top-links a{
+    text-decoration:none;
+    color:#5b2d0a;
+    font-weight:600;
+    font-size:15px;
+}
+
+/* ================= MOBILE MENU BUTTON ================= */
+
+.menu-toggle{
+    display:none;
+    background:#f1efec;
+    padding:16px 20px;
+    font-size:24px;
+    cursor:pointer;
+    border-bottom:1px solid #ddd;
+}
+
+/* ================= NAVIGATION ================= */
+
+nav{
+    background:#f1efec;
+    position:sticky;
+    top:0;
+    z-index:999;
+    border-bottom:1px solid #ddd;
+}
+
+.main-menu{
+    list-style:none;
+    display:flex;
+    justify-content:center;
+}
+
+.main-menu li{
+    position:relative;
+}
+
+.main-menu li a{
+    display:block;
+    padding:22px 25px;
+    text-decoration:none;
+    color:#111;
+    font-weight:700;
+    font-size:17px;
+    transition:0.3s;
+}
+
+.main-menu li:hover,
+.main-menu li.active-tab > a {
+    background:#e6ddd3;
+    color:#5b2d0a;
+}
+
+/* ================= DROPDOWN ================= */
+
+.dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    background:white;
+    min-width:260px;
+    list-style:none;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.dropdown li{
+    width:100%;
+}
+
+.dropdown li a{
+    padding:15px 20px;
+    border-bottom:1px solid #eee;
+    color:#333;
+    font-size:15px;
+    font-weight:600;
+}
+
+.dropdown li a:hover{
+    background:#d66f2d;
+    color:white;
+}
+
+.main-menu li:hover .dropdown{
+    display:block;
+}
+
+/* ================= DYNAMIC SECTION STYLES ================= */
+
+.section-block {
+    background: #ffffff;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.section-block h3 {
+    font-family: 'Merriweather', serif;
+    font-size: 22px;
+    color: #5b2d0a;
+    margin-bottom: 15px;
+}
+
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.image-gallery img {
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* ================= FOOTER STYLES ================= */
+
+footer {
+    background-color: #43230a;
+    color: #e5ded8;
+    padding: 60px 8% 40px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.footer-left {
+    flex: 1.8;
+}
+
+.footer-left h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 26px;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.footer-left .address {
+    font-size: 15px;
+    color: #d1c5bc;
+    margin-bottom: 25px;
+}
+
+.footer-left .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.footer-left .contact-btn:hover {
+    color: #FA8405;
+}
+
+.footer-left .disclaimer {
+    font-size: 13px;
+    color: #bfaea2;
+    line-height: 1.7;
+}
+
+.footer-left .disclaimer p {
+    margin-bottom: 18px;
+}
+
+.footer-right {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #ffffff;
+    color: #43230a;
+}
+
+.footer-nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 30px;
+    margin-top: 6px;
+}
+
+.footer-nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.footer-nav-links a:hover {
+    color: #FA8405;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+
+.top-header{
+    flex-direction:column;
+    gap:20px;
+    text-align:center;
+}
+
+.logo-area{
+    flex-direction:column;
+}
+
+.logo-area h1{
+    font-size:28px;
+}
+
+.top-links{
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
+
+.menu-toggle{
+    display:block;
+}
+
+nav{
+    display:none;
+    position:relative;
+}
+
+nav.active{
+    display:block;
+}
+
+.main-menu{
+    flex-direction:column;
+    width:100%;
+}
+
+.main-menu li{
+    width:100%;
+    border-bottom:1px solid #ddd;
+}
+
+.main-menu li a{
+    padding:18px 20px;
+    font-size:16px;
+}
+
+.dropdown{
+    position:static;
+    width:100%;
+    box-shadow:none;
+    background:#fafafa;
+}
+
+.main-menu li:hover .dropdown{
+    display:none;
+}
+
+.main-menu li.active .dropdown{
+    display:block;
+}
+
+.dropdown li a{
+    padding-left:40px;
+}
+
+.footer-container {
+    flex-direction: column;
+    gap: 40px;
+}
+
+.footer-right {
+    flex-direction: row;
+}
+
+.footer-nav-links {
+    grid-template-columns: 1fr;
+}
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<%@ include file="Header.jsp" %>
+<!-- TOP STRIP -->
+<div class="top-strip"></div>
 
-<c:choose>
+<!-- ================= HEADER ================= -->
+<header>
 
-    <%-- RENDER ONLY DYNAMIC SECTIONS RETRIEVED FROM DATABASE --%>
-    <c:when test="${not empty pageData and not empty pageData.sections}">
+<div class="top-header">
+    <div class="logo-area">
+        <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Logo">
+        <h1>Sandur Residential School</h1>
+    </div>
 
-        <c:forEach
-            var="sec"
-            items="${pageData.sections}"
-            varStatus="secLoop">
+    <div class="top-links">
+        <a href="#">Calendar</a>
+        <a href="#">Quick Links</a>
+        <a href="#">Portal Login</a>
+        <a href="#"><i class="fa fa-search"></i></a>
+    </div>
+</div>
 
-            <c:choose>
+<div class="menu-toggle">
+    <i class="fa fa-bars"></i>
+</div>
 
-                <%-- 1. HERO SECTION --%>
-                <c:when test="${fn:toLowerCase(sec.sectionType) eq 'hero'}">
+<nav>
+<ul class="main-menu">
 
-                    <section class="page-section section-hero">
-                        <div id="slideshow-${secLoop.index}" class="hero-fullscreen-container" data-autoplay="true" data-interval="4000">
+    <!-- Static Home Link -->
+    <li class="${empty pageData.slug || pageData.slug eq 'home' ? 'active-tab' : ''}">
+        <a href="${pageContext.request.contextPath}/homepage?slug=home">Home</a>
+    </li>
 
-                            <c:choose>
+    <!-- Dynamic Header Pages from Database -->
+    <c:choose>
+        <c:when test="${not empty pagesList}">
+            <c:forEach var="pg" items="${pagesList}">
+                <li class="${pageData.slug eq pg.slug ? 'active-tab' : ''}">
+                    <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
+                        <c:out value="${pg.title}" />
+                        <c:if test="${not empty pg.children}">
+                            <i class="fa fa-angle-down" style="font-size: 12px; margin-left: 4px;"></i>
+                        </c:if>
+                    </a>
 
-                                <c:when test="${not empty sec.images}">
-
-                                    <c:forEach var="img" items="${sec.images}" varStatus="imgLoop">
-
-                                        <div class="hero-slide ${imgLoop.first ? 'active' : ''}">
-                                            
-                                            <img
-                                                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
-                                                alt="${img.altText}"
-                                                onload="
-                                                    this.nextElementSibling.querySelector('.status').innerText='LOAD SUCCESS';
-                                                    this.nextElementSibling.querySelector('.status').style.color='#4EAE4E';
-                                                "
-                                                onerror="
-                                                    this.nextElementSibling.querySelector('.status').innerText='LOAD FAILED';
-                                                    this.nextElementSibling.querySelector('.status').style.color='#FF4D4D';
-                                                "
-                                            >
-
-                                            <div class="hero-slide-info">
-                                                <h3><c:out value="${sec.title}" /></h3>
-                                                <p>
-                                                    <strong>Image ID:</strong> <c:out value="${img.id}" /> | 
-                                                    <strong>Alt:</strong> <c:out value="${img.altText}" />
-                                                </p>
-                                                <div class="status" style="font-weight:bold;">Testing stream...</div>
-                                            </div>
-
-                                        </div>
-
-                                    </c:forEach>
-
-                                    <!-- Navigation Arrows -->
-                                    <c:if test="${fn:length(sec.images) > 1}">
-                                        <div class="hero-nav">
-                                            <button type="button" aria-label="Previous Slide" onclick="manualChangeSlide('slideshow-${secLoop.index}', -1)">&#10094;</button>
-                                            <button type="button" aria-label="Next Slide" onclick="manualChangeSlide('slideshow-${secLoop.index}', 1)">&#10095;</button>
-                                        </div>
-
-                                        <!-- Dots -->
-                                        <div class="hero-dots">
-                                            <c:forEach var="img" items="${sec.images}" varStatus="imgLoop">
-                                                <span class="dot ${imgLoop.first ? 'active' : ''}" onclick="manualGoToSlide('slideshow-${secLoop.index}', ${imgLoop.index})"></span>
-                                            </c:forEach>
-                                        </div>
-                                    </c:if>
-
-                                </c:when>
-
-                                <c:otherwise>
-                                    <div style="color:#ffffff; text-align:center; padding-top:20vh;">
-                                        <h3>Section: <c:out value="${sec.title}" /></h3>
-                                        <p style="color:var(--sec-brand-orange, #e06d38);">No images found in <code>section_images</code> for this Hero section ID.</p>
-                                    </div>
-                                </c:otherwise>
-
-                            </c:choose>
-
-                        </div>
-                    </section>
-
-                </c:when>
-
-                <%-- 2. DISTINCT / DISTRICT SECTION --%>
-                <c:when test="${fn:toLowerCase(sec.sectionType) eq 'distinct' or fn:toLowerCase(sec.sectionType) eq 'district'}">
-
-                    <section class="page-section section-distinct">
-                        
-                        <!-- Background Accent Box -->
-                        <div class="distinct-accent-bg"></div>
-
-                        <div class="distinct-grid">
-
-                            <!-- Title Card Block -->
-                            <div class="distinct-header-card">
-                                <h2><c:out value="${sec.title}" default="Distinctly SRS" /></h2>
-                                <p>Discover our school by navigating through our posts, blogs and news.</p>
-                            </div>
-
-                            <!-- Dynamic Grid Cards -->
-                            <c:choose>
-                                <c:when test="${not empty sec.images}">
-                                    <c:forEach var="img" items="${sec.images}">
-                                        <div class="distinct-img-card">
-                                            <img
-                                                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
-                                                alt="${img.altText}"
-                                            >
-                                            <div class="distinct-img-overlay">
-                                                <h3>
-                                                    <c:choose>
-                                                        <c:when test="${not empty img.altText}">
-                                                            <c:out value="${img.altText}" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <c:out value="${img.imageType}" default="Explore" />
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="distinct-img-card" style="grid-column: span 2; display:flex; align-items:center; justify-content:center; color:#ffffff;">
-                                        <p style="padding: 20px;">No images available for this section.</p>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-
-                        </div>
-
-                    </section>
-
-                </c:when>
-
-                <%-- 3. POPUP MODAL SECTION --%>
-                <c:when test="${fn:toLowerCase(sec.sectionType) eq 'popup_modal'}">
-
-                    <section id="modal-section-${secLoop.index}" class="page-section section-popup_modal">
-                        <div class="modal-content-card">
-                            <button type="button" class="modal-close-btn" onclick="closePopupModal('modal-section-${secLoop.index}')">&times;</button>
-                            
-                            <h2 style="margin-top:0; color: var(--sec-brand-dark);"><c:out value="${sec.title}" /></h2>
-                            
-                            <c:if test="${not empty sec.images}">
-                                <div style="margin: 15px 0;">
-                                    <c:forEach var="img" items="${sec.images}">
-                                        <img 
-                                            src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
-                                            alt="${img.altText}"
-                                            style="width: 100%; height: auto; border-radius: 6px; margin-bottom: 10px;"
-                                        >
-                                    </c:forEach>
-                                </div>
-                            </c:if>
-                            
-                            <div style="text-align: right; margin-top: 15px;">
-                                <button type="button" 
-                                        onclick="closePopupModal('modal-section-${secLoop.index}')"
-                                        style="background: var(--sec-brand-orange); color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-
-                </c:when>
-
-                <%-- 4. FALLBACK FOR ANY OTHER CUSTOM SECTION TYPES --%>
-                <c:otherwise>
-
-                    <section class="page-section section-default">
-
-                        <h3>
-                            Section #${secLoop.index + 1}:
-                            <c:out value="${sec.title}" />
-                            (Type: <code><c:out value="${sec.sectionType}" /></code>)
-                        </h3>
-
-                        <p style="color: var(--sec-text-muted);">
-                            Total Images linked to Section ID <strong><c:out value="${sec.id}" /></strong>:
-                            <strong><c:out value="${fn:length(sec.images)}" default="0" /></strong>
-                        </p>
-
-                        <c:choose>
-                            <c:when test="${not empty sec.images}">
-                                <div class="default-grid">
-                                    <c:forEach var="img" items="${sec.images}">
-                                        <div class="default-card">
-                                            <p style="margin: 0 0 8px 0; font-size: 13px;">
-                                                <strong>Image ID:</strong> <c:out value="${img.id}" /><br>
-                                                <strong>Type:</strong> <c:out value="${img.imageType}" /><br>
-                                                <strong>Alt:</strong> <c:out value="${img.altText}" />
-                                            </p>
-                                            <img
-                                                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
-                                                alt="${img.altText}"
-                                                onload="
-                                                    this.nextElementSibling.innerText='LOAD SUCCESS';
-                                                    this.nextElementSibling.style.color='#4EAE4E';
-                                                "
-                                                onerror="
-                                                    this.nextElementSibling.innerText='LOAD FAILED';
-                                                    this.nextElementSibling.style.color='#FF4D4D';
-                                                "
-                                            >
-                                            <div style="font-weight:bold; margin-top:6px; font-size: 12px;">Testing stream...</div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <p style="color:var(--sec-brand-orange);">
-                                    No images found in <code>section_images</code> for this section ID.
-                                </p>
-                            </c:otherwise>
-                        </c:choose>
-
-                    </section>
-
-                </c:otherwise>
-
-            </c:choose>
-
-        </c:forEach>
-
-    </c:when>
-
-    <c:otherwise>
-
-        <section class="diagnostic-container">
-            <p style="color:#FF4D4D; font-weight:bold; margin:0;">
-                No sections found in pageData. Verify 'pages' table entry with slug='home'.
-            </p>
-        </section>
-
-    </c:otherwise>
-
-</c:choose>
-
-<!-- CONDITIONAL NEWS SECTION (ONLY RENDERS IF newsList IS NOT EMPTY) -->
-<c:if test="${not empty newsList}">
-    <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 40px 0;">
-
-    <section class="diagnostic-container">
-        <h2 style="margin-top:0; color: var(--sec-brand-dark);">
-            <c:out value="${not empty pageData.sections ? fn:length(pageData.sections) + 1 : 1}" />. News Section Images
-        </h2>
-
-        <div class="news-grid-container">
-
-            <c:forEach var="news" items="${newsList}">
-
-                <div class="news-card">
-
-                    <h4 style="margin:0 0 8px 0; font-size: 15px;"><c:out value="${news.title}" /></h4>
-
-                    <p style="font-size:12px; color: var(--sec-text-muted); margin: 0 0 10px 0; word-break: break-all;">
-                        Path: <code><c:out value="${news.image}" /></code>
-                    </p>
-
-                    <img
-                        src="${pageContext.request.contextPath}/uploads/${news.image}"
-                        alt="News Image"
-                        onload="
-                            this.nextElementSibling.innerText='OK';
-                            this.nextElementSibling.style.color='#4EAE4E';
-                        "
-                        onerror="
-                            this.nextElementSibling.innerText='IMAGE NOT FOUND IN /uploads/';
-                            this.nextElementSibling.style.color='#FF4D4D';
-                        "
-                    >
-
-                    <div style="font-weight:bold; font-size: 12px; margin-top: 6px;">Testing...</div>
-
-                </div>
-
+                    <!-- Dropdown Navigation for Sub-pages -->
+                    <c:if test="${not empty pg.children}">
+                        <ul class="dropdown">
+                            <c:forEach var="child" items="${pg.children}">
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
+                                        <c:out value="${child.title}" />
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </c:if>
+                </li>
             </c:forEach>
+        </c:when>
+    </c:choose>
 
+</ul>
+</nav>
+
+</header>
+
+<!-- ================= MAIN BODY CONTENT ================= -->
+<main class="main-content">
+    
+    <h2 style="font-family: 'Merriweather', serif; font-size: 30px; color: #5b2d0a; margin-bottom: 20px;">
+        <c:out value="${pageData.title}" />
+    </h2>
+
+    <c:forEach var="sec" items="${pageData.sections}">
+        <section class="section-block">
+            <c:if test="${not empty sec.title}">
+                <h3><c:out value="${sec.title}" /></h3>
+            </c:if>
+            
+            <div class="section-text">
+                <c:out value="${sec.content}" escapeXml="false" />
+            </div>
+
+            <!-- Dynamic Image Stream Gallery -->
+            <c:if test="${not empty sec.images}">
+                <div class="image-gallery">
+                    <c:forEach var="img" items="${sec.images}">
+                        <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
+                             alt="${img.altText != null ? img.altText : 'Section Image'}" />
+                    </c:forEach>
+                </div>
+            </c:if>
+        </section>
+    </c:forEach>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <h2>Sandur Residential School</h2>
+            <div class="address">
+                Shivapur, Sandur - 583119, Ballari District, Karnataka, India
+            </div>
+            <a href="#" class="contact-btn">
+                Contact Us <i class="fa fa-arrow-right"></i>
+            </a>
+            <div class="disclaimer">
+                <p>&copy; Sandur Residential School. All Rights Reserved.</p>
+            </div>
         </div>
-    </section>
-</c:if>
 
-<!-- External Section JavaScript -->
-<script src="${pageContext.request.contextPath}/js/sections.js"></script>
+        <div class="footer-right">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+</footer>
 
-<%@ include file="Footer.jsp" %>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+
+const menuToggle = document.querySelector(".menu-toggle");
+const nav = document.querySelector("nav");
+
+menuToggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+});
+
+document.querySelectorAll(".main-menu > li").forEach(item => {
+    item.addEventListener("click", function(e){
+        if(window.innerWidth <= 900){
+            const dropdown = this.querySelector(".dropdown");
+            if(dropdown){
+                e.preventDefault();
+                this.classList.toggle("active");
+            }
+        }
+    });
+});
+
+</script>
+
 </body>
 </html>
