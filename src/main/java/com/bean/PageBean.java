@@ -7,6 +7,7 @@ public class PageBean {
     private Long id;
     private String title;
     private String slug;
+    private List<PageBean> children = new ArrayList<>();
     private List<Section> sections = new ArrayList<>();
 
     public Long getId() { return id; }
@@ -17,6 +18,10 @@ public class PageBean {
 
     public String getSlug() { return slug; }
     public void setSlug(String slug) { this.slug = slug; }
+
+    // Required by Home.jsp line 271 (${pg.children}) to prevent Jasper errors
+    public List<PageBean> getChildren() { return children; }
+    public void setChildren(List<PageBean> children) { this.children = children; }
 
     public List<Section> getSections() { return sections; }
     public void setSections(List<Section> sections) { this.sections = sections; }

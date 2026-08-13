@@ -1,19 +1,19 @@
-/* =========================================================
+/* =====================================================
    HERO SECTION
-========================================================= */
+===================================================== */
 
 .hero-fullscreen-container {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 550px;
     overflow: hidden;
     background: #000;
 }
 
 
-/* =========================================================
-   HERO SLIDES
-========================================================= */
+/* =====================================================
+   SLIDES
+===================================================== */
 
 .hero-slide {
     position: absolute;
@@ -23,15 +23,16 @@
     height: 100%;
 
     opacity: 0;
+
     visibility: hidden;
 
-    transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.8s ease;
 
     z-index: 1;
 }
 
 
-/* Active slide */
+/* ACTIVE SLIDE */
 
 .hero-slide.active {
     opacity: 1;
@@ -40,9 +41,9 @@
 }
 
 
-/* =========================================================
+/* =====================================================
    HERO IMAGE
-========================================================= */
+===================================================== */
 
 .hero-slide img {
     width: 100%;
@@ -54,9 +55,9 @@
 }
 
 
-/* =========================================================
+/* =====================================================
    DARK OVERLAY
-========================================================= */
+===================================================== */
 
 .hero-slide::after {
     content: "";
@@ -66,35 +67,34 @@
     inset: 0;
 
     background: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.65),
-        rgba(0, 0, 0, 0.20),
-        rgba(0, 0, 0, 0.10)
+        to top,
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.15)
     );
 
-    z-index: 1;
+    z-index: 2;
 }
 
 
-/* =========================================================
+/* =====================================================
    HERO TEXT
-========================================================= */
+===================================================== */
 
 .slide-content {
     position: absolute;
 
     left: 8%;
-    top: 50%;
+    bottom: 15%;
 
-    transform: translateY(-50%);
+    max-width: 700px;
 
-    max-width: 650px;
-
-    color: #ffffff;
+    color: white;
 
     z-index: 3;
 }
 
+
+/* TITLE */
 
 .slide-content h2 {
     margin: 0 0 15px;
@@ -102,25 +102,29 @@
     font-family: 'Merriweather', serif;
 
     font-size: 42px;
-    line-height: 1.2;
 
     font-weight: 700;
+
+    line-height: 1.2;
 }
 
+
+/* DESCRIPTION */
 
 .slide-content p {
     margin: 0;
 
     font-family: 'Open Sans', sans-serif;
 
-    font-size: 20px;
+    font-size: 19px;
+
     line-height: 1.6;
 }
 
 
-/* =========================================================
+/* =====================================================
    PREVIOUS / NEXT BUTTONS
-========================================================= */
+===================================================== */
 
 .hero-fullscreen-container .prev,
 .hero-fullscreen-container .next {
@@ -131,25 +135,27 @@
 
     transform: translateY(-50%);
 
-    z-index: 10;
+    z-index: 5;
 
     width: 45px;
-    height: 60px;
+    height: 45px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    color: #ffffff;
+    color: white;
 
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0,0,0,0.4);
+
+    border-radius: 50%;
 
     cursor: pointer;
 
-    font-size: 28px;
-
     text-decoration: none;
+
+    font-size: 25px;
 
     transition: background 0.3s ease;
 }
@@ -168,24 +174,26 @@
 .hero-fullscreen-container .prev:hover,
 .hero-fullscreen-container .next:hover {
 
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0,0,0,0.75);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    DOTS
-========================================================= */
+===================================================== */
 
 .hero-fullscreen-container .dots {
 
     position: absolute;
 
+    bottom: 25px;
+
     left: 50%;
-    bottom: 20px;
 
     transform: translateX(-50%);
 
-    z-index: 10;
+    z-index: 5;
 
     display: flex;
 
@@ -198,9 +206,9 @@
     width: 11px;
     height: 11px;
 
-    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
 
-    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
 
     cursor: pointer;
 
@@ -210,42 +218,46 @@
 
 .hero-fullscreen-container .dot.active {
 
-    background: #ffffff;
+    background: white;
 
     transform: scale(1.25);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    MOBILE
-========================================================= */
+===================================================== */
 
 @media (max-width: 768px) {
 
     .hero-fullscreen-container {
-        height: 400px;
+
+        height: 420px;
+
     }
 
 
     .slide-content {
 
-        left: 5%;
+        left: 6%;
+        right: 6%;
+        bottom: 14%;
 
-        right: 5%;
-
-        max-width: none;
     }
 
 
     .slide-content h2 {
 
         font-size: 28px;
+
     }
 
 
     .slide-content p {
 
-        font-size: 16px;
+        font-size: 15px;
+
     }
 
 
@@ -253,9 +265,10 @@
     .hero-fullscreen-container .next {
 
         width: 38px;
-        height: 48px;
+        height: 38px;
 
-        font-size: 22px;
+        font-size: 20px;
+
     }
 
 }

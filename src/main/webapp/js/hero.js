@@ -1,46 +1,34 @@
 /**
- * =========================================================
- * HERO SECTION MANAGER
- * =========================================================
+ * HERO SECTION
+ * Dynamic Hero Slider
  */
 
 (function () {
 
     "use strict";
 
-
-    /* =====================================================
-       AUTOPLAY TIMERS
-    ===================================================== */
-
     const heroTimers = {};
 
+    /**
+     * Get slides
+     */
+    function getSlides(container) {
+        return container.querySelectorAll(".hero-slide");
+    }
 
-    /* =====================================================
-       SHOW SLIDE
-    ===================================================== */
-
+    /**
+     * Show slide
+     */
     function showHeroSlide(container, index) {
 
-        if (!container) {
-            return;
-        }
+        if (!container) return;
 
+        const slides = getSlides(container);
+        const dots = container.querySelectorAll(".dot");
 
-        const slides =
-            container.querySelectorAll(".hero-slide");
+        if (slides.length === 0) return;
 
-        const dots =
-            container.querySelectorAll(".dot");
-
-
-        if (slides.length === 0) {
-            return;
-        }
-
-
-        /* Normalize index */
-
+        // Normalize index
         if (index >= slides.length) {
             index = 0;
         }
@@ -48,9 +36,6 @@
         if (index < 0) {
             index = slides.length - 1;
         }
-
-
-        /* Update slides */
 
         slides.forEach(function (slide, i) {
 
@@ -61,9 +46,6 @@
 
         });
 
-
-        /* Update dots */
-
         dots.forEach(function (dot, i) {
 
             dot.classList.toggle(
@@ -73,151 +55,64 @@
 
         });
 
-
-        /* Store current index */
-
-        container.dataset.currentSlide = index;
-
     }
 
 
-    /* =====================================================
-       NEXT SLIDE
-    ===================================================== */
-
+    /**
+     * Next slide
+     */
     function nextHeroSlide(containerId) {
 
         const container =
             document.getElementById(containerId);
 
-
-        if (!container) {
-            return;
-        }
-
+        if (!container) return;
 
         const slides =
-            container.querySelectorAll(".hero-slide");
+            getSlides(container);
 
+        if (slides.length <= 1) return;
 
-        if (slides.length <= 1) {
-            return;
-        }
+        let currentIndex = 0;
 
+        slides.forEach(function (slide, index) {
 
-        let current =
-            parseInt(
-                container.dataset.currentSlide || "0",
-                10
-            );
+            if (slide.classList.contains("active")) {
+                currentIndex = index;
+            }
 
+        });
 
-        let next = current + 1;
-
-
-        if (next >= slides.length) {
-            next = 0;
-        }
-
-
-        showHeroSlide(container, next);
+        showHeroSlide(
+            container,
+            currentIndex + 1
+        );
 
     }
 
 
-    /* =====================================================
-       MANUAL PREVIOUS / NEXT
-    ===================================================== */
-
-    window.manualHeroSlide = function (
-        containerId,
-        step
-    ) {
+    /**
+     * Start autoplay
+     */
+    function startHeroAutoplay(containerId) {
 
         const container =
             document.getElementById(containerId);
 
-
-        if (!container) {
-            return;
-        }
-
+        if (!container) return;
 
         const slides =
-            container.querySelectorAll(".hero-slide");
+            getSlides(container);
 
-
-        if (slides.length <= 1) {
-            return;
-        }
-
-
-        let current =
-            parseInt(
-                container.dataset.currentSlide || "0",
-                10
-            );
-
-
-        let newIndex =
-            current + step;
-
-
-        if (newIndex >= slides.length) {
-            newIndex = 0;
-        }
-
-
-        if (newIndex < 0) {
-            newIndex = slides.length - 1;
-        }
-
-
-        showHeroSlide(container, newIndex);
-
-
-        resetHeroAutoplay(containerId);
-
-    };
-
-
-    /* =====================================================
-       GO TO SPECIFIC SLIDE
-    ===================================================== */
-
-    window.goToHeroSlide = function (
-        containerId,
-        index
-    ) {
-
-        const container =
-            document.getElementById(containerId);
-
-
-        if (!container) {
-            return;
-        }
-
-
-        showHeroSlide(container, index);
-
-
-        resetHeroAutoplay(containerId);
-
-    };
-
-
-    /* =====================================================
-       START AUTOPLAY
-    ===================================================== */
-
-    function startHeroAutoplay(
-        containerId,
-        interval
-    ) {
+        if (slides.length <= 1) return;
 
         stopHeroAutoplay(containerId);
 
+        const interval =
+            parseInt(
+                container.getAttribute("data-interval"),
+                10
+            ) || 4000;
 
         heroTimers[containerId] =
             setInterval(function () {
@@ -229,10 +124,9 @@
     }
 
 
-    /* =====================================================
-       STOP AUTOPLAY
-    ===================================================== */
-
+    /**
+     * Stop autoplay
+     */
     function stopHeroAutoplay(containerId) {
 
         if (heroTimers[containerId]) {
@@ -248,149 +142,134 @@
     }
 
 
-    /* =====================================================
-       RESET AUTOPLAY
-    ===================================================== */
+    /**
+     * Manual previous / next
+     */
+    window.manualHeroSlide =
+        function (containerId, step) {
 
-    function resetHeroAutoplay(containerId) {
+            const container =
+                document.getElementById(containerId);
 
-        const container =
-            document.getElementById(containerId);
-
-
-        if (!container) {
-            return;
-        }
-
-
-        const interval =
-            parseInt(
-                container.dataset.interval || "4000",
-                10
-            );
-
-
-        startHeroAutoplay(
-            containerId,
-            interval
-        );
-
-    }
-
-
-    /* =====================================================
-       INITIALIZE ALL HERO SECTIONS
-    ===================================================== */
-
-    function initializeHeroes() {
-
-        const heroes =
-            document.querySelectorAll(
-                ".hero-fullscreen-container"
-            );
-
-
-        heroes.forEach(function (hero) {
-
-            const containerId =
-                hero.id;
-
-
-            if (!containerId) {
-                return;
-            }
-
+            if (!container) return;
 
             const slides =
-                hero.querySelectorAll(
-                    ".hero-slide"
+                getSlides(container);
+
+            if (slides.length <= 1) return;
+
+            let currentIndex = 0;
+
+            slides.forEach(function (slide, index) {
+
+                if (slide.classList.contains("active")) {
+                    currentIndex = index;
+                }
+
+            });
+
+            showHeroSlide(
+                container,
+                currentIndex + step
+            );
+
+            startHeroAutoplay(containerId);
+
+        };
+
+
+    /**
+     * Go directly to slide
+     */
+    window.goToHeroSlide =
+        function (containerId, index) {
+
+            const container =
+                document.getElementById(containerId);
+
+            if (!container) return;
+
+            showHeroSlide(
+                container,
+                index
+            );
+
+            startHeroAutoplay(containerId);
+
+        };
+
+
+    /**
+     * Initialize all hero sections
+     */
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const heroes =
+                document.querySelectorAll(
+                    ".hero-fullscreen-container"
                 );
 
+            heroes.forEach(function (hero) {
 
-            if (slides.length === 0) {
-                return;
-            }
+                if (!hero.id) return;
 
+                const slides =
+                    getSlides(hero);
 
-            /* First slide */
+                if (slides.length === 0) return;
 
-            showHeroSlide(hero, 0);
+                // Make first slide active
+                showHeroSlide(hero, 0);
 
+                // Start autoplay
+                if (
+                    hero.getAttribute("data-autoplay")
+                    === "true"
+                ) {
 
-            /* Read interval */
-
-            const interval =
-                parseInt(
-                    hero.dataset.interval || "4000",
-                    10
-                );
-
-
-            /* Start autoplay only when enabled */
-
-            if (
-                hero.dataset.autoplay === "true"
-                &&
-                slides.length > 1
-            ) {
-
-                startHeroAutoplay(
-                    containerId,
-                    interval
-                );
-
-            }
-
-
-            /* Pause on mouse enter */
-
-            hero.addEventListener(
-                "mouseenter",
-                function () {
-
-                    stopHeroAutoplay(
-                        containerId
+                    startHeroAutoplay(
+                        hero.id
                     );
 
                 }
-            );
 
+                // Pause when mouse enters
+                hero.addEventListener(
+                    "mouseenter",
+                    function () {
 
-            /* Resume on mouse leave */
-
-            hero.addEventListener(
-                "mouseleave",
-                function () {
-
-                    if (
-                        hero.dataset.autoplay === "true"
-                        &&
-                        slides.length > 1
-                    ) {
-
-                        startHeroAutoplay(
-                            containerId,
-                            interval
+                        stopHeroAutoplay(
+                            hero.id
                         );
 
                     }
+                );
 
-                }
-            );
+                // Resume when mouse leaves
+                hero.addEventListener(
+                    "mouseleave",
+                    function () {
 
-        });
+                        if (
+                            hero.getAttribute(
+                                "data-autoplay"
+                            ) === "true"
+                        ) {
 
-    }
+                            startHeroAutoplay(
+                                hero.id
+                            );
 
+                        }
 
-    /* =====================================================
-       DOM READY
-    ===================================================== */
+                    }
+                );
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeHeroes
+            });
+
+        }
     );
-
 
 })();
