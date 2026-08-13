@@ -1,0 +1,131 @@
+<!-- =================================================
+     PERSON DETAILS SECTION
+================================================= -->
+
+<section class="person-details-section">
+
+
+    <!-- =================================================
+         SECTION TITLE
+    ================================================== -->
+
+    <c:if test="${not empty sec.title}">
+
+        <h2 class="person-section-title">
+            <c:out value="${sec.title}" />
+        </h2>
+
+    </c:if>
+
+
+
+    <!-- =================================================
+         PERSON PROFILE
+    ================================================== -->
+
+    <div class="person-details-profile">
+
+
+        <!-- =================================================
+             LEFT : PERSON IMAGE
+        ================================================== -->
+
+        <div class="person-details-image">
+
+            <c:if test="${not empty sec.images}">
+
+                <c:forEach
+                    var="img"
+                    items="${sec.images}"
+                    varStatus="status">
+
+                    <c:if test="${status.first}">
+
+                        <img
+                            src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                            alt="${not empty img.altText
+                                  ? img.altText
+                                  : sec.subtitle}">
+
+
+                    </c:if>
+
+                </c:forEach>
+
+            </c:if>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT : PERSON INFORMATION
+        ================================================== -->
+
+        <div class="person-details-content">
+
+
+            <!-- =================================================
+                 POSITION / DESIGNATION
+            ================================================== -->
+
+            <c:if test="${not empty sec.subtitle}">
+
+                <h3 class="person-designation">
+
+                    <c:out value="${sec.subtitle}" />
+
+                </h3>
+
+            </c:if>
+
+
+
+            <!-- =================================================
+                 PERSON NAME
+                 Taken from first image altText
+            ================================================== -->
+
+            <c:forEach
+                var="img"
+                items="${sec.images}"
+                varStatus="status">
+
+                <c:if test="${status.first and not empty img.altText}">
+
+                    <h4 class="person-name">
+
+                        <c:out value="${img.altText}" />
+
+                    </h4>
+
+                </c:if>
+
+            </c:forEach>
+
+
+
+            <!-- =================================================
+                 PERSON DESCRIPTION
+            ================================================== -->
+
+            <c:if test="${not empty sec.content}">
+
+                <div class="person-description">
+
+                    <c:out
+                        value="${sec.content}"
+                        escapeXml="false" />
+
+                </div>
+
+            </c:if>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>

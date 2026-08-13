@@ -1,19 +1,56 @@
 /* =========================================================
    PERSON DETAILS SECTION
+   Completely isolated from other sections
 ========================================================= */
 
 .person-details-section {
 
-    width: calc(100% - 104px);
+    width: calc(100% - 100px);
     max-width: 1190px;
 
     margin: 42px auto 70px;
 
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.person-details-section .person-section-title {
+
+    margin: 0 0 48px 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 48px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+}
+
+
+/* =========================================================
+   PERSON PROFILE
+========================================================= */
+
+.person-details-section .person-details-profile {
+
+    width: 100%;
+
     display: grid;
 
-    grid-template-columns: 410px 1fr;
+    grid-template-columns: 410px minmax(0, 1fr);
 
-    column-gap: 40px;
+    column-gap: 24px;
 
     align-items: start;
 }
@@ -23,25 +60,35 @@
    PERSON IMAGE
 ========================================================= */
 
-.person-details-image {
+.person-details-section .person-details-image {
 
     width: 100%;
+
+    margin: 0;
+
+    padding: 0;
 
     overflow: hidden;
 }
 
 
-.person-details-image img {
+.person-details-section .person-details-image img {
 
     display: block;
 
     width: 100%;
 
-    height: auto;
-
-    aspect-ratio: 3 / 4;
+    height: 500px;
 
     object-fit: cover;
+
+    object-position: center top;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: none;
 }
 
 
@@ -49,21 +96,33 @@
    PERSON CONTENT
 ========================================================= */
 
-.person-details-content {
+.person-details-section .person-details-content {
 
-    padding-top: 0;
+    min-width: 0;
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
 }
 
 
-.person-details-content h2 {
+/* =========================================================
+   DESIGNATION
+========================================================= */
 
-    margin: 0 0 20px;
+.person-details-section .person-designation {
+
+    margin: 0 0 12px 0;
+
+    padding: 0;
 
     font-family: 'Merriweather', serif;
 
-    font-size: 32px;
+    font-size: 25px;
 
-    line-height: 1.25;
+    line-height: 1.3;
 
     font-weight: 700;
 
@@ -71,15 +130,21 @@
 }
 
 
-.person-details-content h3 {
+/* =========================================================
+   PERSON NAME
+========================================================= */
 
-    margin: 0 0 18px;
+.person-details-section .person-name {
+
+    margin: 0 0 18px 0;
+
+    padding: 0;
 
     font-family: 'Merriweather', serif;
 
     font-size: 25px;
 
-    line-height: 1.35;
+    line-height: 1.3;
 
     font-weight: 700;
 
@@ -91,13 +156,19 @@
    DESCRIPTION
 ========================================================= */
 
-.person-description {
+.person-details-section .person-description {
+
+    margin: 0;
+
+    padding: 0;
 
     font-family: 'Merriweather', serif;
 
     font-size: 16px;
 
-    line-height: 1.75;
+    line-height: 1.8;
+
+    font-weight: 400;
 
     color: #222;
 
@@ -105,9 +176,44 @@
 }
 
 
-.person-description p {
+/* =========================================================
+   DESCRIPTION PARAGRAPHS
+========================================================= */
 
-    margin: 0 0 12px;
+.person-details-section .person-description p {
+
+    margin: 0 0 20px 0;
+
+    padding: 0;
+}
+
+
+/* Remove bottom margin from last paragraph */
+
+.person-details-section .person-description p:last-child {
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   DESCRIPTION HEADINGS
+========================================================= */
+
+.person-details-section .person-description h1,
+.person-details-section .person-description h2,
+.person-details-section .person-description h3,
+.person-details-section .person-description h4,
+.person-details-section .person-description h5,
+.person-details-section .person-description h6 {
+
+    font-family: 'Merriweather', serif;
+
+    color: #4a2b0b;
+
+    margin-top: 20px;
+
+    margin-bottom: 10px;
 }
 
 
@@ -115,39 +221,55 @@
    TABLET
 ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 
     .person-details-section {
 
-        width: calc(100% - 50px);
+        width: calc(100% - 60px);
 
-        grid-template-columns: 350px 1fr;
-
-        column-gap: 30px;
-
+        margin: 40px auto 60px;
     }
 
 
-    .person-details-content h2 {
+    .person-details-section .person-section-title {
 
-        font-size: 28px;
+        font-size: 40px;
 
+        margin-bottom: 38px;
     }
 
 
-    .person-details-content h3 {
+    .person-details-section .person-details-profile {
+
+        grid-template-columns: 350px minmax(0, 1fr);
+
+        column-gap: 24px;
+    }
+
+
+    .person-details-section .person-details-image img {
+
+        height: 450px;
+    }
+
+
+    .person-details-section .person-designation {
 
         font-size: 22px;
-
     }
 
 
-    .person-description {
+    .person-details-section .person-name {
+
+        font-size: 22px;
+    }
+
+
+    .person-details-section .person-description {
 
         font-size: 15px;
 
-        line-height: 1.7;
-
+        line-height: 1.75;
     }
 
 }
@@ -163,66 +285,115 @@
 
         width: calc(100% - 40px);
 
-        margin: 40px auto 50px;
+        margin: 35px auto 50px;
+    }
+
+
+    .person-details-section .person-section-title {
+
+        font-size: 32px;
+
+        line-height: 1.25;
+
+        margin-bottom: 30px;
+    }
+
+
+    .person-details-section .person-details-profile {
 
         display: flex;
 
         flex-direction: column;
 
         gap: 28px;
-
     }
 
 
-    .person-details-image {
+    .person-details-section .person-details-image {
 
         width: 100%;
-
     }
 
 
-    .person-details-image img {
+    .person-details-section .person-details-image img {
 
         width: 100%;
+
+        height: auto;
 
         max-height: 550px;
 
         object-fit: cover;
-
     }
 
 
-    .person-details-content {
+    .person-details-section .person-details-content {
 
         width: 100%;
-
     }
 
 
-    .person-details-content h2 {
-
-        font-size: 27px;
-
-        margin-bottom: 16px;
-
-    }
-
-
-    .person-details-content h3 {
+    .person-details-section .person-designation {
 
         font-size: 21px;
 
-        margin-bottom: 15px;
-
+        margin-bottom: 10px;
     }
 
 
-    .person-description {
+    .person-details-section .person-name {
+
+        font-size: 21px;
+
+        margin-bottom: 16px;
+    }
+
+
+    .person-details-section .person-description {
 
         font-size: 15px;
 
         line-height: 1.7;
+    }
 
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .person-details-section {
+
+        width: calc(100% - 30px);
+    }
+
+
+    .person-details-section .person-section-title {
+
+        font-size: 28px;
+    }
+
+
+    .person-details-section .person-designation {
+
+        font-size: 19px;
+    }
+
+
+    .person-details-section .person-name {
+
+        font-size: 19px;
+    }
+
+
+    .person-details-section .person-description {
+
+        font-size: 14px;
+
+        line-height: 1.65;
     }
 
 }
