@@ -1,5 +1,6 @@
 package com.bean;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,15 +63,22 @@ public class PageBean {
     public static class SectionImage {
         private Long id;
         private Long sectionId;
+        private byte[] imageData;
         private String imageType;
         private String altText;
         private Integer sequenceOrder;
+        private Timestamp createdAt;
+        private String heading1;
+        private String heading2;
 
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
 
         public Long getSectionId() { return sectionId; }
         public void setSectionId(Long sectionId) { this.sectionId = sectionId; }
+
+        public byte[] getImageData() { return imageData; }
+        public void setImageData(byte[] imageData) { this.imageData = imageData; }
 
         public String getImageType() { return imageType; }
         public void setImageType(String imageType) { this.imageType = imageType; }
@@ -80,5 +88,14 @@ public class PageBean {
 
         public Integer getSequenceOrder() { return sequenceOrder; }
         public void setSequenceOrder(Integer sequenceOrder) { this.sequenceOrder = sequenceOrder; }
+
+        public Timestamp getCreatedAt() { return createdAt; }
+        public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+        public String getHeading1() { return heading1; }
+        public void setHeading1(String heading1) { this.heading1 = heading1; }
+
+        public String getHeading2() { return heading2; }
+        public void setHeading2(String heading2) { this.heading2 = heading2; }
     }
 }
