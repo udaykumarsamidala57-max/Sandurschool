@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 public class ImageStreamServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final int BUFFER_SIZE = 8192; // 8KB buffer size for streaming
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -33,14 +34,15 @@ public class ImageStreamServlet extends HttpServlet {
 
         long imageId;
         try {
-            imageId = Long.parseLong(imageIdParam);
+            imageId = Long.parseLong(imageIdParam.trim());
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Image ID format.");
             return;
         }
 
-        // 2. Database Query & Binary Streaming (Public Access)
-        String sql = "SELECT image_data, image_type FROM section_images WHERE id = ?";
+        // 2. Query data and image length for accurate Content-Length response header
+        String sql = "SELECT image_data, image_type, OCTET_LENGTH(image_data) AS image_size " +
+                     "FROM section_images WHERE id = ?";
 
         try (Connection conn = DBUtil.getConnection("SRS");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -49,24 +51,34 @@ public class ImageStreamServlet extends HttpServlet {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
+                    long imageSize = rs.getLong("image_size");
+
+                    if (rs.wasNull() || imageSize <= 0) {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image content is empty.");
+                        return;
+                    }
+
                     String contentType = rs.getString("image_type");
                     if (contentType == null || contentType.trim().isEmpty()) {
-                        contentType = "image/jpeg";
+                        contentType = "image/jpeg"; // Standard fallback content-type
                     }
 
                     try (InputStream inputStream = rs.getBinaryStream("image_data")) {
                         if (inputStream == null) {
-                            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image content is empty.");
+                            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image content stream unavailable.");
                             return;
                         }
 
-                        // Set headers before writing to stream
+                        // Set headers prior to opening response output stream
                         response.setContentType(contentType);
-                        response.setHeader("Cache-Control", "public, max-age=86400"); // 24 hours browser caching
+                        response.setContentLengthLong(imageSize);
+                        response.setHeader("Cache-Control", "public, max-age=86400"); // 24 Hours Browser Caching
 
+                        // Stream binary data to client output stream
                         OutputStream outputStream = response.getOutputStream();
-                        byte[] buffer = new byte[8192];
+                        byte[] buffer = new byte[BUFFER_SIZE];
                         int bytesRead;
+
                         while ((bytesRead = inputStream.read(buffer)) != -1) {
                             outputStream.write(buffer, 0, bytesRead);
                         }

@@ -9,8 +9,6 @@ public class PageBean {
     private String slug;
     private List<Section> sections = new ArrayList<>();
 
-    public PageBean() {}
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -23,7 +21,7 @@ public class PageBean {
     public List<Section> getSections() { return sections; }
     public void setSections(List<Section> sections) { this.sections = sections; }
 
-    // --- Inner Class: Section ---
+    // Nested Class: Section
     public static class Section {
         private Long id;
         private Long pageId;
@@ -32,8 +30,6 @@ public class PageBean {
         private String title;
         private String content;
         private List<SectionImage> images = new ArrayList<>();
-
-        public Section() {}
 
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
@@ -57,25 +53,19 @@ public class PageBean {
         public void setImages(List<SectionImage> images) { this.images = images; }
     }
 
-    // --- Inner Class: SectionImage ---
+    // Nested Class: SectionImage
     public static class SectionImage {
         private Long id;
         private Long sectionId;
-        private byte[] imageData;
         private String imageType;
         private String altText;
         private Integer sequenceOrder;
-
-        public SectionImage() {}
 
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
 
         public Long getSectionId() { return sectionId; }
         public void setSectionId(Long sectionId) { this.sectionId = sectionId; }
-
-        public byte[] getImageData() { return imageData; }
-        public void setImageData(byte[] imageData) { this.imageData = imageData; }
 
         public String getImageType() { return imageType; }
         public void setImageType(String imageType) { this.imageType = imageType; }
