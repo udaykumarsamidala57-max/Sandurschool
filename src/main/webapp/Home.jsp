@@ -61,19 +61,22 @@
          SECTION CSS
     ====================================================== -->
 
-
-    <!-- HERO -->
-
     <c:if test="${not empty pageData.sections}">
 
         <c:forEach var="sec" items="${pageData.sections}">
+
+            <!-- =================================================
+                 NORMALIZE SECTION TYPE
+            ================================================= -->
 
             <c:set
                 var="secType"
                 value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
 
 
-            <!-- HERO CSS -->
+            <!-- =================================================
+                 HERO CSS
+            ================================================= -->
 
             <c:if test="${secType eq 'HERO'}">
 
@@ -84,7 +87,9 @@
             </c:if>
 
 
-            <!-- DISTINCT CSS -->
+            <!-- =================================================
+                 DISTINCT CSS
+            ================================================= -->
 
             <c:if test="${secType eq 'DISTINCT'}">
 
@@ -95,10 +100,22 @@
             </c:if>
 
 
-   
+            <!-- =================================================
+                 PERSON DETAILS CSS
+            ================================================= -->
+
+            <c:if test="${secType eq 'PERSON_DETAILS'}">
+
+                <link
+                    rel="stylesheet"
+                    href="${pageContext.request.contextPath}/css/person-details.css">
+
+            </c:if>
+
         </c:forEach>
 
     </c:if>
+
 
 </head>
 
@@ -297,7 +314,7 @@
 
     <!-- =================================================
          DATABASE SECTIONS
-         
+
          Each section is loaded from its own JSPF file.
     ================================================== -->
 
@@ -316,7 +333,6 @@
             value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
 
 
-
         <!-- =================================================
              HERO SECTION
         ================================================== -->
@@ -326,16 +342,29 @@
             <%@ include file="views/sections/hero.jspf" %>
 
         </c:if>
-        
-         <c:if test="${sType eq 'DISTINCT'}">
+
+
+        <!-- =================================================
+             DISTINCT SECTION
+        ================================================== -->
+
+        <c:if test="${sType eq 'DISTINCT'}">
 
             <%@ include file="views/sections/distinct.jspf" %>
 
         </c:if>
 
 
+        <!-- =================================================
+             PERSON DETAILS SECTION
+        ================================================== -->
 
-     
+        <c:if test="${sType eq 'PERSON_DETAILS'}">
+
+            <%@ include file="views/sections/person-details.jspf" %>
+
+        </c:if>
+
 
     </c:forEach>
 
@@ -352,10 +381,8 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     const menuToggle =
         document.querySelector(".menu-toggle");
-
 
     const nav =
         document.querySelector("nav");
@@ -363,18 +390,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (menuToggle && nav) {
 
-
         menuToggle.addEventListener("click", function () {
-
 
             nav.classList.toggle("active");
 
-
         });
 
-
     }
-
 
 });
 
@@ -387,14 +409,18 @@ document.addEventListener("DOMContentLoaded", function () {
 ====================================================== -->
 
 
-<!-- HERO JS -->
+<!-- =====================================================
+     HERO JS
+====================================================== -->
 
 <script
     src="${pageContext.request.contextPath}/js/hero.js">
 </script>
 
 
-<!-- DISTINCT JS -->
+<!-- =====================================================
+     DISTINCT JS
+====================================================== -->
 
 <script
     src="${pageContext.request.contextPath}/js/distinct.js">

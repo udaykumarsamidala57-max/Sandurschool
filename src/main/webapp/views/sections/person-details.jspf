@@ -1,33 +1,48 @@
-<!-- =================================================
+<!-- =========================================================
      PERSON DETAILS SECTION
-================================================= -->
+
+     Layout:
+     TITLE
+     IMAGE + PERSON INFORMATION
+
+     The image floats left so that:
+     - Heading/content appears beside image
+     - Remaining biography automatically continues
+       full width below the image
+
+     No sidebar/navigation
+========================================================= -->
 
 <section class="person-details-section">
 
 
-    <!-- =================================================
+    <!-- =====================================================
          SECTION TITLE
-    ================================================== -->
+    ====================================================== -->
 
     <c:if test="${not empty sec.title}">
 
         <h2 class="person-section-title">
+
             <c:out value="${sec.title}" />
+
         </h2>
 
     </c:if>
 
 
 
-    <!-- =================================================
+    <!-- =====================================================
          PERSON PROFILE
-    ================================================== -->
+    ====================================================== -->
 
     <div class="person-details-profile">
 
 
         <!-- =================================================
-             LEFT : PERSON IMAGE
+             PERSON IMAGE
+
+             First image from section_images
         ================================================== -->
 
         <div class="person-details-image">
@@ -45,8 +60,7 @@
                             src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
                             alt="${not empty img.altText
                                   ? img.altText
-                                  : sec.subtitle}">
-
+                                  : sec.title}">
 
                     </c:if>
 
@@ -59,31 +73,21 @@
 
 
         <!-- =================================================
-             RIGHT : PERSON INFORMATION
+             PERSON CONTENT
+
+             This content flows around the floated image.
         ================================================== -->
 
         <div class="person-details-content">
 
 
             <!-- =================================================
-                 POSITION / DESIGNATION
-            ================================================== -->
+                 FIRST IMAGE DATA
 
-            <c:if test="${not empty sec.subtitle}">
+                 heading1 = Founder of our school
+                 heading2 = Shri M.Y. Ghorpade
 
-                <h3 class="person-designation">
-
-                    <c:out value="${sec.subtitle}" />
-
-                </h3>
-
-            </c:if>
-
-
-
-            <!-- =================================================
-                 PERSON NAME
-                 Taken from first image altText
+                 altText is used as fallback name.
             ================================================== -->
 
             <c:forEach
@@ -91,13 +95,57 @@
                 items="${sec.images}"
                 varStatus="status">
 
-                <c:if test="${status.first and not empty img.altText}">
 
-                    <h4 class="person-name">
+                <c:if test="${status.first}">
 
-                        <c:out value="${img.altText}" />
 
-                    </h4>
+                    <!-- =========================================
+                         DESIGNATION / POSITION
+                    ========================================== -->
+
+                    <c:if test="${not empty img.heading1}">
+
+                        <h3 class="person-designation">
+
+                            <c:out value="${img.heading1}" />
+
+                        </h3>
+
+                    </c:if>
+
+
+
+                    <!-- =========================================
+                         PERSON NAME
+                    ========================================== -->
+
+                    <c:choose>
+
+
+                        <c:when test="${not empty img.heading2}">
+
+                            <h4 class="person-name">
+
+                                <c:out value="${img.heading2}" />
+
+                            </h4>
+
+                        </c:when>
+
+
+                        <c:when test="${not empty img.altText}">
+
+                            <h4 class="person-name">
+
+                                <c:out value="${img.altText}" />
+
+                            </h4>
+
+                        </c:when>
+
+
+                    </c:choose>
+
 
                 </c:if>
 
@@ -107,6 +155,12 @@
 
             <!-- =================================================
                  PERSON DESCRIPTION
+
+                 This is intentionally NOT placed inside
+                 another grid column.
+
+                 It will flow beside the image and then
+                 continue full width after the image.
             ================================================== -->
 
             <c:if test="${not empty sec.content}">
@@ -123,6 +177,13 @@
 
 
         </div>
+
+
+        <!-- =================================================
+             CLEAR FLOAT
+        ================================================== -->
+
+        <div class="person-details-clear"></div>
 
 
     </div>
