@@ -70,7 +70,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 14px 22px;
+        padding: 14px 23px;
         color: #000000;
         text-decoration: none;
         font-size: 15px;
