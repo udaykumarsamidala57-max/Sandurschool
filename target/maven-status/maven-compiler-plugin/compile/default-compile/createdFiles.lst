@@ -1,8 +1,0 @@
-com\bean\PageBean$Section.class
-com\bean\PageBean.class
-com\bean\PageBean$SectionImage.class
-com\servlet\HomeDataServlet.class
-com\servlet\ImageStreamServlet.class
-com\servlet\HomePageServlet.class
-com\bean\DBUtil.class
-com\servlet\NavigationServlet.class
