@@ -407,3 +407,59 @@
         padding: 10px 15px;
     }
 }
+/* ==========================================
+   PERSON DETAILS SECTION STYLES
+   ========================================== */
+.person-details-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    align-items: flex-start;
+}
+
+.person-details-image {
+    flex: 1 1 300px;
+    max-width: 400px;
+}
+
+.person-details-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+.person-details-content {
+    flex: 2 1 400px;
+    color: var(--sec-text-dark, #222222);
+}
+
+.person-details-content h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 28px;
+    color: var(--sec-brand-dark, #5b2d0a);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.person-details-content h3 {
+    font-size: 18px;
+    color: var(--sec-brand-orange, #e06d38);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.person-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--sec-text-dark, #333333);
+}
+
+.person-description p {
+    margin-bottom: 15px;
+}

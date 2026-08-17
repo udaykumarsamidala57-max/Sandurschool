@@ -48,18 +48,46 @@ public class HomePageServlet extends HttpServlet {
         // DATABASE CONNECTION
         try (Connection conn = DBUtil.getConnection("SRS")) {
 
-            // 3. LOAD ALL PAGES FOR NAVIGATION
-            String navSql = "SELECT id, title, slug FROM pages ORDER BY title ASC";
+            // 3. LOAD ALL PAGES FOR NAVIGATION (WITH PARENT-CHILD DROPDOWNS)
+            String navSql = 
+                "SELECT " +
+                "  p.id AS parent_id, p.title AS parent_title, p.slug AS parent_slug, " +
+                "  c.id AS child_id, c.title AS child_title, c.slug AS child_slug " +
+                "FROM pages p " +
+                "LEFT JOIN pages c ON c.parent_id = p.id " +
+                "WHERE p.parent_id IS NULL " +
+                "ORDER BY p.title ASC, c.title ASC";
+
             try (PreparedStatement psNav = conn.prepareStatement(navSql);
                  ResultSet rsNav = psNav.executeQuery()) {
 
+                Map<Long, PageBean> parentMap = new LinkedHashMap<>();
+
                 while (rsNav.next()) {
-                    PageBean navPage = new PageBean();
-                    navPage.setId(rsNav.getLong("id"));
-                    navPage.setTitle(rsNav.getString("title"));
-                    navPage.setSlug(rsNav.getString("slug"));
-                    pagesList.add(navPage);
+                    long parentId = rsNav.getLong("parent_id");
+                    PageBean parentPage = parentMap.get(parentId);
+
+                    if (parentPage == null) {
+                        parentPage = new PageBean();
+                        parentPage.setId(parentId);
+                        parentPage.setTitle(rsNav.getString("parent_title"));
+                        parentPage.setSlug(rsNav.getString("parent_slug"));
+                        parentPage.setChildren(new ArrayList<>());
+                        parentMap.put(parentId, parentPage);
+                    }
+
+                    long childId = rsNav.getLong("child_id");
+                    if (!rsNav.wasNull()) {
+                        PageBean childPage = new PageBean();
+                        childPage.setId(childId);
+                        childPage.setTitle(rsNav.getString("child_title"));
+                        childPage.setSlug(rsNav.getString("child_slug"));
+
+                        parentPage.getChildren().add(childPage);
+                    }
                 }
+
+                pagesList.addAll(parentMap.values());
             }
 
             // 4. LOAD SELECTED PAGE
