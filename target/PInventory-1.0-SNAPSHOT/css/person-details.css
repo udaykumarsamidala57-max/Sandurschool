@@ -1,0 +1,584 @@
+/* =========================================================
+   PERSON DETAILS SECTION
+   Leadership / Governance / Legacy Profile
+
+   DESIGN:
+   ---------------------------------------------------------
+   Our legacy
+
+   [ IMAGE ]   Founder of our school
+   [ IMAGE ]   Shri M.Y. Ghorpade
+   [ IMAGE ]   Biography text continues beside image
+   [ IMAGE ]   Biography text continues beside image
+
+   After image ends:
+
+   Full width biography continues here
+========================================================= */
+
+
+/* =========================================================
+   MAIN SECTION
+========================================================= */
+
+.person-details-section {
+
+    width: calc(100% - 100px);
+
+    max-width: 1190px;
+
+    margin: 22px auto 70px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: 'Merriweather', serif;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.person-details-section .person-section-title {
+
+    margin: 0 0 48px 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 48px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   PERSON PROFILE
+========================================================= */
+
+.person-details-section .person-details-profile {
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PERSON IMAGE
+
+   FLOATING IMAGE
+
+   This is the important part.
+
+   The image occupies the left side while the
+   biography flows naturally around it.
+========================================================= */
+
+.person-details-section .person-details-image {
+
+    float: left;
+
+    width: 410px;
+
+    height: 547px;
+
+    margin: 0 40px 25px 0;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    background: #f5f5f5;
+}
+
+
+/* =========================================================
+   PERSON IMAGE
+========================================================= */
+
+.person-details-section .person-details-image img {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: none;
+
+    object-fit: cover;
+
+    object-position: center top;
+}
+
+
+/* =========================================================
+   PERSON CONTENT
+
+   IMPORTANT:
+   Do NOT use grid/flex here.
+
+   Because the image is floated, this content will:
+
+   1. Flow beside the image initially.
+   2. Automatically become full width after
+      reaching the bottom of the image.
+========================================================= */
+
+.person-details-section .person-details-content {
+
+    display: block;
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: 'Merriweather', serif;
+}
+
+
+/* =========================================================
+   DESIGNATION
+
+   Example:
+   Founder of our school
+========================================================= */
+
+.person-details-section .person-designation {
+
+    margin: -5px 0 14px 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 28px;
+
+    line-height: 1.3;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+}
+
+
+/* =========================================================
+   PERSON NAME
+
+   Example:
+   Shri M.Y. Ghorpade
+========================================================= */
+
+.person-details-section .person-name {
+
+    margin: 0 0 18px 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 25px;
+
+    line-height: 1.3;
+
+    font-weight: 700;
+
+    color: #4a2b0b;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.person-details-section .person-description {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 16px;
+
+    line-height: 1.78;
+
+    font-weight: 400;
+
+    color: #222;
+
+    text-align: left;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   DESCRIPTION PARAGRAPHS
+========================================================= */
+
+.person-details-section .person-description p {
+
+    margin: 0 0 18px 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   LAST PARAGRAPH
+========================================================= */
+
+.person-details-section .person-description p:last-child {
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   DESCRIPTION HEADINGS
+========================================================= */
+
+.person-details-section .person-description h1,
+.person-details-section .person-description h2,
+.person-details-section .person-description h3,
+.person-details-section .person-description h4,
+.person-details-section .person-description h5,
+.person-details-section .person-description h6 {
+
+    margin-top: 22px;
+
+    margin-bottom: 10px;
+
+    padding: 0;
+
+    font-family: 'Merriweather', serif;
+
+    color: #4a2b0b;
+}
+
+
+/* =========================================================
+   CLEAR FLOAT
+========================================================= */
+
+.person-details-section .person-details-clear {
+
+    clear: both;
+
+    width: 100%;
+
+    height: 0;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .person-details-section {
+
+        width: calc(100% - 60px);
+
+        margin: 40px auto 60px;
+    }
+
+
+    /* ---------------------------------------------
+       SECTION TITLE
+    --------------------------------------------- */
+
+    .person-details-section .person-section-title {
+
+        font-size: 42px;
+
+        margin-bottom: 38px;
+    }
+
+
+    /* ---------------------------------------------
+       IMAGE
+    --------------------------------------------- */
+
+    .person-details-section .person-details-image {
+
+        width: 350px;
+
+        height: 480px;
+
+        margin-right: 30px;
+
+        margin-bottom: 22px;
+    }
+
+
+    /* ---------------------------------------------
+       DESIGNATION
+    --------------------------------------------- */
+
+    .person-details-section .person-designation {
+
+        font-size: 24px;
+
+        line-height: 1.3;
+    }
+
+
+    /* ---------------------------------------------
+       PERSON NAME
+    --------------------------------------------- */
+
+    .person-details-section .person-name {
+
+        font-size: 22px;
+
+        line-height: 1.3;
+    }
+
+
+    /* ---------------------------------------------
+       DESCRIPTION
+    --------------------------------------------- */
+
+    .person-details-section .person-description {
+
+        font-size: 15px;
+
+        line-height: 1.75;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .person-details-section {
+
+        width: calc(100% - 50px);
+    }
+
+
+    .person-details-section .person-details-image {
+
+        width: 320px;
+
+        height: 440px;
+
+        margin-right: 25px;
+    }
+
+
+    .person-details-section .person-designation {
+
+        font-size: 23px;
+    }
+
+
+    .person-details-section .person-name {
+
+        font-size: 21px;
+    }
+
+
+    .person-details-section .person-description {
+
+        font-size: 15px;
+
+        line-height: 1.7;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .person-details-section {
+
+        width: calc(100% - 40px);
+
+        margin: 35px auto 50px;
+    }
+
+
+    /* ---------------------------------------------
+       SECTION TITLE
+    --------------------------------------------- */
+
+    .person-details-section .person-section-title {
+
+        font-size: 32px;
+
+        line-height: 1.25;
+
+        margin-bottom: 30px;
+    }
+
+
+    /* ---------------------------------------------
+       REMOVE FLOAT ON MOBILE
+    --------------------------------------------- */
+
+    .person-details-section .person-details-image {
+
+        float: none;
+
+        width: 100%;
+
+        height: auto;
+
+        margin: 0 0 28px 0;
+
+        max-height: none;
+    }
+
+
+    /* ---------------------------------------------
+       IMAGE
+    --------------------------------------------- */
+
+    .person-details-section .person-details-image img {
+
+        width: 100%;
+
+        height: auto;
+
+        max-height: 550px;
+
+        object-fit: cover;
+
+        object-position: center top;
+    }
+
+
+    /* ---------------------------------------------
+       CONTENT
+    --------------------------------------------- */
+
+    .person-details-section .person-details-content {
+
+        width: 100%;
+    }
+
+
+    /* ---------------------------------------------
+       DESIGNATION
+    --------------------------------------------- */
+
+    .person-details-section .person-designation {
+
+        margin: 0 0 10px 0;
+
+        font-size: 22px;
+
+        line-height: 1.35;
+    }
+
+
+    /* ---------------------------------------------
+       PERSON NAME
+    --------------------------------------------- */
+
+    .person-details-section .person-name {
+
+        margin-bottom: 16px;
+
+        font-size: 21px;
+
+        line-height: 1.35;
+    }
+
+
+    /* ---------------------------------------------
+       DESCRIPTION
+    --------------------------------------------- */
+
+    .person-details-section .person-description {
+
+        font-size: 15px;
+
+        line-height: 1.7;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .person-details-section {
+
+        width: calc(100% - 30px);
+
+        margin-top: 30px;
+    }
+
+
+    .person-details-section .person-section-title {
+
+        font-size: 28px;
+
+        margin-bottom: 25px;
+    }
+
+
+    .person-details-section .person-designation {
+
+        font-size: 20px;
+    }
+
+
+    .person-details-section .person-name {
+
+        font-size: 19px;
+    }
+
+
+    .person-details-section .person-description {
+
+        font-size: 14px;
+
+        line-height: 1.65;
+    }
+
+}

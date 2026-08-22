@@ -1,0 +1,141 @@
+<!-- =================================================
+     DISTINCT SECTION
+================================================= -->
+
+<section class="distinct-section">
+
+
+    <!-- =================================================
+         DISTINCT INTRO
+    ================================================= -->
+
+    <div class="distinct-intro">
+
+        <c:if test="${not empty sec.title}">
+
+            <h2>
+                <c:out value="${sec.title}" />
+            </h2>
+
+        </c:if>
+
+
+        <c:if test="${not empty sec.content}">
+
+            <p>
+                <c:out
+                    value="${sec.content}"
+                    escapeXml="false" />
+            </p>
+
+        </c:if>
+
+    </div>
+
+
+
+    <!-- =================================================
+         DISTINCT CARDS
+         Dynamic number of images
+    ================================================= -->
+
+    <c:forEach
+        var="img"
+        items="${sec.images}"
+        varStatus="status">
+
+
+        <div
+            class="distinct-card
+            ${status.index == 0
+                ? 'distinct-card-first'
+                : status.index == 1
+                    ? 'distinct-card-second'
+                    : ''}">
+
+
+            <!-- =================================================
+                 IMAGE
+            ================================================= -->
+
+            <img
+                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                alt="${not empty img.altText
+                      ? img.altText
+                      : sec.title}">
+
+
+
+            <!-- =================================================
+                 HOVER OVERLAY
+            ================================================= -->
+
+            <div class="distinct-overlay">
+
+
+                <div class="distinct-overlay-content">
+
+
+                    <!-- =================================================
+                         HEADING 1
+                    ================================================= -->
+
+                    <c:if test="${not empty img.heading1}">
+
+                        <h4 class="image-heading1">
+
+                            <c:out
+                                value="${img.heading1}" />
+
+                        </h4>
+
+                    </c:if>
+
+
+
+                    <!-- =================================================
+                         HEADING 2
+                    ================================================= -->
+
+                    <c:if test="${not empty img.heading2}">
+
+                        <h5 class="image-heading2">
+
+                            <c:out
+                                value="${img.heading2}" />
+
+                        </h5>
+
+                    </c:if>
+
+
+
+                    <!-- =================================================
+                         IMAGE TITLE
+                    ================================================= -->
+
+                    <c:if test="${not empty img.altText}">
+
+                        <h3>
+
+                            <c:out
+                                value="${img.altText}" />
+
+                        </h3>
+
+                    </c:if>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </c:forEach>
+
+
+</section>
