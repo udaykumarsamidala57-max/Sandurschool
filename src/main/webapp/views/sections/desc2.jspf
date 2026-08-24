@@ -1,0 +1,32 @@
+<%-- =========================================================
+     DESC SECTION
+     Displays:
+     - Section title
+     - Section description/content
+     ========================================================= --%>
+
+<section class="desc-section">
+
+    <div class="desc-container">
+
+        <%-- Section Title --%>
+        <c:if test="${not empty sec.title}">
+            <h2 class="desc-title">
+                <c:out value="${sec.title}" />
+            </h2>
+        </c:if>
+
+        <%-- Description Box --%>
+        <c:if test="${not empty sec.content}">
+            <div class="desc-box">
+
+                <div class="desc-content">
+                    <c:out value="${sec.content}" />
+                </div>
+
+            </div>
+        </c:if>
+
+    </div>
+
+</section>

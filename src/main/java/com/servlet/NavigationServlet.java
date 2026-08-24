@@ -25,65 +25,171 @@ public class NavigationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<PageBean> pagesList = new ArrayList<>();
+        // =====================================================
+        // FINAL ROOT NAVIGATION LIST
+        // Maintains database ID order
+        // =====================================================
+        List<PageBean> rootPages = new ArrayList<>();
 
-        // Fetch parent pages and their child pages ordered logically
-        String query = 
-            "SELECT " +
-            "  p.id AS parent_id, p.title AS parent_title, p.slug AS parent_slug, " +
-            "  c.id AS child_id, c.title AS child_title, c.slug AS child_slug " +
-            "FROM pages p " +
-            "LEFT JOIN pages c ON c.parent_id = p.id " +
-            "WHERE p.parent_id IS NULL " +
-            "ORDER BY p.title ASC, c.title ASC";
+        // =====================================================
+        // ALL PAGES
+        // Key   = Page ID
+        // Value = PageBean
+        //
+        // LinkedHashMap preserves database ID insertion order.
+        // =====================================================
+        Map<Long, PageBean> pageMap = new LinkedHashMap<>();
+
+        // =====================================================
+        // CHILD -> PARENT RELATIONSHIP
+        //
+        // Key   = Child ID
+        // Value = Parent ID
+        //
+        // LinkedHashMap preserves child database ID order.
+        // =====================================================
+        Map<Long, Long> parentChildRelationships =
+                new LinkedHashMap<>();
+
+        /*
+         * =====================================================
+         * FETCH ALL PAGES
+         *
+         * IMPORTANT:
+         * ORDER BY id ASC means:
+         *
+         * 1, 2, 3, 4, 5, 6...
+         *
+         * This determines the navigation sequence.
+         * =====================================================
+         */
+        String query =
+                "SELECT id, title, slug, parent_id " +
+                "FROM pages " +
+                "ORDER BY id ASC";
 
         try (Connection conn = DBUtil.getConnection("SRS");
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
-            Map<Long, PageBean> parentMap = new LinkedHashMap<>();
-
+            /*
+             * =================================================
+             * PASS 1
+             *
+             * Create every PageBean first.
+             *
+             * At the same time:
+             * - Store all pages in pageMap
+             * - Store root pages in rootPages
+             * - Store child-parent relationships
+             * =================================================
+             */
             while (rs.next()) {
+
+                long pageId = rs.getLong("id");
+
+                PageBean page = new PageBean();
+
+                page.setId(pageId);
+                page.setTitle(rs.getString("title"));
+                page.setSlug(rs.getString("slug"));
+
+                // Every page gets its own children list
+                page.setChildren(new ArrayList<>());
+
+                // Store page using its ID
+                pageMap.put(pageId, page);
+
+                /*
+                 * Check parent_id
+                 */
                 long parentId = rs.getLong("parent_id");
-                PageBean parentPage = parentMap.get(parentId);
 
-                if (parentPage == null) {
-                    parentPage = new PageBean();
-                    parentPage.setId(parentId);
-                    parentPage.setTitle(rs.getString("parent_title"));
-                    parentPage.setSlug(rs.getString("parent_slug"));
-                    parentPage.setChildren(new ArrayList<>());
-                    parentMap.put(parentId, parentPage);
-                }
+                if (rs.wasNull()) {
 
-                // Attach child page if present
-                long childId = rs.getLong("child_id");
-                if (!rs.wasNull()) {
-                    PageBean childPage = new PageBean();
-                    childPage.setId(childId);
-                    childPage.setTitle(rs.getString("child_title"));
-                    childPage.setSlug(rs.getString("child_slug"));
-                    
-                    parentPage.getChildren().add(childPage);
+                    /*
+                     * This is a ROOT / TOP-LEVEL page.
+                     *
+                     * Because the SQL is ORDER BY id ASC,
+                     * rootPages will also remain in ID order.
+                     */
+                    rootPages.add(page);
+
+                } else {
+
+                    /*
+                     * This is a child page.
+                     *
+                     * Store:
+                     *
+                     * child ID -> parent ID
+                     */
+                    parentChildRelationships.put(
+                            pageId,
+                            parentId
+                    );
                 }
             }
 
-            pagesList.addAll(parentMap.values());
+            /*
+             * =================================================
+             * PASS 2
+             *
+             * Attach every child to its parent.
+             *
+             * parentChildRelationships is a LinkedHashMap,
+             * so children are processed in database ID order.
+             * =================================================
+             */
+            for (Map.Entry<Long, Long> entry
+                    : parentChildRelationships.entrySet()) {
+
+                Long childId = entry.getKey();
+                Long parentId = entry.getValue();
+
+                PageBean childBean = pageMap.get(childId);
+                PageBean parentBean = pageMap.get(parentId);
+
+                if (parentBean != null && childBean != null) {
+
+                    /*
+                     * Add child to parent's ArrayList.
+                     *
+                     * Therefore children also follow
+                     * database ID order.
+                     */
+                    parentBean.getChildren().add(childBean);
+                }
+            }
 
         } catch (SQLException e) {
-            System.err.println("Database error while fetching navigation pages:");
+
+            System.err.println(
+                    "Database error while fetching navigation pages:"
+            );
+
             e.printStackTrace();
+
         } catch (Exception e) {
+
             e.printStackTrace();
         }
 
-        // Set the structured list attribute for JSP consumption
-        request.setAttribute("pagesList", pagesList);
+        /*
+         * =====================================================
+         * SEND NAVIGATION TO JSP
+         * =====================================================
+         */
+        request.setAttribute("pagesList", rootPages);
 
-        // Forward to target page
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        /*
+         * Forward to index.jsp
+         */
+        request.getRequestDispatcher("/index.jsp")
+               .forward(request, response);
     }
 }

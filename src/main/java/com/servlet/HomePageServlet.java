@@ -48,46 +48,46 @@ public class HomePageServlet extends HttpServlet {
         // DATABASE CONNECTION
         try (Connection conn = DBUtil.getConnection("SRS")) {
 
-            // 3. LOAD ALL PAGES FOR NAVIGATION (WITH PARENT-CHILD DROPDOWNS)
-            String navSql = 
-                "SELECT " +
-                "  p.id AS parent_id, p.title AS parent_title, p.slug AS parent_slug, " +
-                "  c.id AS child_id, c.title AS child_title, c.slug AS child_slug " +
-                "FROM pages p " +
-                "LEFT JOIN pages c ON c.parent_id = p.id " +
-                "WHERE p.parent_id IS NULL " +
-                "ORDER BY p.title ASC, c.title ASC";
+            // 3. LOAD ALL PAGES FOR NAVIGATION ORDERED BY DATABASE ID SEQUENCE
+            String navSql = "SELECT id, title, slug, parent_id FROM pages ORDER BY id ASC";
 
             try (PreparedStatement psNav = conn.prepareStatement(navSql);
                  ResultSet rsNav = psNav.executeQuery()) {
 
-                Map<Long, PageBean> parentMap = new LinkedHashMap<>();
+                Map<Long, PageBean> pageMap = new LinkedHashMap<>();
+                Map<Long, Long> parentChildRelationships = new LinkedHashMap<>();
 
+                // Pass 1: Build objects in exact DB ID sequence
                 while (rsNav.next()) {
+                    long id = rsNav.getLong("id");
+                    PageBean page = new PageBean();
+                    page.setId(id);
+                    page.setTitle(rsNav.getString("title"));
+                    page.setSlug(rsNav.getString("slug"));
+                    page.setChildren(new ArrayList<>());
+
+                    pageMap.put(id, page);
+
                     long parentId = rsNav.getLong("parent_id");
-                    PageBean parentPage = parentMap.get(parentId);
-
-                    if (parentPage == null) {
-                        parentPage = new PageBean();
-                        parentPage.setId(parentId);
-                        parentPage.setTitle(rsNav.getString("parent_title"));
-                        parentPage.setSlug(rsNav.getString("parent_slug"));
-                        parentPage.setChildren(new ArrayList<>());
-                        parentMap.put(parentId, parentPage);
-                    }
-
-                    long childId = rsNav.getLong("child_id");
                     if (!rsNav.wasNull()) {
-                        PageBean childPage = new PageBean();
-                        childPage.setId(childId);
-                        childPage.setTitle(rsNav.getString("child_title"));
-                        childPage.setSlug(rsNav.getString("child_slug"));
-
-                        parentPage.getChildren().add(childPage);
+                        parentChildRelationships.put(id, parentId);
+                    } else {
+                        pagesList.add(page); // Preserves exact top-level DB ID sequence
                     }
                 }
 
-                pagesList.addAll(parentMap.values());
+                // Pass 2: Attach children to parents in exact DB ID sequence
+                for (Map.Entry<Long, Long> entry : parentChildRelationships.entrySet()) {
+                    Long childId = entry.getKey();
+                    Long parentId = entry.getValue();
+
+                    PageBean childBean = pageMap.get(childId);
+                    PageBean parentBean = pageMap.get(parentId);
+
+                    if (parentBean != null && childBean != null) {
+                        parentBean.getChildren().add(childBean);
+                    }
+                }
             }
 
             // 4. LOAD SELECTED PAGE

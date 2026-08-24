@@ -48,6 +48,7 @@
             <c:if test="${secType eq 'DISTINCT'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/distinct.css"></c:if>
             <c:if test="${secType eq 'PERSON_DETAILS'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/person-details.css"></c:if>
             <c:if test="${secType eq 'DESC'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc.css"></c:if>
+            <c:if test="${secType eq 'DESC2'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc2.css"></c:if>
         </c:forEach>
     </c:if>
 </head>
@@ -64,6 +65,7 @@
             <c:if test="${sType eq 'DISTINCT'}"><%@ include file="views/sections/distinct.jspf" %></c:if>
             <c:if test="${sType eq 'PERSON_DETAILS'}"><%@ include file="views/sections/person-details.jspf" %></c:if>
             <c:if test="${sType eq 'DESC'}"><%@ include file="views/sections/desc.jspf" %></c:if>
+            <c:if test="${sType eq 'DESC2'}"><%@ include file="views/sections/desc2.jspf" %></c:if>
         </c:forEach>
     </main>
 
