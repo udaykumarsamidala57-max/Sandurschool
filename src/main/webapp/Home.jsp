@@ -15,6 +15,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+      
+    <c:if test="${not empty pageData.sections}">
+        <c:forEach var="sec" items="${pageData.sections}">
+            <c:set var="secType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
+
+            <c:if test="${secType eq 'HERO'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/hero.css"></c:if>
+            <c:if test="${secType eq 'DISTINCT'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/distinct.css"></c:if>
+            <c:if test="${secType eq 'PERSON_DETAILS'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/person-details.css"></c:if>
+            <c:if test="${secType eq 'DESC'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc.css"></c:if>
+        </c:forEach>
+    </c:if>
 
     <style>
         nav .main-menu { list-style: none; margin: 0; padding: 0; display: flex; background-color: #FAF8F7; }
@@ -42,71 +53,8 @@
 </head>
 
 <body>
-
-    <div class="top-strip"></div>
-
-    <header>
-        <div class="top-header">
-            <div class="logo-area">
-                <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
-                <h1>Sandur Residential School</h1>
-            </div>
-
-            <div class="top-links">
-                <a href="${pageContext.request.contextPath}/homepage?slug=calendar">Calendar</a>
-                <a href="#">Quick Links</a>
-                <a href="#">Portal Login</a>
-                <a href="#" aria-label="Search"><i class="fa fa-search"></i></a>
-            </div>
-        </div>
-
-        <div class="menu-toggle"><i class="fa fa-bars"></i></div>
-
-        <nav>
-            <ul class="main-menu">
-                <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
-
-                <li class="${currentSlug eq 'home' ? 'active-tab' : ''}">
-                    <a href="${pageContext.request.contextPath}/homepage?slug=home">Home</a>
-                </li>
-
-                <c:forEach var="pg" items="${pagesList}">
-                    <c:if test="${pg.slug ne 'home'}">
-                        <c:set var="isChildActive" value="false" />
-
-                        <c:if test="${not empty pg.children}">
-                            <c:forEach var="child" items="${pg.children}">
-                                <c:if test="${child.slug eq currentSlug}">
-                                    <c:set var="isChildActive" value="true" />
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
-
-                        <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
-                            <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
-                                <c:out value="${pg.title}" />
-                                <c:if test="${not empty pg.children}">
-                                    <i class="fa fa-angle-down" style="font-size:12px; margin-left:4px;"></i>
-                                </c:if>
-                            </a>
-
-                            <c:if test="${not empty pg.children}">
-                                <ul class="dropdown-menu">
-                                    <c:forEach var="child" items="${pg.children}">
-                                        <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
-                                            <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
-                                                <c:out value="${child.title}" />
-                                            </a>
-                                        </li>
-                                    </c:forEach>
-                                </ul>
-                            </c:if>
-                        </li>
-                    </c:if>
-                </c:forEach>
-            </ul>
-        </nav>
-    </header>
+<%@ include file="Header.jsp" %>
+   
 
     <main class="main-content">
         <c:forEach var="sec" items="${pageData.sections}">
