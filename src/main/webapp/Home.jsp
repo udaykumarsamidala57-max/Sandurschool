@@ -139,9 +139,33 @@
         </c:forEach>
 
         <!-- Normalize slug to lowercase for reliable comparison -->
-        <c:set var="currentSlug" value="${fn:toLowerCase(fn:trim(pageData.slug))}" />
+        <c:set var="currentSlug" value="${fn:toLowerCase(fn:trim(not empty param.slug ? param.slug : pageData.slug))}" />
 
-        <!-- Step 2: Content layout wrapper for all remaining sections + Optional Sticky Sidebar -->
+        <!-- Identify current section's sub-navigation items dynamically from pagesList -->
+        <c:set var="dynamicSubMenuItems" value="${null}" />
+        <c:forEach var="pg" items="${pagesList}">
+            <c:set var="parentSlug" value="${fn:toLowerCase(fn:trim(pg.slug))}" />
+            <c:set var="isParentOrChild" value="false" />
+
+            <c:if test="${parentSlug eq currentSlug}">
+                <c:set var="isParentOrChild" value="true" />
+            </c:if>
+
+            <c:if test="${not empty pg.children}">
+                <c:forEach var="child" items="${pg.children}">
+                    <c:set var="childSlug" value="${fn:toLowerCase(fn:trim(child.slug))}" />
+                    <c:if test="${childSlug eq currentSlug}">
+                        <c:set var="isParentOrChild" value="true" />
+                    </c:if>
+                </c:forEach>
+            </c:if>
+
+            <c:if test="${isParentOrChild and not empty pg.children}">
+                <c:set var="dynamicSubMenuItems" value="${pg.children}" />
+            </c:if>
+        </c:forEach>
+
+        <!-- Step 2: Content layout wrapper for all remaining sections + Dynamic Sidebar -->
         <div class="page-body-container">
             
             <!-- Left Main Body Content -->
@@ -157,29 +181,18 @@
                 </c:forEach>
             </div>
 
-            <!-- Right Fixed Subnavigation Bar (Rendered ONLY if slug is NOT 'about' or 'lag') -->
-            <c:if test="${currentSlug ne 'about' and currentSlug ne 'lag' and currentSlug ne 'infrastructure' and currentSlug ne 'home' }">
+            <!-- Right Dynamic Subnavigation Sidebar (Rendered ONLY if current section has active dynamic sub-items) -->
+            <c:if test="${currentSlug ne 'about' and currentSlug ne 'lag' and currentSlug ne 'infrastructure' and currentSlug ne 'home' and not empty dynamicSubMenuItems}">
                 <aside class="sidebar-nav-box">
                     <ul>
-                        <c:choose>
-                            <c:when test="${not empty activeSubMenuItems}">
-                                <c:forEach var="subItem" items="${activeSubMenuItems}">
-                                    <li class="${subItem.active ? 'active' : ''}">
-                                        <a href="${pageContext.request.contextPath}${subItem.url}">
-                                            <c:out value="${subItem.title}" />
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <!-- Hardcoded Fallback Menu -->
-                                <li class="active"><a href="#">Enquire and visit</a></li>
-                                <li><a href="#">Admission process</a></li>
-                                <li><a href="#">Fees payment</a></li>
-                                <li><a href="#">Scholarship Programme</a></li>
-                                <li><a href="#">Admission FAQ</a></li>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:forEach var="subItem" items="${dynamicSubMenuItems}">
+                            <c:set var="itemSlug" value="${fn:toLowerCase(fn:trim(subItem.slug))}" />
+                            <li class="${currentSlug eq itemSlug ? 'active' : ''}">
+                                <a href="${pageContext.request.contextPath}/homepage?slug=${subItem.slug}">
+                                    <c:out value="${subItem.title}" />
+                                </a>
+                            </li>
+                        </c:forEach>
                     </ul>
                 </aside>
             </c:if>
