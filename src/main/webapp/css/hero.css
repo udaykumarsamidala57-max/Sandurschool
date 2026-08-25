@@ -5,7 +5,8 @@
 .hero-fullscreen-container {
     position: relative;
     width: 100%;
-    height: 550px;
+    /* Removed fixed height so the container scales automatically */
+    height: auto;
     overflow: hidden;
     background: #000;
 }
@@ -31,6 +32,13 @@
     z-index: 1;
 }
 
+/* 
+   Keep the first image relative so it expands the container's 
+   height dynamically based on its natural dimensions
+*/
+.hero-slide:first-child {
+    position: relative;
+}
 
 /* ACTIVE SLIDE */
 
@@ -47,8 +55,10 @@
 
 .hero-slide img {
     width: 100%;
-    height: 100%;
+    /* Auto height allows the image to stretch full width with zero side gaps */
+    height: auto;
 
+    /* Cover ensures edge-to-edge coverage without letterboxing gaps */
     object-fit: cover;
 
     display: block;
@@ -230,13 +240,6 @@
 ===================================================== */
 
 @media (max-width: 768px) {
-
-    .hero-fullscreen-container {
-
-        height: 420px;
-
-    }
-
 
     .slide-content {
 
