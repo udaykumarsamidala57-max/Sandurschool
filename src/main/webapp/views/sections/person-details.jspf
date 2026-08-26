@@ -1,192 +1,70 @@
 <!-- =========================================================
-     PERSON DETAILS SECTION
-
-     Layout:
-     TITLE
-     IMAGE + PERSON INFORMATION
-
-     The image floats left so that:
-     - Heading/content appears beside image
-     - Remaining biography automatically continues
-       full width below the image
-
-     No sidebar/navigation
+     PERSON DETAILS SECTION (Card Layout)
 ========================================================= -->
 
 <section class="person-details-section">
 
-
-    <!-- =====================================================
-         SECTION TITLE
-    ====================================================== -->
-
+    <!-- SECTION TITLE -->
     <c:if test="${not empty sec.title}">
-
         <h2 class="person-section-title">
-
             <c:out value="${sec.title}" />
-
         </h2>
-
     </c:if>
 
-
-
-    <!-- =====================================================
-         PERSON PROFILE
-    ====================================================== -->
-
+    <!-- PERSON PROFILE CARD WRAPPER -->
     <div class="person-details-profile">
 
-
-        <!-- =================================================
-             PERSON IMAGE
-
-             First image from section_images
-        ================================================== -->
-
+        <!-- LEFT SIDE: UNCROPPED PROFILE IMAGE -->
         <div class="person-details-image">
-
             <c:if test="${not empty sec.images}">
-
-                <c:forEach
-                    var="img"
-                    items="${sec.images}"
-                    varStatus="status">
-
+                <c:forEach var="img" items="${sec.images}" varStatus="status">
                     <c:if test="${status.first}">
-
-                        <img
-                            src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
-                            alt="${not empty img.altText
-                                  ? img.altText
-                                  : sec.title}">
-
+                        <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                             alt="${not empty img.altText ? img.altText : sec.title}">
                     </c:if>
-
                 </c:forEach>
-
             </c:if>
-
         </div>
 
-
-
-        <!-- =================================================
-             PERSON CONTENT
-
-             This content flows around the floated image.
-        ================================================== -->
-
+        <!-- RIGHT SIDE: DETAILS CONTENT -->
         <div class="person-details-content">
 
-
-            <!-- =================================================
-                 FIRST IMAGE DATA
-
-                 heading1 = Founder of our school
-                 heading2 = Shri M.Y. Ghorpade
-
-                 altText is used as fallback name.
-            ================================================== -->
-
-            <c:forEach
-                var="img"
-                items="${sec.images}"
-                varStatus="status">
-
-
+            <c:forEach var="img" items="${sec.images}" varStatus="status">
                 <c:if test="${status.first}">
 
-
-                    <!-- =========================================
-                         DESIGNATION / POSITION
-                    ========================================== -->
-
+                    <!-- DESIGNATION -->
                     <c:if test="${not empty img.heading1}">
-
                         <h3 class="person-designation">
-
                             <c:out value="${img.heading1}" />
-
                         </h3>
-
                     </c:if>
 
-
-
-                    <!-- =========================================
-                         PERSON NAME
-                    ========================================== -->
-
+                    <!-- PERSON NAME -->
                     <c:choose>
-
-
                         <c:when test="${not empty img.heading2}">
-
                             <h4 class="person-name">
-
                                 <c:out value="${img.heading2}" />
-
                             </h4>
-
                         </c:when>
-
-
                         <c:when test="${not empty img.altText}">
-
                             <h4 class="person-name">
-
                                 <c:out value="${img.altText}" />
-
                             </h4>
-
                         </c:when>
-
-
                     </c:choose>
 
-
                 </c:if>
-
             </c:forEach>
 
-
-
-            <!-- =================================================
-                 PERSON DESCRIPTION
-
-                 This is intentionally NOT placed inside
-                 another grid column.
-
-                 It will flow beside the image and then
-                 continue full width after the image.
-            ================================================== -->
-
+            <!-- DESCRIPTION -->
             <c:if test="${not empty sec.content}">
-
                 <div class="person-description">
-
-                    <c:out
-                        value="${sec.content}"
-                        escapeXml="false" />
-
+                    <c:out value="${sec.content}" escapeXml="false" />
                 </div>
-
             </c:if>
-
 
         </div>
 
-
-        <!-- =================================================
-             CLEAR FLOAT
-        ================================================== -->
-
-        <div class="person-details-clear"></div>
-
-
     </div>
-
 
 </section>
