@@ -1,7 +1,4 @@
-<%-- =========================================================
-     DESCRIPTION SECTION
-     ISOLATED DESIGN
-     ========================================================= --%>
+
 <br>
 <section class="page-desc-section">
 
@@ -19,7 +16,8 @@
             <div class="page-desc-box">
 
                 <div class="page-desc-content">
-                    <c:out value="${sec.content}" />
+                    <%-- Using unescaped expression to render raw HTML --%>
+                    ${sec.content}
                 </div>
 
             </div>

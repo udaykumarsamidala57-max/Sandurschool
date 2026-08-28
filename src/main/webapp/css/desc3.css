@@ -1,22 +1,4 @@
-```css id="k8r2wp"
-/* =========================================================
-   DESCRIPTION SECTION
-   ISOLATED FROM ALL OTHER JSPF DESIGNS
-   =========================================================
-   ALL SELECTORS ARE SCOPED TO .desc-section
 
-   This prevents this JSPF from affecting:
-   - Other JSPFs
-   - Other images
-   - Other headings
-   - Other content
-   - Other sections
-   ========================================================= */
-
-
-/* =========================================================
-   MAIN DESCRIPTION SECTION
-   ========================================================= */
 
 .desc-section {
 
@@ -214,7 +196,7 @@
 
     font-family: "Merriweather", Georgia, serif;
 
-    font-size: 16px;
+    font-size: 14px;
 
     line-height: 1.6;
 

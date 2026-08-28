@@ -1,0 +1,42 @@
+<%-- =========================================================
+     SIDE DESIGN SECTION (EXACT LAYOUT: IMAGE ON TOP, BOX BELOW)
+     ========================================================= --%>
+<br>
+<section class="page-desc-section">
+
+    <div class="page-desc-container">
+
+        <%-- Optional Section Image from ImageStreamServlet (Placed strictly above the text box) --%>
+        <c:if test="${not empty sec.images}">
+            <div class="page-desc-image-box">
+                <c:forEach var="img" items="${sec.images}">
+                    <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                         alt="${not empty img.altText ? img.altText : 'Section Image'}" />
+                </c:forEach>
+            </div>
+        </c:if>
+
+        <%-- Description Box containing Title and Content stacked sequentially --%>
+        <c:if test="${not empty sec.title or not empty sec.content}">
+            <div class="page-desc-box">
+
+                <%-- Section Title --%>
+                <c:if test="${not empty sec.title}">
+                    <h2 class="page-desc-title">
+                        <c:out value="${sec.title}" />
+                    </h2>
+                </c:if>
+
+                <%-- Description Content (Allows raw HTML rendering) --%>
+                <c:if test="${not empty sec.content}">
+                    <div class="page-desc-content">
+                        ${sec.content}
+                    </div>
+                </c:if>
+
+            </div>
+        </c:if>
+
+    </div>
+
+</section>
