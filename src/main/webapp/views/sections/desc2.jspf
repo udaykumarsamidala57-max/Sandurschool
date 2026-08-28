@@ -1,9 +1,8 @@
-```jsp
 <%-- =========================================================
      DESCRIPTION SECTION
-     Fully isolated styles to avoid affecting other JSPF sections
+     ISOLATED DESIGN
      ========================================================= --%>
-
+<br>
 <section class="page-desc-section">
 
     <div class="page-desc-container">
@@ -29,4 +28,3 @@
     </div>
 
 </section>
-```

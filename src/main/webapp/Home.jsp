@@ -26,6 +26,7 @@
             <c:if test="${secType eq 'PERSON_DETAILS'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/person-details.css"></c:if>
             <c:if test="${secType eq 'DESC'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc.css"></c:if>
             <c:if test="${secType eq 'DESC2'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc2.css"></c:if>
+            <c:if test="${secType eq 'DESC2'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc3.css"></c:if>
             <c:if test="${secType eq 'DESC3'}"><link rel="stylesheet" href="${pageContext.request.contextPath}/css/desc.css"></c:if>
         </c:forEach>
     </c:if>

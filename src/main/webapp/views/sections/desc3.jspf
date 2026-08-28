@@ -1,47 +1,91 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <section class="desc-section">
+
     <div class="desc-container">
 
-        <%-- Section Title --%>
+        <%-- =================================================
+             SECTION TITLE
+             ================================================= --%>
+
         <c:if test="${not empty sec.title}">
-          
+            <h2 class="desc-title">
+                <c:out value="${sec.title}" />
+            </h2>
         </c:if>
 
-        <%-- Section Main Content --%>
-        
-        <%-- Section Images & Image-Level Headings --%>
+
+        <%-- =================================================
+             SECTION IMAGES
+             ================================================= --%>
+
         <c:if test="${not empty sec.images}">
+
             <div class="desc-images">
+
                 <c:forEach var="img" items="${sec.images}">
-                
-               
 
-                    <%-- Heading 1 bound to image --%>
+
+                    <%-- =====================================
+                         HEADING 1
+                         ===================================== --%>
+
                     <c:if test="${not empty img.heading1}">
-                        <h1 class="desc-heading1"><c:out value="${img.heading1}" /></h1>
+                        <h1 class="desc-heading1">
+                            <c:out value="${img.heading1}" />
+                        </h1>
                     </c:if>
 
-                    <%-- Heading 2 bound to image --%>
+
+                    <%-- =====================================
+                         HEADING 2
+                         ===================================== --%>
+
                     <c:if test="${not empty img.heading2}">
-                        <h3 class="desc-heading2"><c:out value="${img.heading2}" /></h3>
+                        <h3 class="desc-heading2">
+                            <c:out value="${img.heading2}" />
+                        </h3>
                     </c:if>
-                     <div class="desc-image-wrapper">
-                        <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
-                             alt="<c:out value='${img.altText}' />" 
-                             class="desc-image" />
-                    </div>
-                    
-                    <c:if test="${not empty sec.content}">
-            <div class="desc-content">${sec.content}</div>
-        </c:if>
 
-                    
+
+                    <%-- =====================================
+                         IMAGE
+                         ===================================== --%>
+
+                    <div class="desc-image-wrapper">
+
+                        <img
+                            src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                            alt="<c:out value='${img.altText}' />"
+                            class="desc-image"
+                        />
+
+                    </div>
+
+
+                    <%-- =====================================
+                         SECTION CONTENT
+                         ===================================== --%>
+
+                    <c:if test="${not empty sec.content}">
+
+                        <div class="desc-content">
+                            ${sec.content}
+                        </div>
+
+                    </c:if>
+
 
                 </c:forEach>
+
             </div>
+
         </c:if>
 
     </div>
+
 </section>
