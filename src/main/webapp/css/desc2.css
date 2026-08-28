@@ -1,8 +1,12 @@
+```css
 /* =========================================================
-   DESC SECTION
+   DESCRIPTION SECTION
+   IMPORTANT:
+   All styles are scoped using .page-desc-section
+   so they do NOT affect other JSPF sections.
    ========================================================= */
 
-.desc-section {
+.page-desc-section {
     width: 100%;
     margin: 0;
     padding: 20px 30px 30px;
@@ -10,7 +14,7 @@
     background: #ffffff;
 }
 
-.desc-container {
+.page-desc-section .page-desc-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -22,7 +26,7 @@
    SECTION TITLE
    ========================================================= */
 
-.desc-title {
+.page-desc-section .page-desc-title {
     margin: 0 0 48px 0;
     padding: 0;
 
@@ -32,7 +36,6 @@
     font-weight: 700;
 
     color: #612405;
-
     text-align: left;
 }
 
@@ -41,7 +44,7 @@
    DESCRIPTION BOX
    ========================================================= */
 
-.desc-box {
+.page-desc-section .page-desc-box {
     width: 100%;
     min-height: 160px;
 
@@ -53,7 +56,6 @@
     background: #ffffff;
 
     padding: 28px 30px 34px;
-
     margin: 0;
 }
 
@@ -62,7 +64,7 @@
    DESCRIPTION CONTENT
    ========================================================= */
 
-.desc-content {
+.page-desc-section .page-desc-content {
     margin: 0;
 
     font-family: "Merriweather", Georgia, serif;
@@ -71,7 +73,6 @@
     font-weight: 700;
 
     color: #351d12;
-
     text-align: left;
 
     white-space: pre-line;
@@ -84,21 +85,21 @@
 
 @media (max-width: 900px) {
 
-    .desc-section {
+    .page-desc-section {
         padding: 20px 24px 30px;
     }
 
-    .desc-title {
+    .page-desc-section .page-desc-title {
         font-size: 42px;
         margin-bottom: 38px;
     }
 
-    .desc-box {
+    .page-desc-section .page-desc-box {
         padding: 25px 26px 30px;
         border-bottom-width: 9px;
     }
 
-    .desc-content {
+    .page-desc-section .page-desc-content {
         font-size: 22px;
         line-height: 1.4;
     }
@@ -111,21 +112,21 @@
 
 @media (max-width: 600px) {
 
-    .desc-section {
+    .page-desc-section {
         padding: 15px 15px 25px;
     }
 
-    .desc-title {
+    .page-desc-section .page-desc-title {
         font-size: 34px;
         margin-bottom: 28px;
     }
 
-    .desc-box {
+    .page-desc-section .page-desc-box {
         padding: 20px 18px 24px;
         border-bottom-width: 8px;
     }
 
-    .desc-content {
+    .page-desc-section .page-desc-content {
         font-size: 18px;
         line-height: 1.45;
     }
@@ -138,15 +139,16 @@
 
 @media (max-width: 400px) {
 
-    .desc-title {
+    .page-desc-section .page-desc-title {
         font-size: 30px;
     }
 
-    .desc-content {
+    .page-desc-section .page-desc-content {
         font-size: 17px;
     }
 
-    .desc-box {
+    .page-desc-section .page-desc-box {
         padding: 18px 15px 22px;
     }
 }
+```

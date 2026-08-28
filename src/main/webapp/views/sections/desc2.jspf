@@ -1,26 +1,25 @@
+```jsp
 <%-- =========================================================
-     DESC SECTION
-     Displays:
-     - Section title
-     - Section description/content
+     DESCRIPTION SECTION
+     Fully isolated styles to avoid affecting other JSPF sections
      ========================================================= --%>
 
-<section class="desc-section">
+<section class="page-desc-section">
 
-    <div class="desc-container">
+    <div class="page-desc-container">
 
         <%-- Section Title --%>
         <c:if test="${not empty sec.title}">
-            <h2 class="desc-title">
+            <h2 class="page-desc-title">
                 <c:out value="${sec.title}" />
             </h2>
         </c:if>
 
         <%-- Description Box --%>
         <c:if test="${not empty sec.content}">
-            <div class="desc-box">
+            <div class="page-desc-box">
 
-                <div class="desc-content">
+                <div class="page-desc-content">
                     <c:out value="${sec.content}" />
                 </div>
 
@@ -30,3 +29,4 @@
     </div>
 
 </section>
+```
