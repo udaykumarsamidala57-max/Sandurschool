@@ -24,6 +24,14 @@
     box-sizing: border-box;
 }
 
+.truncated-heading {
+    display: -webkit-box;
+    -webkit-line-clamp: 8; /* Limit visible lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 /* =========================================================
    ORANGE BACKGROUND

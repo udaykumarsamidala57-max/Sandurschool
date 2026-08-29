@@ -117,15 +117,10 @@
                     ================================================= -->
 
                     <c:if test="${not empty img.altText}">
-
-                        <h3>
-
-                            <c:out
-                                value="${img.altText}" />
-
-                        </h3>
-
-                    </c:if>
+    <h3 class="truncated-heading">
+        <c:out value="${img.altText}" />
+    </h3>
+</c:if>
 
 
 
