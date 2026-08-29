@@ -1,176 +1,266 @@
 /* =========================================================
-   CONTAINER
-========================================================= */
+   PERSON DETAILS SECTION
+   ========================================================= */
+
 .person-details-section {
-    width: calc(100% - 100px);
-    max-width: 1190px;
-    margin: 22px auto 70px;
-    padding: 0;
+    width: 100%;
+    max-width: 1100px;
+    margin: clamp(24px, 4vw, 48px) auto;
+    padding: 0 clamp(12px, 3vw, 24px);
     box-sizing: border-box;
-    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
+
 
 /* =========================================================
    SECTION TITLE
-========================================================= */
+   ========================================================= */
+
 .person-details-section .person-section-title {
-    margin: 0 0 40px 0;
+    margin: 0 0 clamp(16px, 2.5vw, 24px) 0;
     padding: 0;
-    font-size: 40px;
-    line-height: 1.2;
+
+    font-size: clamp(22px, 3.2vw, 30px);
+    line-height: 1.25;
     font-weight: 700;
-    color: #4a2b0b;
+    letter-spacing: -0.02em;
+
+    color: #3b2006;
     text-align: left;
 }
 
-/* =========================================================
-   CARD WRAPPER
-========================================================= */
-.person-details-section .person-details-profile {
-    display: flex;
-    align-items: center; /* Vertically centers image and text */
-    width: 100%;
-    margin: 0;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #f0e6df;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    box-sizing: border-box;
-}
 
 /* =========================================================
-   LEFT SIDE: IMAGE CONTAINER (UNCROPPED)
-========================================================= */
-.person-details-section .person-details-image {
-    flex: 0 0 410px;
-    max-width: 410px;
+   PROFILE CONTAINER (FLUID GRID LAYOUT)
+   ========================================================= */
+
+.person-details-section .person-details-profile {
+    display: grid;
+    /* Auto-fit columns: Left image keeps a stable size range; Right content takes the rest */
+    grid-template-columns: minmax(220px, 260px) 1fr;
+    align-items: center;
+
+    gap: clamp(20px, 4vw, 40px);
+
     width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 0;
+    margin: 0 auto;
+    padding: clamp(20px, 3.5vw, 36px);
+
+    background: #ffffff;
+
+    border: 1px solid rgba(226, 212, 201, 0.6);
+    border-radius: 14px;
+
+    /* Elevated subtle shadow depth */
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04),
+                0 2px 6px -1px rgba(0, 0, 0, 0.02);
+
     box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.person-details-section .person-details-profile:hover {
+    box-shadow: 0 14px 38px -6px rgba(0, 0, 0, 0.07),
+                0 4px 10px -2px rgba(0, 0, 0, 0.03);
+}
+
+
+/* =========================================================
+   LEFT SIDE: IMAGE
+   ========================================================= */
+
+.person-details-section .person-details-image {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+
+    box-sizing: border-box;
+    position: relative;
+}
+
+
+/* =========================================================
+   PROFILE IMAGE
+   ========================================================= */
 
 .person-details-section .person-details-image img {
     display: block;
+
     width: 100%;
     height: auto;
-    object-fit: contain; /* Prevents cropping and keeps original aspect ratio */
-    object-position: center center;
-    border-radius: 8px;
+    max-height: 380px;
+
+    object-fit: cover;
+    object-position: top center;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
+
 /* =========================================================
-   RIGHT SIDE: CONTENT CONTAINER
-========================================================= */
+   RIGHT SIDE: CONTENT
+   ========================================================= */
+
 .person-details-section .person-details-content {
-    flex: 1;
-    padding: 20px 20px 20px 45px;
+    min-width: 0;
+
+    padding: 0;
+
     box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
+
 /* =========================================================
-   DESIGNATION & NAME
-========================================================= */
+   DESIGNATION
+   ========================================================= */
+
 .person-details-section .person-designation {
-    margin: 0 0 10px 0;
+    margin: 0 0 6px 0;
     padding: 0;
-    font-size: 30px;
-    line-height: 1.25;
-    font-weight: 500;
-    color: #df7b51;
+
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+
+    /* Rich, classic warm accent tone */
+    color: #b8542b;
 }
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
 
 .person-details-section .person-name {
     position: relative;
+
     display: inline-block;
-    margin: 0 0 24px 0;
-    padding-bottom: 12px;
-    font-size: 20px;
-    line-height: 1.3;
-    font-weight: 700;
-    color: #4a2b0b;
+    width: fit-content;
+
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.35;
+    font-weight: 600;
+
+    color: #2c1a0c;
 }
 
-/* Accent line under the name */
-.person-details-section .person-name::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 120px;
-    height: 2px;
-    background-color: #4a2b0b;
-}
 
 /* =========================================================
-   DESCRIPTION TEXT
-========================================================= */
+   CLASSY ACCENT LINE
+   ========================================================= */
+
+.person-details-section .person-name::after {
+    content: '';
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    width: 48px;
+    height: 3px;
+
+    background: linear-gradient(90deg, #b8542b 0%, rgba(184, 84, 43, 0.3) 100%);
+    border-radius: 2px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
 .person-details-section .person-description {
     margin: 0;
     padding: 0;
-    font-size: 15px;
-    line-height: 1.75;
+
+    font-size: clamp(13.5px, 1.4vw, 15px);
+    line-height: 1.8;
     font-weight: 400;
-    color: #555555;
+
+    /* Optimized readability color */
+    color: #2b2b2b;
 }
 
+
+/* =========================================================
+   DESCRIPTION PARAGRAPHS
+   ========================================================= */
+
 .person-details-section .person-description p {
-    margin: 0 0 16px 0;
+    margin: 0 0 12px 0;
 }
 
 .person-details-section .person-description p:last-child {
     margin-bottom: 0;
 }
 
+
 /* =========================================================
-   TABLET RESPONSIVE (1000px)
-========================================================= */
-@media (max-width: 1000px) {
-    .person-details-section {
-        width: calc(100% - 60px);
-    }
+   RESPONSIVE LAYOUT adjustments
+   ========================================================= */
+
+/* Tablet & Smaller Desktop Adjustments */
+@media (max-width: 868px) {
     .person-details-section .person-details-profile {
-        padding: 25px;
+        grid-template-columns: 1fr;
+        gap: 22px;
+        text-align: center;
     }
+
     .person-details-section .person-details-image {
-        flex: 0 0 340px;
-        max-width: 340px;
+        max-width: 220px;
     }
+
     .person-details-section .person-details-content {
-        padding: 15px 15px 15px 30px;
+        align-items: center;
     }
+
     .person-details-section .person-designation {
-        font-size: 26px;
+        text-align: center;
+    }
+
+    .person-details-section .person-name {
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .person-details-section .person-name::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .person-details-section .person-description {
+        text-align: left;
     }
 }
 
-/* =========================================================
-   MOBILE RESPONSIVE (768px - STACK VERTICALLY)
-========================================================= */
-@media (max-width: 768px) {
+/* Mobile Screens */
+@media (max-width: 480px) {
     .person-details-section {
-        width: calc(100% - 30px);
-        margin: 30px auto;
+        padding: 0 8px;
     }
+
+    .person-details-section .person-section-title {
+        text-align: center;
+    }
+
     .person-details-section .person-details-profile {
-        flex-direction: column;
-        padding: 20px;
+        padding: 18px 16px;
+        border-radius: 12px;
     }
+
     .person-details-section .person-details-image {
-        flex: none;
-        max-width: 100%;
-        width: 100%;
-        margin-bottom: 25px;
-    }
-    .person-details-section .person-details-content {
-        padding: 0;
-    }
-    .person-details-section .person-designation {
-        font-size: 24px;
+        max-width: 170px;
     }
 }

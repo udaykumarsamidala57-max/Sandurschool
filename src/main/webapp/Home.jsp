@@ -268,6 +268,25 @@
             box-sizing: border-box;
         }
 
+        /* =====================================================
+           FULL-WIDTH FALLBACK (WHEN NO SIDE DESIGN)
+           ===================================================== */
+
+        .page-body-container.no-side-design {
+            display: block;
+            max-width: 1400px;
+        }
+
+        .page-body-container.no-side-design .primary-content-area {
+            width: 100%;
+            max-width: 100%;
+            flex: none;
+        }
+
+        .page-body-container.no-side-design .right-side-column {
+            display: none;
+        }
+
 
         /* =====================================================
            PRIMARY CONTENT
@@ -662,10 +681,35 @@
 
 
         <!-- =================================================
+             CHECK FOR SIDE DESIGN / SIDEBAR PRESENCE
+             ================================================= -->
+
+        <c:set var="hasSideDesign" value="false" />
+
+        <c:if test="${not empty pageData.sections}">
+            <c:forEach var="sec" items="${pageData.sections}">
+                <c:set var="sTypeCheck" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
+                <c:if test="${sTypeCheck eq 'SIDE_DESIGN'}">
+                    <c:set var="hasSideDesign" value="true" />
+                </c:if>
+            </c:forEach>
+        </c:if>
+
+        <c:set var="showSidebarNav" value="false" />
+        <c:if test="${currentSlug ne 'about'
+                      and currentSlug ne 'lag'
+                      and currentSlug ne 'infrastructure'
+                      and currentSlug ne 'home'
+                      and not empty dynamicSubMenuItems}">
+            <c:set var="showSidebarNav" value="true" />
+        </c:if>
+
+
+        <!-- =================================================
              CONTENT + RIGHT SIDE
              ================================================= -->
 
-        <div class="page-body-container">
+        <div class="page-body-container ${(!hasSideDesign and !showSidebarNav) ? 'no-side-design' : ''}">
 
 
             <!-- =============================================
@@ -748,79 +792,77 @@
                  RIGHT SIDE COLUMN
                  ============================================= -->
 
-            <aside class="right-side-column">
+            <c:if test="${hasSideDesign or showSidebarNav}">
+
+                <aside class="right-side-column">
 
 
-                <!-- =========================================
-                     DYNAMIC SUBNAVIGATION
+                    <!-- =========================================
+                         DYNAMIC SUBNAVIGATION
+                         ========================================= -->
 
-                     This appears first in the sidebar.
-                     ========================================= -->
-
-                <c:if test="${currentSlug ne 'about'
-                              and currentSlug ne 'lag'
-                              and currentSlug ne 'infrastructure'
-                              and currentSlug ne 'home'
-                              and not empty dynamicSubMenuItems}">
+                    <c:if test="${showSidebarNav}">
 
 
-                    <div class="sidebar-nav-box">
+                        <div class="sidebar-nav-box">
 
-                        <ul>
+                            <ul>
 
-                            <c:forEach var="subItem"
-                                       items="${dynamicSubMenuItems}">
-
-
-                                <c:set var="itemSlug"
-                                         value="${fn:toLowerCase(fn:trim(subItem.slug))}" />
+                                <c:forEach var="subItem"
+                                           items="${dynamicSubMenuItems}">
 
 
-                                <li class="${currentSlug eq itemSlug ? 'active' : ''}">
+                                    <c:set var="itemSlug"
+                                             value="${fn:toLowerCase(fn:trim(subItem.slug))}" />
 
 
-                                    <a href="${pageContext.request.contextPath}/homepage?slug=${subItem.slug}">
-
-                                        <c:out value="${subItem.title}" />
-
-                                    </a>
+                                    <li class="${currentSlug eq itemSlug ? 'active' : ''}">
 
 
-                                </li>
+                                        <a href="${pageContext.request.contextPath}/homepage?slug=${subItem.slug}">
+
+                                            <c:out value="${subItem.title}" />
+
+                                        </a>
 
 
-                            </c:forEach>
-
-                        </ul>
-
-                    </div>
+                                    </li>
 
 
-                </c:if>
+                                </c:forEach>
 
-
-                <!-- =========================================
-                     SIDE DESIGN SECTION (RENDERED IN SIDEBAR)
-                     ========================================= -->
-
-                <c:forEach var="sec" items="${pageData.sections}">
-
-                    <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
-
-                    <c:if test="${sType eq 'SIDE_DESIGN'}">
-
-                        <div class="side-design-wrapper">
-
-                            <%@ include file="views/sections/side_design.jspf" %>
+                            </ul>
 
                         </div>
 
+
                     </c:if>
 
-                </c:forEach>
+
+                    <!-- =========================================
+                         SIDE DESIGN SECTION (RENDERED IN SIDEBAR)
+                         ========================================= -->
+
+                    <c:forEach var="sec" items="${pageData.sections}">
+
+                        <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
+
+                        <c:if test="${sType eq 'SIDE_DESIGN'}">
+
+                            <div class="side-design-wrapper">
+
+                                <%@ include file="views/sections/side_design.jspf" %>
+
+                            </div>
+
+                        </c:if>
+
+                    </c:forEach>
 
 
-            </aside>
+                </aside>
+
+            </c:if>
 
 
         </div>
