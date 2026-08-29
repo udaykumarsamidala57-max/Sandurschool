@@ -75,6 +75,11 @@
                       href="${pageContext.request.contextPath}/css/distinct.css">
             </c:if>
 
+            <c:if test="${secType eq 'DISTINCT2'}">
+                <link rel="stylesheet"
+                      href="${pageContext.request.contextPath}/css/distinct2.css">
+            </c:if>
+
             <c:if test="${secType eq 'PERSON_DETAILS'}">
                 <link rel="stylesheet"
                       href="${pageContext.request.contextPath}/css/person-details.css">
@@ -734,6 +739,17 @@
                     <c:if test="${sType eq 'DISTINCT'}">
 
                         <%@ include file="views/sections/distinct.jspf" %>
+
+                    </c:if>
+
+
+                    <!-- =====================================
+                         DISTINCT2
+                         ===================================== -->
+
+                    <c:if test="${sType eq 'DISTINCT2'}">
+
+                        <%@ include file="views/sections/distinct2.jspf" %>
 
                     </c:if>
 

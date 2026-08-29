@@ -1,0 +1,118 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<section class="house-grid-section">
+    <c:if test="${not empty sec.title}">
+        <h2 class="section-heading"><c:out value="${sec.title}" /></h2>
+    </c:if>
+
+    <div class="house-grid">
+        <c:forEach var="img" items="${sec.images}" varStatus="status">
+            <div class="house-card">
+                <div class="house-img-container">
+                    <%-- Streams BLOB image by ID from ImageStreamServlet --%>
+                    <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
+                         alt="<c:out value='${img.heading1}' />">
+                </div>
+
+                <h3 class="house-title-link" 
+                    data-title="<c:out value='${img.heading1}' />" 
+                    data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                    data-desc-id="desc-content-${img.id}-${status.index}">
+                    <c:out value="${img.heading1}" />
+                </h3>
+
+                <%-- Hidden container reading JavaBeans properties correctly --%>
+                <div id="desc-content-${img.id}-${status.index}" style="display: none;">
+                    <c:choose>
+                        <c:when test="${not empty img.heading2}">
+                            <c:out value="${img.heading2}" escapeXml="false" />
+                        </c:when>
+                        <c:when test="${not empty img.altText}">
+                            <c:out
+                                value="${img.altText}" />
+                        </c:when>
+                    </c:choose>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+</section>
+
+<!-- POPUP MODAL CONTAINER -->
+<div id="houseModalOverlay" class="house-modal-overlay">
+    <div class="house-modal-content">
+        <button type="button" class="house-modal-close" id="houseModalClose" aria-label="Close">&times;</button>
+        <div class="house-modal-body">
+            <img id="modalImg" src="" alt="House Image" class="house-modal-img">
+            <h2 id="modalTitle" class="house-modal-title"></h2>
+            <div id="modalDesc" class="house-modal-desc"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalOverlay = document.getElementById("houseModalOverlay");
+        const modalClose = document.getElementById("houseModalClose");
+        const modalImg = document.getElementById("modalImg");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDesc = document.getElementById("modalDesc");
+
+        document.querySelectorAll(".house-title-link").forEach(function (element) {
+            element.addEventListener("click", function () {
+                const title = this.getAttribute("data-title") || "";
+                const imgSrc = this.getAttribute("data-img") || "";
+                const descTargetId = this.getAttribute("data-desc-id");
+
+                modalTitle.textContent = title;
+                modalImg.src = imgSrc;
+                modalImg.alt = title;
+
+                let rawContent = "";
+                if (descTargetId) {
+                    const contentContainer = document.getElementById(descTargetId);
+                    if (contentContainer) {
+                        rawContent = contentContainer.innerHTML.trim();
+                    }
+                }
+
+                if (rawContent !== "") {
+                    renderDescription(rawContent);
+                } else {
+                    modalDesc.innerHTML = "<em>No description available.</em>";
+                }
+
+                modalOverlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        function renderDescription(rawText) {
+            // Checks if content contains HTML tags; otherwise replaces \n with <br>
+            if (/<[a-z][\s\S]*>/i.test(rawText)) {
+                modalDesc.innerHTML = rawText;
+            } else {
+                modalDesc.innerHTML = rawText.replace(/\r?\n/g, '<br>');
+            }
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove("active");
+            document.body.style.overflow = "auto";
+        }
+
+        if (modalClose) {
+            modalClose.addEventListener("click", closeModal);
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener("click", function (e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+        }
+    });
+</script>

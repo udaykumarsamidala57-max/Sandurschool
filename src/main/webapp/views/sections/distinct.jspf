@@ -36,7 +36,6 @@
 
     <!-- =================================================
          DISTINCT CARDS
-         Dynamic number of images
     ================================================= -->
 
     <c:forEach
@@ -51,7 +50,10 @@
                 ? 'distinct-card-first'
                 : status.index == 1
                     ? 'distinct-card-second'
-                    : ''}">
+                    : ''}"
+            data-title="<c:out value='${not empty img.heading1 ? img.heading1 : img.altText}' />"
+            data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+            data-desc-id="distinct-desc-${img.id}-${status.index}">
 
 
             <!-- =================================================
@@ -108,7 +110,7 @@
 
                     </c:if>
 
-
+                       <BR> <BR>
 
                     <!-- =================================================
                          IMAGE TITLE
@@ -126,8 +128,51 @@
                     </c:if>
 
 
+
+                    <!-- =================================================
+                         READ MORE LINK
+                    ================================================= -->
+
+                    <span class="distinct-read-more">
+
+                        READ MORE &rightarrow;
+
+                    </span>
+
+
                 </div>
 
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HIDDEN CONTENT NODE
+            ================================================= -->
+
+            <div
+                id="distinct-desc-${img.id}-${status.index}"
+                style="display: none;">
+
+                <c:choose>
+
+                    <c:when test="${not empty img.heading2}">
+
+                        <c:out
+                            value="${img.heading2}"
+                            escapeXml="false" />
+
+                    </c:when>
+
+                    <c:when test="${not empty img.altText}">
+
+                         <c:out
+                                value="${img.altText}" />
+
+                    </c:when>
+
+                </c:choose>
 
             </div>
 
@@ -139,3 +184,156 @@
 
 
 </section>
+
+
+
+<!-- =================================================
+     DISTINCT POPUP MODAL CONTAINER
+================================================= -->
+
+<div
+    id="distinctModalOverlay"
+    class="distinct-modal-overlay">
+
+
+    <div class="distinct-modal-content">
+
+
+        <button
+            type="button"
+            class="distinct-modal-close"
+            id="distinctModalClose"
+            aria-label="Close">&mdash;</button>
+
+
+        <div class="distinct-modal-body">
+
+
+            <div class="distinct-modal-left">
+
+                <img
+                    id="distinctModalImg"
+                    src=""
+                    alt="Popup Image">
+
+            </div>
+
+
+            <div class="distinct-modal-right">
+
+                <h3
+                    id="distinctModalTitle"
+                    class="distinct-modal-title"></h3>
+
+                <div
+                    id="distinctModalDesc"
+                    class="distinct-modal-desc"></div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =================================================
+     MODAL INTERACTION LOGIC
+================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const modalOverlay = document.getElementById("distinctModalOverlay");
+        const modalClose = document.getElementById("distinctModalClose");
+        const modalImg = document.getElementById("distinctModalImg");
+        const modalTitle = document.getElementById("distinctModalTitle");
+        const modalDesc = document.getElementById("distinctModalDesc");
+
+        document.querySelectorAll(".distinct-card").forEach(function (card) {
+
+            card.addEventListener("click", function () {
+
+                const title = this.getAttribute("data-title") || "";
+                const imgSrc = this.getAttribute("data-img") || "";
+                const descTargetId = this.getAttribute("data-desc-id");
+
+                modalTitle.textContent = title;
+                modalImg.src = imgSrc;
+                modalImg.alt = title;
+
+                let rawContent = "";
+
+                if (descTargetId) {
+
+                    const contentContainer = document.getElementById(descTargetId);
+
+                    if (contentContainer) {
+
+                        rawContent = contentContainer.innerHTML.trim();
+
+                    }
+
+                }
+
+                if (rawContent !== "") {
+
+                    if (/<[a-z][\s\S]*>/i.test(rawContent)) {
+
+                        modalDesc.innerHTML = rawContent;
+
+                    } else {
+
+                        modalDesc.innerHTML = rawContent.replace(/\r?\n/g, '<br><br>');
+
+                    }
+
+                } else {
+
+                    modalDesc.innerHTML = "<p>No description available.</p>";
+
+                }
+
+                modalOverlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+
+            });
+
+        });
+
+        function closeModal() {
+
+            modalOverlay.classList.remove("active");
+            document.body.style.overflow = "auto";
+
+        }
+
+        if (modalClose) {
+
+            modalClose.addEventListener("click", closeModal);
+
+        }
+
+        if (modalOverlay) {
+
+            modalOverlay.addEventListener("click", function (e) {
+
+                if (e.target === modalOverlay) {
+
+                    closeModal();
+
+                }
+
+            });
+
+        }
+
+    });
+
+</script>
