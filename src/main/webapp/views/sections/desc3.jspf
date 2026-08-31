@@ -8,20 +8,13 @@
 
     <div class="desc-container">
 
-        <%-- =================================================
-             SECTION TITLE
-             ================================================= --%>
-
+   
         <c:if test="${not empty sec.title}">
             <h2 class="desc-title">
                 <c:out value="${sec.title}" />
             </h2>
         </c:if>
 
-
-        <%-- =================================================
-             SECTION IMAGES
-             ================================================= --%>
 
         <c:if test="${not empty sec.images}">
 
@@ -30,9 +23,6 @@
                 <c:forEach var="img" items="${sec.images}">
 
 
-                    <%-- =====================================
-                         HEADING 1
-                         ===================================== --%>
 
                     <c:if test="${not empty img.heading1}">
                         <h1 class="desc-heading1">
@@ -41,20 +31,12 @@
                     </c:if>
 
 
-                    <%-- =====================================
-                         HEADING 2
-                         ===================================== --%>
-
                     <c:if test="${not empty img.heading2}">
                         <h3 class="desc-heading2">
                             <c:out value="${img.heading2}" />
                         </h3>
                     </c:if>
 
-
-                    <%-- =====================================
-                         IMAGE
-                         ===================================== --%>
 
                     <div class="desc-image-wrapper">
 
@@ -66,10 +48,6 @@
 
                     </div>
 
-
-                    <%-- =====================================
-                         SECTION CONTENT
-                         ===================================== --%>
 
                     <c:if test="${not empty sec.content}">
 

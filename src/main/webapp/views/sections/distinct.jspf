@@ -1,13 +1,4 @@
-<!-- =================================================
-     DISTINCT SECTION
-================================================= -->
-
 <section class="distinct-section">
-
-
-    <!-- =================================================
-         DISTINCT INTRO
-    ================================================= -->
 
     <div class="distinct-intro">
 
@@ -18,7 +9,6 @@
             </h2>
 
         </c:if>
-
 
         <c:if test="${not empty sec.content}">
 
@@ -32,17 +22,10 @@
 
     </div>
 
-
-
-    <!-- =================================================
-         DISTINCT CARDS
-    ================================================= -->
-
     <c:forEach
         var="img"
         items="${sec.images}"
         varStatus="status">
-
 
         <div
             class="distinct-card
@@ -55,32 +38,15 @@
             data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}"
             data-desc-id="distinct-desc-${img.id}-${status.index}">
 
-
-            <!-- =================================================
-                 IMAGE
-            ================================================= -->
-
             <img
                 src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
                 alt="${not empty img.altText
                       ? img.altText
                       : sec.title}">
 
-
-
-            <!-- =================================================
-                 HOVER OVERLAY
-            ================================================= -->
-
             <div class="distinct-overlay">
 
-
                 <div class="distinct-overlay-content">
-
-
-                    <!-- =================================================
-                         HEADING 1
-                    ================================================= -->
 
                     <c:if test="${not empty img.heading1}">
 
@@ -92,12 +58,6 @@
                         </h4>
 
                     </c:if>
-
-
-
-                    <!-- =================================================
-                         HEADING 2
-                    ================================================= -->
 
                     <c:if test="${not empty img.heading2}">
 
@@ -112,21 +72,11 @@
 
                        <BR> <BR>
 
-                    <!-- =================================================
-                         IMAGE TITLE
-                    ================================================= -->
-
                     <c:if test="${not empty img.altText}">
     <h3 class="truncated-heading">
         <c:out value="${img.altText}" />
     </h3>
 </c:if>
-
-
-
-                    <!-- =================================================
-                         READ MORE LINK
-                    ================================================= -->
 
                     <span class="distinct-read-more">
 
@@ -134,17 +84,9 @@
 
                     </span>
 
-
                 </div>
 
-
             </div>
-
-
-
-            <!-- =================================================
-                 HIDDEN CONTENT NODE
-            ================================================= -->
 
             <div
                 id="distinct-desc-${img.id}-${status.index}"
@@ -171,28 +113,17 @@
 
             </div>
 
-
         </div>
-
 
     </c:forEach>
 
-
 </section>
-
-
-
-<!-- =================================================
-     DISTINCT POPUP MODAL CONTAINER
-================================================= -->
 
 <div
     id="distinctModalOverlay"
     class="distinct-modal-overlay">
 
-
     <div class="distinct-modal-content">
-
 
         <button
             type="button"
@@ -200,9 +131,7 @@
             id="distinctModalClose"
             aria-label="Close">&mdash;</button>
 
-
         <div class="distinct-modal-body">
-
 
             <div class="distinct-modal-left">
 
@@ -212,7 +141,6 @@
                     alt="Popup Image">
 
             </div>
-
 
             <div class="distinct-modal-right">
 
@@ -226,20 +154,11 @@
 
             </div>
 
-
         </div>
-
 
     </div>
 
-
 </div>
-
-
-
-<!-- =================================================
-     MODAL INTERACTION LOGIC
-================================================= -->
 
 <script>
 

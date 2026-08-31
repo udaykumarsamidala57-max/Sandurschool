@@ -4,24 +4,22 @@
 <section class="desc-section">
     <div class="desc-container">
 
-        <%-- Section Title --%>
+    
         <c:if test="${not empty sec.title}">
           
         </c:if>
 
-        <%-- Section Main Content --%>
-        
-        <%-- Section Images & Image-Level Headings --%>
+       
         <c:if test="${not empty sec.images}">
             <div class="desc-images">
                 <c:forEach var="img" items="${sec.images}">
 
-                    <%-- Heading 1 bound to image --%>
+                   
                     <c:if test="${not empty img.heading1}">
                         <h1 class="desc-heading1"><c:out value="${img.heading1}" /></h1>
                     </c:if>
 
-                    <%-- Heading 2 bound to image --%>
+                   
                     <c:if test="${not empty img.heading2}">
                         <h3 class="desc-heading2"><c:out value="${img.heading2}" /></h3>
                     </c:if>

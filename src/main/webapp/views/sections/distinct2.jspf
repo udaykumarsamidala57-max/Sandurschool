@@ -11,7 +11,7 @@
         <c:forEach var="img" items="${sec.images}" varStatus="status">
             <div class="house-card">
                 <div class="house-img-container">
-                    <%-- Streams BLOB image by ID from ImageStreamServlet --%>
+                    
                     <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
                          alt="<c:out value='${img.heading1}' />">
                 </div>
@@ -23,7 +23,7 @@
                     <c:out value="${img.heading1}" />
                 </h3>
 
-                <%-- Hidden container reading JavaBeans properties correctly --%>
+               
                 <div id="desc-content-${img.id}-${status.index}" style="display: none;">
                     <c:choose>
                         <c:when test="${not empty img.heading2}">
@@ -40,7 +40,7 @@
     </div>
 </section>
 
-<!-- POPUP MODAL CONTAINER -->
+
 <div id="houseModalOverlay" class="house-modal-overlay">
     <div class="house-modal-content">
         <button type="button" class="house-modal-close" id="houseModalClose" aria-label="Close">&times;</button>

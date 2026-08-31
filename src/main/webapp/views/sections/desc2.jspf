@@ -4,19 +4,19 @@
 
     <div class="page-desc-container">
 
-        <%-- Section Title --%>
+      
         <c:if test="${not empty sec.title}">
             <h2 class="page-desc-title">
                 <c:out value="${sec.title}" />
             </h2>
         </c:if>
 
-        <%-- Description Box --%>
+        
         <c:if test="${not empty sec.content}">
             <div class="page-desc-box">
 
                 <div class="page-desc-content">
-                    <%-- Using unescaped expression to render raw HTML --%>
+                    
                     ${sec.content}
                 </div>
 
