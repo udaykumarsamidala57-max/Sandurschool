@@ -9,93 +9,89 @@
     <title>
         <c:out value="${not empty pageData.title ? pageData.title : 'Sandur Residential School'}" />
     </title>
-    
-    <!-- Title Tab Logo (Favicon) -->
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/Home/logo.png">
-    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/Home/logo.png">
+
+    <link rel="icon" href="${pageContext.request.contextPath}/Home/logo.png?v=10" type="image/png">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/Home/logo.png?v=10" type="image/png">
+    <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/Home/logo.png?v=10">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
     <style>
-        nav .main-menu { 
-            list-style: none; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            background-color: #FAF8F7; 
+        nav .main-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #FAF8F7;
         }
-        nav .main-menu > li { 
-            position: relative; 
+
+        nav .main-menu > li {
+            position: relative;
         }
-        
-        /* Top Navigation Links */
-        nav .main-menu > li > a { 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            padding: 14px 23px; 
-            color: #000000; 
-            text-decoration: none; 
-            font-size: 15px; 
-            font-weight: 500; 
-            transition: all 0.2s ease; 
-            border-bottom: 3px solid transparent; 
+
+        nav .main-menu > li > a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 23px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
         }
-        
-        /* Top Navigation Active & Hover States */
-        nav .main-menu > li.active-tab > a, 
-        nav .main-menu > li:hover > a { 
-            background-color: #FAF8F7; 
-            color: #612405; 
-            border-bottom: 3px solid #612405; /* Accent line changed to match brown theme for visibility */
+
+        nav .main-menu > li.active-tab > a,
+        nav .main-menu > li:hover > a {
+            background-color: #FAF8F7;
+            color: #612405;
+            border-bottom: 3px solid #612405;
         }
-        
-        /* Dropdown Box */
-        nav .dropdown-menu { 
-            display: none; 
-            position: absolute; 
-            top: 100%; 
-            left: 0; 
-            min-width: 210px; 
-            background-color: #612405; 
-            list-style: none; 
-            margin: 0; 
-            padding: 0; 
-            border: none; 
-            border-top: 3px solid #612405; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-            z-index: 1000; 
+
+        nav .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 210px;
+            background-color: #612405;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-top: 3px solid #612405;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
-        
-        nav .main-menu > li:hover .dropdown-menu { 
-            display: block; 
+
+        nav .main-menu > li:hover .dropdown-menu {
+            display: block;
         }
-        
-        /* Dropdown Items */
-        nav .dropdown-menu li { 
-            border: none !important; 
-            background-color: #612405 !important; 
+
+        nav .dropdown-menu li {
+            border: none !important;
+            background-color: #612405 !important;
         }
-        
-        /* Base Sub-Navigation Links */
-        nav .dropdown-menu li a { 
-            display: block; 
-            padding: 12px 18px; 
-            color: #ffffff; 
-            text-decoration: none; 
-            font-size: 14px; 
-            background-color: #612405; 
-            transition: color 0.2s ease, background-color 0.2s ease; 
+
+        nav .dropdown-menu li a {
+            display: block;
+            padding: 12px 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            background-color: #612405;
+            transition: color 0.2s ease, background-color 0.2s ease;
             border: none !important;
         }
-        
-        /* Sub-Navigation Hover & Active State */
-        nav .dropdown-menu li:hover > a, 
-        nav .dropdown-menu li a:hover, 
-        nav .dropdown-menu li.active-child > a { 
-            background-color: #4a1b03 !important; /* Slightly darker shade on hover for visual feedback */
-            color: #e8cfb8 !important; 
+
+        nav .dropdown-menu li:hover > a,
+        nav .dropdown-menu li a:hover,
+        nav .dropdown-menu li.active-child > a {
+            background-color: #4a1b03 !important;
+            color: #e8cfb8 !important;
         }
     </style>
 </head>
