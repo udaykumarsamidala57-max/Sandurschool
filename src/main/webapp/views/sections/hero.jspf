@@ -21,9 +21,7 @@
             <div class="slide-content">
 
                 <c:if test="${not empty sec.title}">
-                    <h2>
-                        <c:out value="${sec.title}" />
-                    </h2>
+                   
                 </c:if>
 
                 <c:if test="${not empty sec.content}">

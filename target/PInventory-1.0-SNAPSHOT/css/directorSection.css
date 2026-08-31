@@ -1,0 +1,224 @@
+/* Custom Properties / Variables */
+:root {
+    --primary-brown: #3D1E0B;
+    --accent-orange: #E26A2C;
+    --accent-orange-hover: #D0591B;
+    --text-body: #4A4A4A;
+    --bg-light: #FDFBF7;
+    --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Layout Wrapper */
+.director-welcome-section {
+    display: flex;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 24px;
+    gap: 48px;
+    align-items: center;
+    box-sizing: border-box;
+    font-family: var(--font-body);
+}
+
+/* Left Column Styling */
+.director-left-col {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+}
+
+.director-subtitle {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    color: var(--primary-brown);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px 0;
+    line-height: 1.3;
+}
+
+/* Orange Backdrop Box */
+.orange-card {
+    background-color: var(--accent-orange);
+    border-radius: 8px;
+    padding: 30px 0 45px 0;
+    width: 82%;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(226, 106, 44, 0.15);
+}
+
+/* Floating/Overlapping Video Frame */
+.video-container {
+    position: relative;
+    width: 100%;
+    margin-left: 18%; /* Precise offset for high-contrast backdrop reveal */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #000000;
+    aspect-ratio: 16 / 9;
+}
+
+.video-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.video-container:hover .video-thumbnail {
+    transform: scale(1.03);
+}
+
+/* Play Button Icon & Layer Effects */
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    z-index: 2;
+}
+
+.play-btn::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    z-index: -1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background-color: #FFFFFF;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.play-btn:hover::before {
+    transform: scale(1.3);
+    opacity: 0;
+}
+
+.play-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--accent-orange);
+    margin-left: 3px;
+    transition: fill 0.2s ease;
+}
+
+.play-btn:hover svg {
+    fill: var(--accent-orange-hover);
+}
+
+/* Right Column Content */
+.director-right-col {
+    flex: 1.1;
+    padding-top: 4px;
+    min-width: 0;
+}
+
+.welcome-title {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    color: var(--primary-brown);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px 0;
+}
+
+.welcome-text p {
+    color: var(--text-body);
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0 0 16px 0;
+}
+
+.welcome-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 992px) {
+    .director-welcome-section {
+        gap: 36px;
+    }
+
+    .welcome-title {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 868px) {
+    .director-welcome-section {
+        flex-direction: column;
+        margin: 40px auto;
+        gap: 32px;
+        padding: 0 16px;
+    }
+
+    .director-left-col,
+    .director-right-col {
+        width: 100%;
+        flex: none;
+    }
+
+    .orange-card {
+        width: 90%;
+        padding: 20px 0 28px 0;
+    }
+
+    .video-container {
+        margin-left: 10%;
+        width: 90%;
+    }
+
+    .director-subtitle {
+        font-size: 22px;
+        margin-bottom: 14px;
+    }
+
+    .welcome-title {
+        font-size: 26px;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .orange-card {
+        width: 100%;
+        padding: 12px 0 0 0;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .video-container {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .play-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .play-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}

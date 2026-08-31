@@ -1,0 +1,153 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%-- 1. Single Pass: Locate DIRECTOR section first; fall back to WELCOME if missing --%>
+<c:set var="directorSec" value="${null}" />
+<c:set var="welcomeFallback" value="${null}" />
+
+<c:forEach var="sec" items="${pageData.sections}">
+    <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
+    <c:if test="${sType eq 'DIRECTOR' and empty directorSec}">
+        <c:set var="directorSec" value="${sec}" />
+    </c:if>
+    <c:if test="${sType eq 'WELCOME' and empty welcomeFallback}">
+        <c:set var="welcomeFallback" value="${sec}" />
+    </c:if>
+</c:forEach>
+
+<c:if test="${empty directorSec}">
+    <c:set var="directorSec" value="${welcomeFallback}" />
+</c:if>
+
+<%-- Extract first image safely --%>
+<c:set var="firstImg" value="${null}" />
+<c:if test="${not empty directorSec and not empty directorSec.images and fn:length(directorSec.images) > 0}">
+    <c:set var="firstImg" value="${directorSec.images[0]}" />
+</c:if>
+
+<div class="director-welcome-section">
+
+    <!-- LEFT COLUMN -->
+    <div class="director-left-col">
+        <h2 class="director-subtitle">
+            <c:choose>
+                <c:when test="${not empty directorSec and not empty directorSec.title}">
+                    <c:out value="${directorSec.title}" />
+                </c:when>
+                <c:otherwise>
+                    From the Director's Desk
+                </c:otherwise>
+            </c:choose>
+        </h2>
+
+        <div class="orange-card">
+            <div class="video-container">
+                <c:choose>
+                    <%-- Case 1: Video binary stream stored directly in DB --%>
+                    <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0 and (not empty firstImg.imageType and fn:startsWith(fn:toLowerCase(firstImg.imageType), 'video/'))}">
+                        <video class="video-player" controls preload="metadata" playsinline>
+                            <source src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}" type="${firstImg.imageType}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </c:when>
+
+                    <%-- Case 2: External YouTube Video URL stored in Heading1 --%>
+                    <c:when test="${not empty firstImg and not empty firstImg.heading1 and (fn:contains(firstImg.heading1, 'youtube.com') or fn:contains(firstImg.heading1, 'youtu.be'))}">
+                        <c:set var="rawVideoUrl" value="${fn:trim(firstImg.heading1)}" />
+                        <c:set var="videoId" value="" />
+                        
+                        <c:choose>
+                            <c:when test="${fn:contains(rawVideoUrl, 'v=')}">
+                                <c:set var="videoId" value="${fn:substringAfter(rawVideoUrl, 'v=')}" />
+                            </c:when>
+                            <c:when test="${fn:contains(rawVideoUrl, 'youtu.be/')}">
+                                <c:set var="videoId" value="${fn:substringAfter(rawVideoUrl, 'youtu.be/')}" />
+                            </c:when>
+                        </c:choose>
+                        
+                        <c:if test="${fn:contains(videoId, '&')}">
+                            <c:set var="videoId" value="${fn:substringBefore(videoId, '&')}" />
+                        </c:if>
+
+                        <iframe 
+                            class="video-iframe"
+                            src="https://www.youtube.com/embed/${videoId}" 
+                            title="Director Desk Video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </c:when>
+
+                    <%-- Case 3: Fallback Image stored in DB --%>
+                    <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0}">
+                        <img
+                            src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}"
+                            alt="Director Desk"
+                            class="video-thumbnail"
+                        />
+                    </c:when>
+
+                    <%-- Case 4: Default Static Fallback Image --%>
+                    <c:otherwise>
+                        <img
+                            src="${pageContext.request.contextPath}/images/director-thumbnail.jpg"
+                            alt="Director Desk Video"
+                            class="video-thumbnail"
+                        />
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="director-right-col">
+        <h1 class="welcome-title">
+            <c:choose>
+                <c:when test="${not empty firstImg and not empty firstImg.heading2}">
+                    <c:out value="${firstImg.heading2}" />
+                </c:when>
+                <c:otherwise>
+                    Welcome to Sandur Residential School
+                </c:otherwise>
+            </c:choose>
+        </h1>
+
+        <div class="welcome-text">
+            <c:choose>
+                <c:when test="${not empty directorSec and not empty directorSec.content}">
+                    <c:set var="newline" value="<%= \"\n\" %>" />
+                    <c:forEach var="paragraph" items="${fn:split(directorSec.content, newline)}">
+                        <c:if test="${not empty fn:trim(paragraph)}">
+                            <p><c:out value="${paragraph}" /></p>
+                        </c:if>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <p>
+                        Sandur Residential School is proud to present itself
+                        spanning over 60 years since its inception in 1959.
+                    </p>
+                    <p>
+                        We provide stimulating, engaging academics integrated
+                        with enhanced opportunities in sports, literature,
+                        community service, environment and arts.
+                    </p>
+                    <p>
+                        As you visit our campus and website, you will see that
+                        our learning community is dedicated to the development
+                        of knowledgeable, caring, confident and responsible
+                        global citizens. At our school every child is cared
+                        for and valued.
+                    </p>
+                    <p>
+                        We are an ICSE co-educational day-scholar and boarding
+                        school for classes from nursery to 10th Standard.
+                    </p>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+
+</div>

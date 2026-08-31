@@ -58,6 +58,13 @@
                 <link rel="stylesheet"
                       href="${pageContext.request.contextPath}/css/person-details.css">
             </c:if>
+            
+             <c:if test="${secType eq 'DIRECTOR'}">
+                <link rel="stylesheet"
+                      href="${pageContext.request.contextPath}/css/directorSection.css">
+            </c:if>
+            
+          
 
             <c:if test="${secType eq 'DESC'}">
                 <link rel="stylesheet"
@@ -608,6 +615,12 @@
                     <c:if test="${sType eq 'DESC3'}">
 
                         <%@ include file="views/sections/desc3.jspf" %>
+
+                    </c:if>
+                    
+                    <c:if test="${sType eq 'DIRECTOR'}">
+
+                        <%@ include file="views/sections/directorSection.jspf" %>
 
                     </c:if>
 

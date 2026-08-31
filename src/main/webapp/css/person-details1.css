@@ -1,0 +1,267 @@
+/* =========================================================
+   PERSON DETAILS SECTION (ISOLATED COMPONENT STYLES)
+   ========================================================= */
+
+.person-details-section {
+    width: 100%;
+    max-width: 1100px;
+    margin: clamp(24px, 4vw, 48px) auto;
+    padding: 0 clamp(12px, 3vw, 24px);
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Ensure box-sizing isolation for all internal elements */
+.person-details-section,
+.person-details-section * {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.person-details-section h2.person-section-title {
+    margin: 0 0 clamp(16px, 2.5vw, 24px) 0;
+    padding: 0;
+
+    font-size: clamp(22px, 3.2vw, 30px);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+
+    color: #3b2006;
+    text-align: left;
+}
+
+
+/* =========================================================
+   PROFILE CONTAINER (FLUID GRID LAYOUT)
+   ========================================================= */
+
+.person-details-section > .person-details-profile {
+    display: grid;
+    grid-template-columns: minmax(200px, 240px) 1fr;
+    align-items: center;
+
+    gap: clamp(24px, 4vw, 44px);
+
+    width: 100%;
+    margin: 0 auto;
+    padding: clamp(20px, 3.5vw, 36px);
+
+    background: #ffffff;
+
+    border: 1px solid rgba(226, 212, 201, 0.6);
+    border-radius: 14px;
+
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04),
+                0 2px 6px -1px rgba(0, 0, 0, 0.02);
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.person-details-section > .person-details-profile:hover {
+    box-shadow: 0 14px 38px -6px rgba(0, 0, 0, 0.07),
+                0 4px 10px -2px rgba(0, 0, 0, 0.03);
+}
+
+
+/* =========================================================
+   LEFT SIDE: IMAGE CONTAINER
+   ========================================================= */
+
+.person-details-section .person-details-image {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   PROFILE IMAGE (STRICTLY SCOPED SIZING & BORDER)
+   ========================================================= */
+
+.person-details-section .person-details-image img {
+    display: block;
+
+    width: 100%;
+    max-width: 230px;
+    aspect-ratio: 4 / 5;
+
+    object-fit: cover;
+    object-position: top center;
+
+    border-radius: 12px;
+    border: 4px solid #ffffff;
+    outline: 1px solid rgba(184, 84, 43, 0.25);
+    box-shadow: 0 8px 20px -4px rgba(59, 32, 6, 0.12),
+                0 2px 6px rgba(0, 0, 0, 0.04);
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease, outline-color 0.3s ease;
+}
+
+.person-details-section .person-details-profile:hover .person-details-image img {
+    transform: translateY(-2px);
+    outline-color: rgba(184, 84, 43, 0.5);
+    box-shadow: 0 12px 24px -4px rgba(59, 32, 6, 0.16),
+                0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================================
+   RIGHT SIDE: CONTENT
+   ========================================================= */
+
+.person-details-section .person-details-content {
+    min-width: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   DESIGNATION
+   ========================================================= */
+
+.person-details-section h3.person-designation {
+    margin: 0 0 6px 0;
+    padding: 0;
+
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+
+    color: #b8542b;
+}
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
+.person-details-section h4.person-name {
+    position: relative;
+
+    display: inline-block;
+    width: fit-content;
+
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.35;
+    font-weight: 600;
+
+    color: #2c1a0c;
+}
+
+
+/* =========================================================
+   ACCENT LINE UNDER NAME
+   ========================================================= */
+
+.person-details-section h4.person-name::after {
+    content: '';
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    width: 48px;
+    height: 3px;
+
+    background: linear-gradient(90deg, #b8542b 0%, rgba(184, 84, 43, 0.3) 100%);
+    border-radius: 2px;
+}
+
+
+/* =========================================================
+   DESCRIPTION (SCOPED TO PREVENT INHERITANCE ISSUES)
+   ========================================================= */
+
+.person-details-section .person-description {
+    margin: 0;
+    padding: 0;
+
+    font-size: clamp(13.5px, 1.4vw, 15px);
+    line-height: 1.8;
+    font-weight: 400;
+
+    color: #2b2b2b;
+}
+
+.person-details-section .person-description p {
+    margin: 0 0 12px 0;
+}
+
+.person-details-section .person-description p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS (SCOPED)
+   ========================================================= */
+
+@media (max-width: 868px) {
+    .person-details-section > .person-details-profile {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .person-details-section .person-details-image img {
+        max-width: 200px;
+    }
+
+    .person-details-section .person-details-content {
+        align-items: center;
+    }
+
+    .person-details-section h3.person-designation {
+        text-align: center;
+    }
+
+    .person-details-section h4.person-name {
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .person-details-section h4.person-name::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .person-details-section .person-description {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .person-details-section {
+        padding: 0 8px;
+    }
+
+    .person-details-section h2.person-section-title {
+        text-align: center;
+    }
+
+    .person-details-section > .person-details-profile {
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .person-details-section .person-details-image img {
+        max-width: 170px;
+    }
+}
