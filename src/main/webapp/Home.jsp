@@ -20,43 +20,17 @@
         <c:out value="${not empty pageData.title ? pageData.title : 'Sandur Residential School'}" />
     </title>
 
-
-    <!-- =====================================================
-         FONT AWESOME
-         ===================================================== -->
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
-    <!-- =====================================================
-         GOOGLE FONTS
-         ===================================================== -->
 
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap"
           rel="stylesheet">
 
-
-    <!-- =====================================================
-         MAIN CSS
-         ===================================================== -->
-
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/style.css">
 
-
-    <!-- =====================================================
-         SIDE DESIGN CSS
-         LOAD ONCE
-         ===================================================== -->
-
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/side_design.css">
-
-
-    <!-- =====================================================
-         DYNAMIC SECTION STYLESHEETS
-         ===================================================== -->
 
     <c:if test="${not empty pageData.sections}">
 
@@ -109,16 +83,7 @@
 
     </c:if>
 
-
-    <!-- =====================================================
-         NAVIGATION / PAGE LAYOUT CSS
-         ===================================================== -->
-
     <style>
-
-        /* =====================================================
-           NAVIGATION
-           ===================================================== */
 
         nav .main-menu {
             list-style: none;
@@ -163,11 +128,6 @@
 
             color: #000000;
         }
-
-
-        /* =====================================================
-           DROPDOWN
-           ===================================================== */
 
         nav .dropdown-menu {
 
@@ -237,22 +197,10 @@
             color: #ffffff;
         }
 
-
-        /* =====================================================
-           MAIN PAGE AREA
-           ===================================================== */
-
         .main-content {
             width: 100%;
             position: relative;
         }
-
-
-        /* =====================================================
-           PAGE BODY
-
-           LEFT CONTENT + RIGHT SIDEBAR
-           ===================================================== */
 
         .page-body-container {
 
@@ -273,10 +221,6 @@
             box-sizing: border-box;
         }
 
-        /* =====================================================
-           FULL-WIDTH FALLBACK (WHEN NO SIDE DESIGN)
-           ===================================================== */
-
         .page-body-container.no-side-design {
             display: block;
             max-width: 1400px;
@@ -292,11 +236,6 @@
             display: none;
         }
 
-
-        /* =====================================================
-           PRIMARY CONTENT
-           ===================================================== */
-
         .primary-content-area {
 
             flex: 1;
@@ -307,13 +246,6 @@
 
             box-sizing: border-box;
         }
-
-
-        /* =====================================================
-           RIGHT SIDE COLUMN
-
-           SIDE DESIGN WILL APPEAR HERE
-           ===================================================== */
 
         .right-side-column {
 
@@ -337,11 +269,6 @@
 
             z-index: 5;
         }
-
-
-        /* =====================================================
-           DYNAMIC SUBMENU
-           ===================================================== */
 
         .sidebar-nav-box {
 
@@ -423,14 +350,6 @@
             text-decoration-thickness: 2px;
         }
 
-
-        /* =====================================================
-           SIDE DESIGN
-
-           IMPORTANT:
-           SIDE DESIGN IS INSIDE RIGHT COLUMN
-           ===================================================== */
-
         .right-side-column .side-design {
 
             width: 100%;
@@ -448,22 +367,11 @@
             padding: 0;
         }
 
-
-        /*
-         * Prevent any common parent container from
-         * moving the side design outside the sidebar.
-         */
-
         .right-side-column .side-design *,
         .right-side-column .side-design {
 
             box-sizing: border-box;
         }
-
-
-        /* =====================================================
-           TABLET
-           ===================================================== */
 
         @media (max-width: 1024px) {
 
@@ -515,11 +423,6 @@
             }
         }
 
-
-        /* =====================================================
-           MOBILE
-           ===================================================== */
-
         @media (max-width: 600px) {
 
             .page-body-container {
@@ -550,11 +453,6 @@
             }
         }
 
-
-        /* =====================================================
-           VERY SMALL MOBILE
-           ===================================================== */
-
         @media (max-width: 400px) {
 
             .page-body-container {
@@ -576,29 +474,9 @@
 
 <body>
 
-
-    <!-- =====================================================
-         HEADER + NAVIGATION
-
-         Navigation appears first.
-         Everything below this starts underneath navigation.
-         ===================================================== -->
-
     <%@ include file="Header.jsp" %>
 
-
-    <!-- =====================================================
-         MAIN CONTENT
-         ===================================================== -->
-
     <main class="main-content">
-
-
-        <!-- =================================================
-             HERO SECTION
-
-             HERO REMAINS FULL WIDTH
-             ================================================= -->
 
         <c:forEach var="sec" items="${pageData.sections}">
 
@@ -614,18 +492,8 @@
 
         </c:forEach>
 
-
-        <!-- =================================================
-             NORMALIZE CURRENT SLUG
-             ================================================= -->
-
         <c:set var="currentSlug"
                  value="${fn:toLowerCase(fn:trim(not empty param.slug ? param.slug : pageData.slug))}" />
-
-
-        <!-- =================================================
-             FIND CURRENT PAGE / CHILD PAGE
-             ================================================= -->
 
         <c:set var="dynamicSubMenuItems"
                  value="${null}" />
@@ -640,18 +508,12 @@
             <c:set var="isParentOrChild"
                      value="false" />
 
-
-            <!-- Parent page -->
-
             <c:if test="${parentSlug eq currentSlug}">
 
                 <c:set var="isParentOrChild"
                          value="true" />
 
             </c:if>
-
-
-            <!-- Child page -->
 
             <c:if test="${not empty pg.children}">
 
@@ -672,9 +534,6 @@
 
             </c:if>
 
-
-            <!-- Save submenu -->
-
             <c:if test="${isParentOrChild and not empty pg.children}">
 
                 <c:set var="dynamicSubMenuItems"
@@ -683,11 +542,6 @@
             </c:if>
 
         </c:forEach>
-
-
-        <!-- =================================================
-             CHECK FOR SIDE DESIGN / SIDEBAR PRESENCE
-             ================================================= -->
 
         <c:set var="hasSideDesign" value="false" />
 
@@ -709,17 +563,7 @@
             <c:set var="showSidebarNav" value="true" />
         </c:if>
 
-
-        <!-- =================================================
-             CONTENT + RIGHT SIDE
-             ================================================= -->
-
         <div class="page-body-container ${(!hasSideDesign and !showSidebarNav) ? 'no-side-design' : ''}">
-
-
-            <!-- =============================================
-                 LEFT MAIN CONTENT
-                 ============================================= -->
 
             <div class="primary-content-area">
 
@@ -731,21 +575,11 @@
                     <c:set var="sType"
                              value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
 
-
-                    <!-- =====================================
-                         DISTINCT
-                         ===================================== -->
-
                     <c:if test="${sType eq 'DISTINCT'}">
 
                         <%@ include file="views/sections/distinct.jspf" %>
 
                     </c:if>
-
-
-                    <!-- =====================================
-                         DISTINCT2
-                         ===================================== -->
 
                     <c:if test="${sType eq 'DISTINCT2'}">
 
@@ -753,21 +587,11 @@
 
                     </c:if>
 
-
-                    <!-- =====================================
-                         PERSON DETAILS
-                         ===================================== -->
-
                     <c:if test="${sType eq 'PERSON_DETAILS'}">
 
                         <%@ include file="views/sections/person-details.jspf" %>
 
                     </c:if>
-
-
-                    <!-- =====================================
-                         DESC
-                         ===================================== -->
 
                     <c:if test="${sType eq 'DESC'}">
 
@@ -775,21 +599,11 @@
 
                     </c:if>
 
-
-                    <!-- =====================================
-                         DESC2
-                         ===================================== -->
-
                     <c:if test="${sType eq 'DESC2'}">
 
                         <%@ include file="views/sections/desc2.jspf" %>
 
                     </c:if>
-
-
-                    <!-- =====================================
-                         DESC3
-                         ===================================== -->
 
                     <c:if test="${sType eq 'DESC3'}">
 
@@ -803,19 +617,9 @@
 
             </div>
 
-
-            <!-- =============================================
-                 RIGHT SIDE COLUMN
-                 ============================================= -->
-
             <c:if test="${hasSideDesign or showSidebarNav}">
 
                 <aside class="right-side-column">
-
-
-                    <!-- =========================================
-                         DYNAMIC SUBNAVIGATION
-                         ========================================= -->
 
                     <c:if test="${showSidebarNav}">
 
@@ -854,11 +658,6 @@
 
                     </c:if>
 
-
-                    <!-- =========================================
-                         SIDE DESIGN SECTION (RENDERED IN SIDEBAR)
-                         ========================================= -->
-
                     <c:forEach var="sec" items="${pageData.sections}">
 
                         <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
@@ -886,11 +685,6 @@
 
     </main>
 
-
-    <!-- =====================================================
-         MOBILE MENU
-         ===================================================== -->
-
     <script>
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -915,11 +709,6 @@
         });
 
     </script>
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
 
     <script src="${pageContext.request.contextPath}/js/hero.js"></script>
 
