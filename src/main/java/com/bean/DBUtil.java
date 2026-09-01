@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBUtil {
 
     private static final String USER = "root";
-    private static final String PASSWORD = "aGqMEJvhAhoDWKXRPxxdYJXMNlbFmhBr"; // Add your Railway DB password here if required
+    private static final String PASSWORD = "fSPcwMERVlpBdtrGEzxQwKjqYiXqTeWU"; // Add your Railway DB password here if required
 
     static {
         try {
@@ -21,7 +21,7 @@ public class DBUtil {
         String url;
 
         if ("SRS".equalsIgnoreCase(branch)) {
-            url = "jdbc:mysql://altaria.proxy.rlwy.net:54307/website"
+            url = "jdbc:mysql://altaria.proxy.rlwy.net:53217/website"
                     + "?useSSL=false"
                     + "&allowPublicKeyRetrieval=true"
                     + "&serverTimezone=UTC"
