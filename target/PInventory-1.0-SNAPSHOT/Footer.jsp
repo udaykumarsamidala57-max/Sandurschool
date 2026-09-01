@@ -44,29 +44,7 @@
     color: #ffffff;
   }
 
-  .contact-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-weight: 800;
-    
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    transition: opacity 0.2s ease;
-  }
-
-  .contact-btn:hover {
-    opacity: 0.8;
-  }
-
-  .contact-btn i {
-    font-size: 12px;
-  }
+ 
 
   .disclaimer {
     font-size: 15px;
@@ -101,11 +79,16 @@
     color: #ffffff;
     text-decoration: none;
     font-size: 18px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
   }
 
-  .social-icon:hover {
-    background-color: rgba(255, 255, 255, 0.12);
+  .social-icon:hover,
+  .social-icon:focus,
+  .social-icon:active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: #ffffff;
+    outline: none;
   }
 
   .footer-nav-links {
@@ -122,12 +105,16 @@
     font-size: 15px;
     font-weight: 500;
     white-space: nowrap;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease;
   }
 
-  .footer-nav-links a:hover {
+  .footer-nav-links a:hover,
+  .footer-nav-links a:focus,
+  .footer-nav-links a:active {
+    color: #ffffff;
     text-decoration: underline;
     opacity: 0.85;
+    outline: none;
   }
 
   @media (max-width: 900px) {
@@ -145,9 +132,9 @@
             <h2>Sandur Residential School</h2>
             <p class="address">Shivapur, Sandur – 583119 · Ballari District, Karnataka ·<br>India</p>
 
-            <a href="${pageContext.request.contextPath}/contact.jsp" class="contact-btn"> 
-                CONTACT US <i class="fa-solid fa-arrow-right"></i>
-            </a>
+         <a href="${pageContext.request.contextPath}/contact.jsp" style="color: #ffffff;"> 
+    CONTACT US <i class="fa-solid fa-arrow-right"></i>
+</a>
 
             <div class="disclaimer">
                 <p>This official site of Sandur Residential School has been developed to provide general public information. The documents and information displayed on this site are for reference purposes only.</p>

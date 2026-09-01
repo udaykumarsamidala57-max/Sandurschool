@@ -43,28 +43,52 @@
 
         <div class="orange-card">
             <div class="video-container">
-                <%-- Video / Thumbnail Image --%>
                 <c:choose>
+                    <%-- Case 1: Video binary stream stored directly in DB --%>
+                    <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0 and (not empty firstImg.imageType and fn:startsWith(fn:toLowerCase(firstImg.imageType), 'video/'))}">
+                        <video class="video-player" controls preload="metadata" playsinline>
+                            <source src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}" type="${firstImg.imageType}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </c:when>
+
+                    <%-- Case 2: External YouTube Video URL stored in Heading1 --%>
+                    <c:when test="${not empty firstImg and not empty firstImg.heading1 and (fn:contains(firstImg.heading1, 'youtube.com') or fn:contains(firstImg.heading1, 'youtu.be'))}">
+                        <c:set var="rawVideoUrl" value="${fn:trim(firstImg.heading1)}" />
+                        <c:set var="videoId" value="" />
+                        
+                        <c:choose>
+                            <c:when test="${fn:contains(rawVideoUrl, 'v=')}">
+                                <c:set var="videoId" value="${fn:substringAfter(rawVideoUrl, 'v=')}" />
+                            </c:when>
+                            <c:when test="${fn:contains(rawVideoUrl, 'youtu.be/')}">
+                                <c:set var="videoId" value="${fn:substringAfter(rawVideoUrl, 'youtu.be/')}" />
+                            </c:when>
+                        </c:choose>
+                        
+                        <c:if test="${fn:contains(videoId, '&')}">
+                            <c:set var="videoId" value="${fn:substringBefore(videoId, '&')}" />
+                        </c:if>
+
+                        <iframe 
+                            class="video-iframe"
+                            src="https://www.youtube.com/embed/${videoId}" 
+                            title="Director Desk Video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </c:when>
+
+                    <%-- Case 3: Fallback Image stored in DB --%>
                     <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0}">
                         <img
                             src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}"
-                            alt="Director Desk Video"
+                            alt="Director Desk"
                             class="video-thumbnail"
                         />
-
-                        <%-- Video URL stored in Heading1 --%>
-                        <c:if test="${not empty firstImg.heading1}">
-                            <a href="${firstImg.heading1}"
-                               class="play-btn"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               aria-label="Play Video">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </a>
-                        </c:if>
                     </c:when>
+
+                    <%-- Case 4: Default Static Fallback Image --%>
                     <c:otherwise>
                         <img
                             src="${pageContext.request.contextPath}/images/director-thumbnail.jpg"
@@ -93,7 +117,6 @@
         <div class="welcome-text">
             <c:choose>
                 <c:when test="${not empty directorSec and not empty directorSec.content}">
-                    <%-- Robust text line rendering without breaking XML tags --%>
                     <c:set var="newline" value="<%= \"\n\" %>" />
                     <c:forEach var="paragraph" items="${fn:split(directorSec.content, newline)}">
                         <c:if test="${not empty fn:trim(paragraph)}">
