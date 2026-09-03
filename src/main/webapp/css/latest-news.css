@@ -64,6 +64,8 @@
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
     transition: transform 0.25s ease,
                 box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .latest-news-card:hover {
@@ -73,12 +75,12 @@
 
 
 /* =========================================================
-   IMAGE
+   IMAGE (HEIGHT INCREASED)
    ========================================================= */
 
 .latest-news-image {
     width: 100%;
-    height: 210px;
+    height: 280px; /* Increased from 210px */
     overflow: hidden;
     background: #eee;
 }
@@ -115,40 +117,39 @@
 
 
 /* =========================================================
-   CONTENT
+   CONTENT (CENTERED & SPACING ADJUSTED)
    ========================================================= */
 
 .latest-news-content {
-    padding: 22px;
+    padding: 30px 25px; /* Increased padding */
+    text-align: center;  /* Centered to match layout */
+    flex-grow: 1;
 }
 
 .latest-news-date {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: #e26a2c;
-    margin-bottom: 9px;
+    margin-bottom: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .latest-news-title {
-    margin: 0 0 12px;
-    color: #3d1e0b;
-    font-size: 20px;
-    line-height: 1.35;
+    margin: 0 0 16px;
+    color: #e26a2c; /* Styled matching the reference image title color */
+    font-size: 22px; /* Increased from 20px */
+    line-height: 1.3;
     font-weight: 700;
+    text-transform: uppercase;
 }
 
 .latest-news-description {
     margin: 0;
-    color: #555;
-    font-size: 14px;
-    line-height: 1.7;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: #444;
+    font-size: 15px; /* Increased from 14px */
+    line-height: 1.75;
+    /* Removed line-clamp so full text displays clearly */
 }
 
 
@@ -160,6 +161,10 @@
 
     .latest-news-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .latest-news-image {
+        height: 250px;
     }
 
 }
@@ -185,11 +190,11 @@
     }
 
     .latest-news-image {
-        height: 220px;
+        height: 240px;
     }
 
     .latest-news-content {
-        padding: 18px;
+        padding: 22px 18px;
     }
 
 }
