@@ -26,6 +26,7 @@ public class ImageStreamServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String imageIdParam = request.getParameter("id");
+        String type = request.getParameter("type");
 
         if (imageIdParam == null || imageIdParam.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image ID is required.");
@@ -40,9 +41,15 @@ public class ImageStreamServlet extends HttpServlet {
             return;
         }
 
-        // OCTET_LENGTH works for MySQL/PostgreSQL BLOB columns
-        String sql = "SELECT image_data, image_type, OCTET_LENGTH(image_data) AS image_size " +
-                     "FROM section_images WHERE id = ?";
+        // Standardized 'img_blob' alias to prevent ResultSet column reading mismatch
+        String sql;
+        if ("news".equalsIgnoreCase(type)) {
+            sql = "SELECT image AS img_blob, 'image/jpeg' AS image_type, OCTET_LENGTH(image) AS image_size " +
+                  "FROM latest_news WHERE id = ?";
+        } else {
+            sql = "SELECT image_data AS img_blob, image_type, OCTET_LENGTH(image_data) AS image_size " +
+                  "FROM section_images WHERE id = ?";
+        }
 
         try (Connection conn = DBUtil.getConnection("SRS");
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -68,13 +75,12 @@ public class ImageStreamServlet extends HttpServlet {
                     contentType = contentType.trim();
                 }
 
-                try (InputStream inputStream = rs.getBinaryStream("image_data")) {
+                try (InputStream inputStream = rs.getBinaryStream("img_blob")) {
                     if (inputStream == null) {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image binary stream null.");
                         return;
                     }
 
-                    // Reset buffer prior to setting headers
                     if (!response.isCommitted()) {
                         response.reset();
                         response.setContentType(contentType);
