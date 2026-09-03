@@ -105,7 +105,7 @@
             <div class="top-links">
                 <a href="${pageContext.request.contextPath}/homepage?slug=calendar">Calendar</a>
                 <a href="#">Quick Links</a>
-                <a href="#">Portal Login</a>
+                <a href="https://srs.myclassboard.com/">Portal Login</a>
                 <a href="#" aria-label="Search"><i class="fa fa-search"></i></a>
             </div>
         </div>

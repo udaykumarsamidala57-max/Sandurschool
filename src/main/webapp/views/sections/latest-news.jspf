@@ -1,21 +1,14 @@
-<%@ page language="java"
-         contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core"%>
-
-<%@ taglib prefix="fmt"
-           uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <section class="latest-news-section">
 
     <div class="latest-news-container">
 
         <div class="latest-news-header">
-           
-            <h2> LATEST NEWS</h2>
- <span class="latest-news-label">Campus is always buzzing! Click below to stay up-to-date on our school to see all of the news & announcements and school calendar.</span>
+            <h2>LATEST NEWS</h2>
+            <span class="latest-news-label">Campus is always buzzing! Click below to stay up-to-date on our school to see all of the news & announcements and school calendar.</span>
             <div class="latest-news-line"></div>
         </div>
 
@@ -23,94 +16,105 @@
 
             <c:when test="${not empty latestNewsList}">
 
-                <div class="latest-news-grid">
+                <div class="latest-news-slider-wrapper">
 
-                    <c:forEach var="news" items="${latestNewsList}" varStatus="status">
+                    <!-- Side Scroll Arrows -->
+                    <button type="button" class="news-slider-arrow prev-arrow" id="newsPrevBtn" onclick="scrollNews(-1)" aria-label="Previous News">
+                        &#10094;
+                    </button>
 
-                        <article class="latest-news-card" id="news-card-${status.index}">
+                    <div class="latest-news-grid" id="newsGridTrack">
 
-                            <div class="latest-news-image">
+                        <c:forEach var="news" items="${latestNewsList}" varStatus="status">
 
-                                <c:choose>
+                            <article class="latest-news-card" id="news-card-${status.index}">
 
-                                    <c:when test="${news.hasImage eq true || not empty news.image}">
+                                <div class="latest-news-image">
 
-                                        <img
-                                            src="${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}"
-                                            alt="<c:out value='${news.event_name}'/>"
-                                            loading="lazy"
-                                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                                        />
+                                    <c:choose>
 
-                                        <div class="latest-news-no-image" style="display:none;">
-                                            <span>NEWS</span>
+                                        <c:when test="${news.hasImage eq true || not empty news.image}">
+
+                                            <img
+                                                src="${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}"
+                                                alt="<c:out value='${news.event_name}'/>"
+                                                loading="lazy"
+                                                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                                            />
+
+                                            <div class="latest-news-no-image" style="display:none;">
+                                                <span>NEWS</span>
+                                            </div>
+
+                                        </c:when>
+
+                                        <c:otherwise>
+
+                                            <div class="latest-news-no-image">
+                                                <span>NEWS</span>
+                                            </div>
+
+                                        </c:otherwise>
+
+                                    </c:choose>
+
+                                </div>
+
+                                <div class="latest-news-content">
+
+                                    <c:if test="${not empty news.created_at}">
+                                        <div class="latest-news-date">
+                                            <fmt:formatDate value="${news.created_at}" pattern="dd MMM yyyy"/>
                                         </div>
+                                    </c:if>
 
-                                    </c:when>
+                                    <h3 class="latest-news-title">
+                                        <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
+                                    </h3>
 
-                                    <c:otherwise>
-
-                                        <div class="latest-news-no-image">
-                                            <span>NEWS</span>
+                                    <c:if test="${not empty news.description}">
+                                        <div class="latest-news-description">
+                                            <c:out value="${news.description}" escapeXml="false"/>
                                         </div>
+                                    </c:if>
 
-                                    </c:otherwise>
+                                    <button type="button" 
+                                            class="latest-news-readmore" 
+                                            onclick="openNewsModal('news-card-${status.index}')">
+                                        Read More &rarr;
+                                    </button>
 
-                                </c:choose>
+                                </div>
 
-                            </div>
-
-                            <div class="latest-news-content">
-
-                                <c:if test="${not empty news.created_at}">
-                                    <div class="latest-news-date">
-                                        <fmt:formatDate
-                                            value="${news.created_at}"
-                                            pattern="dd MMM yyyy"/>
+                                <!-- Hidden Payload Template for Modal Display -->
+                                <div class="news-modal-payload" style="display: none;">
+                                    <div class="modal-payload-date">
+                                        <c:if test="${not empty news.created_at}">
+                                            <fmt:formatDate value="${news.created_at}" pattern="dd MMM yyyy"/>
+                                        </c:if>
                                     </div>
-                                </c:if>
-
-                                <h3 class="latest-news-title">
-                                    <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
-                                </h3>
-
-                                <c:if test="${not empty news.description}">
-                                    <div class="latest-news-description">
+                                    <div class="modal-payload-title">
+                                        <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
+                                    </div>
+                                    <div class="modal-payload-image-src">
+                                        <c:if test="${news.hasImage eq true || not empty news.image}">
+                                            ${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}
+                                        </c:if>
+                                    </div>
+                                    <div class="modal-payload-description">
                                         <c:out value="${news.description}" escapeXml="false"/>
                                     </div>
-                                </c:if>
-
-                                <button type="button" 
-                                        class="latest-news-readmore" 
-                                        onclick="openNewsModal('news-card-${status.index}')">
-                                    Read More &rarr;
-                                </button>
-
-                            </div>
-
-                            <!-- Hidden Payload Template for Modal Display -->
-                            <div class="news-modal-payload" style="display: none;">
-                                <div class="modal-payload-date">
-                                    <c:if test="${not empty news.created_at}">
-                                        <fmt:formatDate value="${news.created_at}" pattern="dd MMM yyyy"/>
-                                    </c:if>
                                 </div>
-                                <div class="modal-payload-title">
-                                    <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
-                                </div>
-                                <div class="modal-payload-image-src">
-                                    <c:if test="${news.hasImage eq true || not empty news.image}">
-                                        ${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}
-                                    </c:if>
-                                </div>
-                                <div class="modal-payload-description">
-                                    <c:out value="${news.description}" escapeXml="false"/>
-                                </div>
-                            </div>
 
-                        </article>
+                            </article>
 
-                    </c:forEach>
+                        </c:forEach>
+
+                    </div>
+
+                    <button type="button" class="news-slider-arrow next-arrow" id="newsNextBtn" onclick="scrollNews(1)" aria-label="Next News">
+                        &#10095;
+                    </button>
 
                 </div>
 
@@ -131,7 +135,7 @@
 </section>
 
 <!-- =========================================================
-   NEWS MODAL POPUP
+    NEWS MODAL POPUP
    ========================================================= -->
 <div class="news-modal-overlay" id="newsModalOverlay" onclick="closeNewsModal(event)">
     <div class="news-modal-container" onclick="event.stopPropagation();">
@@ -156,6 +160,21 @@
 </div>
 
 <script>
+    function scrollNews(direction) {
+        var grid = document.getElementById('newsGridTrack');
+        if (!grid) return;
+        
+        // Width of one card + grid gap
+        var card = grid.querySelector('.latest-news-card');
+        if (!card) return;
+        
+        var scrollAmount = (card.offsetWidth + 30) * direction;
+        grid.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
     function openNewsModal(cardId) {
         var card = document.getElementById(cardId);
         if (!card) return;
