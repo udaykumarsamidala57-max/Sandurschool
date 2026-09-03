@@ -13,8 +13,9 @@
     <div class="latest-news-container">
 
         <div class="latest-news-header">
-            <span class="latest-news-label">LATEST NEWS</span>
-            <h2>Latest News</h2>
+           
+            <h2> LATEST NEWS</h2>
+ <span class="latest-news-label">Campus is always buzzing! Click below to stay up-to-date on our school to see all of the news & announcements and school calendar.</span>
             <div class="latest-news-line"></div>
         </div>
 
@@ -24,15 +25,14 @@
 
                 <div class="latest-news-grid">
 
-                    <c:forEach var="news" items="${latestNewsList}">
+                    <c:forEach var="news" items="${latestNewsList}" varStatus="status">
 
-                        <article class="latest-news-card">
+                        <article class="latest-news-card" id="news-card-${status.index}">
 
                             <div class="latest-news-image">
 
                                 <c:choose>
 
-                                    <%-- Checks for either boolean flag or presence of image data --%>
                                     <c:when test="${news.hasImage eq true || not empty news.image}">
 
                                         <img
@@ -42,8 +42,7 @@
                                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
                                         />
 
-                                        <div class="latest-news-no-image"
-                                             style="display:none;">
+                                        <div class="latest-news-no-image" style="display:none;">
                                             <span>NEWS</span>
                                         </div>
 
@@ -72,17 +71,41 @@
                                 </c:if>
 
                                 <h3 class="latest-news-title">
-                                    <c:out
-                                        value="${news.event_name}"
-                                        default="Latest News"/>
+                                    <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
                                 </h3>
 
                                 <c:if test="${not empty news.description}">
-                                    <p class="latest-news-description">
-                                        <c:out value="${news.description}"/>
-                                    </p>
+                                    <div class="latest-news-description">
+                                        <c:out value="${news.description}" escapeXml="false"/>
+                                    </div>
                                 </c:if>
 
+                                <button type="button" 
+                                        class="latest-news-readmore" 
+                                        onclick="openNewsModal('news-card-${status.index}')">
+                                    Read More &rarr;
+                                </button>
+
+                            </div>
+
+                            <!-- Hidden Payload Template for Modal Display -->
+                            <div class="news-modal-payload" style="display: none;">
+                                <div class="modal-payload-date">
+                                    <c:if test="${not empty news.created_at}">
+                                        <fmt:formatDate value="${news.created_at}" pattern="dd MMM yyyy"/>
+                                    </c:if>
+                                </div>
+                                <div class="modal-payload-title">
+                                    <c:out value="${news.event_name}" escapeXml="false" default="LATEST NEWS"/>
+                                </div>
+                                <div class="modal-payload-image-src">
+                                    <c:if test="${news.hasImage eq true || not empty news.image}">
+                                        ${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}
+                                    </c:if>
+                                </div>
+                                <div class="modal-payload-description">
+                                    <c:out value="${news.description}" escapeXml="false"/>
+                                </div>
                             </div>
 
                         </article>
@@ -106,3 +129,78 @@
     </div>
 
 </section>
+
+<!-- =========================================================
+   NEWS MODAL POPUP
+   ========================================================= -->
+<div class="news-modal-overlay" id="newsModalOverlay" onclick="closeNewsModal(event)">
+    <div class="news-modal-container" onclick="event.stopPropagation();">
+        <button type="button" class="news-modal-close" onclick="closeNewsModal()">&times;</button>
+        <div class="news-modal-body">
+            
+            <div id="modalImageContainer" class="news-modal-image-wrap">
+                <img id="modalImage" src="" alt="Full News Image" />
+                <div id="modalFallbackImage" class="latest-news-no-image modal-no-image" style="display:none;">
+                    <span>NEWS</span>
+                </div>
+            </div>
+
+            <div class="news-modal-content">
+                <div class="latest-news-date" id="modalDate"></div>
+                <h2 class="latest-news-title" id="modalTitle"></h2>
+                <div class="latest-news-description modal-full-desc" id="modalDescription"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function openNewsModal(cardId) {
+        var card = document.getElementById(cardId);
+        if (!card) return;
+
+        var payload = card.querySelector('.news-modal-payload');
+        var date = payload.querySelector('.modal-payload-date').innerHTML.trim();
+        var title = payload.querySelector('.modal-payload-title').innerHTML.trim();
+        var imgSrc = payload.querySelector('.modal-payload-image-src').innerText.trim();
+        var desc = payload.querySelector('.modal-payload-description').innerHTML.trim();
+
+        document.getElementById('modalDate').innerHTML = date;
+        document.getElementById('modalTitle').innerHTML = title;
+        document.getElementById('modalDescription').innerHTML = desc;
+
+        var imgContainer = document.getElementById('modalImageContainer');
+        var imgTag = document.getElementById('modalImage');
+        var fallbackTag = document.getElementById('modalFallbackImage');
+
+        if (imgSrc && imgSrc.length > 0) {
+            imgTag.src = imgSrc;
+            imgTag.style.display = 'block';
+            fallbackTag.style.display = 'none';
+            imgContainer.style.display = 'block';
+        } else {
+            imgTag.src = '';
+            imgTag.style.display = 'none';
+            fallbackTag.style.display = 'flex';
+            imgContainer.style.display = 'block';
+        }
+
+        var overlay = document.getElementById('newsModalOverlay');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNewsModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        var overlay = document.getElementById('newsModalOverlay');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeNewsModal();
+        }
+    });
+</script>
