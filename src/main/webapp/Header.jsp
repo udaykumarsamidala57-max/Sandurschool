@@ -19,6 +19,97 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Top Bar Styling */
+        .top-bar {
+            background-color: #0c1d37;
+            color: #ffffff;
+            padding: 8px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .top-bar .school-title {
+            font-weight: 500;
+        }
+
+        .top-bar .top-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-bar .top-links a {
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-bar .top-links a:hover {
+            text-decoration: underline;
+        }
+
+        .top-bar .btn-pill {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 14px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .top-bar .btn-pill:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+        }
+
+        /* Main Header Styling */
+        .main-header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .main-header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .main-header .logo-area img {
+            max-height: 55px;
+            width: auto;
+        }
+
+        .menu-btn-toggle {
+            border: 1px solid #dcdcdc;
+            background-color: #f8f9fa;
+            color: #0c1d37;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-btn-toggle:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Existing Navigation Styling preserved */
         nav .main-menu {
             list-style: none;
             margin: 0;
@@ -97,19 +188,30 @@
 </head>
 <body>
     <header>
-        <div class="top-header">
-            <div class="logo-area">
-                <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
-                <h1>Sandur Residential School</h1>
+        <!-- Top Dark Blue Bar -->
+        <div class="top-bar">
+            <div class="school-title">
+                Sandur Residential School | Sandur
             </div>
             <div class="top-links">
+                <a href="mailto:info@sandurschool.edu"><i class="fa-regular fa-envelope"></i> mail@sandurschool.edu</a>
                 <a href="${pageContext.request.contextPath}/homepage?slug=calendar">Calendar</a>
-                <a href="#">Quick Links</a>
                 <a href="https://srs.myclassboard.com/">Portal Login</a>
-                <a href="#" aria-label="Search"><i class="fa fa-search"></i></a>
+                <a href="#" class="btn-pill"><i class="fa-solid fa-briefcase"></i> Careers</a>
             </div>
         </div>
-        <div class="menu-toggle"><i class="fa fa-bars"></i></div>
+
+        <!-- Main Logo Header -->
+        <div class="main-header">
+            <div class="logo-area">
+                <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
+            </div>
+            <button class="menu-btn-toggle" type="button">
+                MENU <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Dynamic Menu Preserved Below Header -->
         <nav>
             <ul class="main-menu">
                 <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
