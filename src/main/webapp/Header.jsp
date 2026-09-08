@@ -57,6 +57,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 12.5px;
             white-space: nowrap;
         }
 
@@ -68,6 +69,7 @@
             display: flex;
             align-items: center;
             gap: 20px;
+            font-size: 12.5px;
         }
 
         .top-bar .top-links a {
@@ -76,6 +78,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            font-size: 12.5px;
             transition: var(--transition);
         }
 
