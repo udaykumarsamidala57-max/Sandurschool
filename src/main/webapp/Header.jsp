@@ -64,7 +64,7 @@
             align-items: center;
             gap: 15px;
             font-size: 12px;
-             font-weight: 100;
+            font-weight: 100;
         }
 
         .top-bar .top-links a {
@@ -76,7 +76,7 @@
             opacity: 0.88;
             transition: var(--transition);
             font-size: 12px;
-             font-weight: 100;
+            font-weight: 100;
         }
 
         .top-bar .top-links a:hover {
@@ -97,60 +97,45 @@
             border-color: var(--accent-gold);
         }
 
-        /* Main Branding Header */
+        /* Main Header with Logo & Inline Nav */
         .main-header {
             background-color: var(--white);
-            padding: 16px 5%;
+            padding: 0 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 2px solid var(--accent-gold);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .main-header .logo-area {
             display: flex;
             align-items: center;
+            padding: 10px 0;
         }
 
         .main-header .logo-area img {
-            height: 75px;
+            height: 65px;
             width: auto;
             object-fit: contain;
         }
 
-        .menu-btn-toggle {
-            display: none;
-            background: transparent;
-            border: 1px solid #cbd5e1;
-            color: var(--text-dark);
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .menu-btn-toggle:hover {
-            background-color: #f1f5f9;
-        }
-
-        /* Desktop Navigation Bar */
+        /* Inline Desktop Navigation */
         .nav-wrapper {
-            background-color: var(--white);
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
         }
 
         nav .main-menu {
             list-style: none;
             margin: 0;
-            padding: 0 5%;
+            padding: 0;
             display: flex;
             align-items: center;
+            gap: 4px;
         }
 
         nav .main-menu > li {
@@ -161,10 +146,10 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 16px 20px;
+            padding: 24px 16px;
             color: var(--text-dark);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -185,7 +170,7 @@
             position: absolute;
             top: 100%;
             left: 0;
-            min-width: 230px;
+            min-width: 220px;
             background-color: var(--primary-brand);
             list-style: none;
             margin: 0;
@@ -210,9 +195,10 @@
             padding: 10px 20px;
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 500;
             transition: var(--transition);
+            text-transform: none;
         }
 
         nav .dropdown-menu li:hover > a,
@@ -222,12 +208,33 @@
             padding-left: 24px;
         }
 
-        /* Responsive Breakpoints */
+        .menu-btn-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-btn-toggle:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Mobile & Responsive Breakpoints */
         @media (max-width: 992px) {
             .top-bar {
                 flex-direction: column;
                 gap: 8px;
                 text-align: center;
+            }
+
+            .main-header {
+                padding: 12px 5%;
             }
 
             .menu-btn-toggle {
@@ -242,6 +249,8 @@
                 width: 100%;
                 top: 100%;
                 left: 0;
+                background-color: var(--white);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             }
 
             .nav-wrapper.open {
@@ -250,11 +259,8 @@
 
             nav .main-menu {
                 flex-direction: column;
-                padding: 0;
-            }
-
-            nav .main-menu > li {
-                width: 100%;
+                align-items: stretch;
+                gap: 0;
             }
 
             nav .main-menu > li > a {
@@ -287,57 +293,59 @@
             </div>
         </div>
 
-        <!-- Main Branding Header -->
+        <!-- Main Header with Logo and Navigation Side-by-Side -->
         <div class="main-header">
             <div class="logo-area">
                 <a href="${pageContext.request.contextPath}/">
                     <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
                 </a>
             </div>
+
+            <!-- Navigation Menu Beside Logo -->
+            <div class="nav-wrapper" id="navWrapper">
+                <nav>
+                    <ul class="main-menu">
+                        <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
+                        <c:forEach var="pg" items="${pagesList}">
+                            <c:if test="${pg.slug ne 'home'}">
+                                <c:set var="isChildActive" value="false" />
+                                <c:if test="${not empty pg.children}">
+                                    <c:forEach var="child" items="${pg.children}">
+                                        <c:if test="${child.slug eq currentSlug}">
+                                            <c:set var="isChildActive" value="true" />
+                                        </c:if>
+                                    </c:forEach>
+                                </c:if>
+                                <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
+                                    <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
+                                        <c:out value="${pg.title}" />
+                                        <c:if test="${not empty pg.children}">
+                                            <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                                        </c:if>
+                                    </a>
+                                    <c:if test="${not empty pg.children}">
+                                        <ul class="dropdown-menu">
+                                            <c:forEach var="child" items="${pg.children}">
+                                                <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
+                                                    <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
+                                                        <c:out value="${child.title}" />
+                                                    </a>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
             <button class="menu-btn-toggle" onclick="toggleNavigation()" type="button" aria-label="Toggle navigation">
                 <span>MENU</span>
                 <i class="fa-solid fa-bars"></i>
             </button>
-        </div>
-
-        <!-- Navigation Bar -->
-        <div class="nav-wrapper" id="navWrapper">
-            <nav>
-                <ul class="main-menu">
-                    <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
-                    <c:forEach var="pg" items="${pagesList}">
-                        <c:if test="${pg.slug ne 'home'}">
-                            <c:set var="isChildActive" value="false" />
-                            <c:if test="${not empty pg.children}">
-                                <c:forEach var="child" items="${pg.children}">
-                                    <c:if test="${child.slug eq currentSlug}">
-                                        <c:set var="isChildActive" value="true" />
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-                            <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
-                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
-                                    <c:out value="${pg.title}" />
-                                    <c:if test="${not empty pg.children}">
-                                        <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
-                                    </c:if>
-                                </a>
-                                <c:if test="${not empty pg.children}">
-                                    <ul class="dropdown-menu">
-                                        <c:forEach var="child" items="${pg.children}">
-                                            <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
-                                                <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
-                                                    <c:out value="${child.title}" />
-                                                </a>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-                                </c:if>
-                            </li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-            </nav>
         </div>
     </header>
 
