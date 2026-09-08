@@ -16,7 +16,7 @@
 
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>
@@ -24,91 +24,91 @@
             --primary-brand: #5c1d06;
             --primary-hover: #421202;
             --accent-gold: #d4af37;
-            --text-dark: #1e293b;
+            --text-dark: #0f172a;
             --text-muted: #64748b;
             --bg-light: #f8fafc;
             --white: #ffffff;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-color: #e2e8f0;
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-dark);
             background-color: var(--bg-light);
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Utility Bar */
+        /* Fixed & Optimized Top Utility Ribbon (Desktop) */
         .top-bar {
             background-color: var(--primary-brand);
             color: var(--white);
-            padding: 4px 5%;
+            padding: 8px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            font-weight: 100;
-            letter-spacing: 0.2px;
+            font-size: 12.5px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .top-bar .school-affiliation {
             display: flex;
             align-items: center;
             gap: 8px;
-            opacity: 0.9;
+            white-space: nowrap;
+        }
+
+        .top-bar .school-affiliation i {
+            color: var(--accent-gold);
         }
 
         .top-bar .top-links {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 12px;
-            font-weight: 100;
+            gap: 20px;
         }
 
         .top-bar .top-links a {
-            color: var(--white);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            opacity: 0.88;
             transition: var(--transition);
-            font-size: 12px;
-            font-weight: 100;
         }
 
         .top-bar .top-links a:hover {
-            opacity: 1;
             color: var(--accent-gold);
         }
 
         .top-bar .btn-pill {
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 4px 14px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 3px 12px;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--accent-gold) !important;
         }
 
         .top-bar .btn-pill:hover {
             background-color: var(--accent-gold);
             color: var(--primary-brand) !important;
-            border-color: var(--accent-gold);
         }
 
-        /* Main Header with Logo & Inline Nav */
+        /* Main Desktop Header */
         .main-header {
-            background-color: var(--white);
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
             padding: 0 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid var(--accent-gold);
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 999;
         }
 
         .main-header .logo-area {
@@ -118,18 +118,18 @@
         }
 
         .main-header .logo-area img {
-            height: 65px;
+            height: 60px;
             width: auto;
             object-fit: contain;
         }
 
-        /* Inline Desktop Navigation */
-        .nav-wrapper {
+        /* Desktop Navigation Menu */
+        .desktop-nav {
             display: flex;
             align-items: center;
         }
 
-        nav .main-menu {
+        .desktop-nav .main-menu {
             list-style: none;
             margin: 0;
             padding: 0;
@@ -138,34 +138,32 @@
             gap: 4px;
         }
 
-        nav .main-menu > li {
+        .desktop-nav .main-menu > li {
             position: relative;
         }
 
-        nav .main-menu > li > a {
+        .desktop-nav .main-menu > li > a {
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 24px 16px;
+            padding: 22px 14px;
             color: var(--text-dark);
             text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             transition: var(--transition);
-            border-bottom: 3px solid transparent;
         }
 
-        nav .main-menu > li.active-tab > a,
-        nav .main-menu > li:hover > a {
+        .desktop-nav .main-menu > li.active-tab > a,
+        .desktop-nav .main-menu > li:hover > a {
             color: var(--primary-brand);
-            border-bottom-color: var(--primary-brand);
-            background-color: rgba(92, 29, 6, 0.03);
+            background-color: rgba(92, 29, 6, 0.04);
         }
 
-        /* Dropdown Styling */
-        nav .dropdown-menu {
+        /* Brown Background & White Text Dropdown Styling */
+        .desktop-nav .dropdown-menu {
             display: none;
             position: absolute;
             top: 100%;
@@ -176,124 +174,227 @@
             margin: 0;
             padding: 8px 0;
             border-radius: 0 0 8px 8px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--primary-hover);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             z-index: 1000;
-            animation: fadeIn 0.2s ease-in-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        nav .main-menu > li:hover .dropdown-menu {
+        .desktop-nav .main-menu > li:hover .dropdown-menu {
             display: block;
         }
 
-        nav .dropdown-menu li a {
+        .desktop-nav .dropdown-menu li a {
             display: block;
-            padding: 10px 20px;
-            color: rgba(255, 255, 255, 0.9);
+            padding: 10px 18px;
+            color: #ffffff;
             text-decoration: none;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             transition: var(--transition);
-            text-transform: none;
+            background-color: var(--primary-brand);
         }
 
-        nav .dropdown-menu li:hover > a,
-        nav .dropdown-menu li.active-child > a {
+        .desktop-nav .dropdown-menu li:hover > a,
+        .desktop-nav .dropdown-menu li.active-child > a {
             background-color: var(--primary-hover);
             color: var(--accent-gold);
-            padding-left: 24px;
+            font-weight: 700;
+            padding-left: 22px;
         }
 
+        /* Mobile Controls */
         .menu-btn-toggle {
             display: none;
             background: transparent;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
             color: var(--text-dark);
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
+        }
+
+        /* Mobile Drawer Component */
+        .mobile-drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
             transition: var(--transition);
         }
 
-        .menu-btn-toggle:hover {
-            background-color: #f1f5f9;
+        .mobile-drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        /* Mobile & Responsive Breakpoints */
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 1002;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-light);
+        }
+
+        .drawer-header span {
+            font-weight: 700;
+            color: var(--primary-brand);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drawer-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .drawer-body {
+            padding: 10px 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .mobile-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mobile-menu-item {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .mobile-menu-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .mobile-menu-link.active-tab {
+            color: var(--primary-brand);
+            background-color: rgba(92, 29, 6, 0.03);
+        }
+
+        /* Brown Background & White Text Mobile Submenu Styling */
+        .mobile-submenu {
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-brand);
+        }
+
+        .mobile-menu-item.expanded .mobile-submenu {
+            display: block;
+        }
+
+        .mobile-submenu li a {
+            display: block;
+            padding: 10px 20px 10px 32px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: var(--primary-brand);
+        }
+
+        .mobile-submenu li:hover a,
+        .mobile-submenu li.active-child a {
+            color: var(--accent-gold);
+            font-weight: 700;
+            background-color: var(--primary-hover);
+        }
+
+        .submenu-toggle {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Mobile Breakpoint Adjustments */
         @media (max-width: 992px) {
             .top-bar {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
+                padding: 6px 4%;
+                font-size: 11px;
             }
 
-            .main-header {
-                padding: 12px 5%;
+            .top-bar .school-affiliation span {
+                display: none;
+            }
+
+            .top-bar .school-affiliation::after {
+                content: "Sandur Residential School";
+            }
+
+            .top-bar .top-links a span {
+                display: none;
+            }
+
+            .desktop-nav {
+                display: none;
             }
 
             .menu-btn-toggle {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-            }
-
-            .nav-wrapper {
-                display: none;
-                position: absolute;
-                width: 100%;
-                top: 100%;
-                left: 0;
-                background-color: var(--white);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            }
-
-            .nav-wrapper.open {
-                display: block;
-            }
-
-            nav .main-menu {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-            }
-
-            nav .main-menu > li > a {
-                padding: 14px 20px;
-                border-bottom: 1px solid #e2e8f0;
-            }
-
-            nav .dropdown-menu {
-                position: static;
-                box-shadow: none;
-                border-radius: 0;
-                background-color: #3d1304;
+                gap: 6px;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <!-- Top Info/Utility Bar -->
+        <!-- Desktop/Tablet Top Info Ribbon -->
         <div class="top-bar">
             <div class="school-affiliation">
                 <i class="fa-solid fa-graduation-cap"></i>
                 <span>Sandur Residential School | Affiliated to CISCE, New Delhi</span>
             </div>
             <div class="top-links">
-                <a href="mailto:mail@sandurschool.edu"><i class="fa-regular fa-envelope"></i> mail@sandurschool.edu</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=calendar"><i class="fa-regular fa-calendar-days"></i> Calendar</a>
-                <a href="https://srs.myclassboard.com/" target="_blank"><i class="fa-solid fa-right-to-bracket"></i> Portal Login</a>
-                <a href="#" class="btn-pill"><i class="fa-solid fa-briefcase"></i> Careers</a>
+                <a href="mailto:mail@sandurschool.edu"><i class="fa-regular fa-envelope"></i> <span>mail@sandurschool.edu</span></a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=calendar"><i class="fa-regular fa-calendar-days"></i> <span>Calendar</span></a>
+                <a href="https://srs.myclassboard.com/" target="_blank"><i class="fa-solid fa-right-to-bracket"></i> <span>Portal Login</span></a>
+                <a href="#" class="btn-pill"><i class="fa-solid fa-briefcase"></i> <span>Careers</span></a>
             </div>
         </div>
 
-        <!-- Main Header with Logo and Navigation Side-by-Side -->
+        <!-- Main Header -->
         <div class="main-header">
             <div class="logo-area">
                 <a href="${pageContext.request.contextPath}/">
@@ -301,8 +402,8 @@
                 </a>
             </div>
 
-            <!-- Navigation Menu Beside Logo -->
-            <div class="nav-wrapper" id="navWrapper">
+            <!-- Standard Web Navigation -->
+            <div class="desktop-nav">
                 <nav>
                     <ul class="main-menu">
                         <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
@@ -341,18 +442,78 @@
                 </nav>
             </div>
 
-            <!-- Mobile Hamburger Button -->
-            <button class="menu-btn-toggle" onclick="toggleNavigation()" type="button" aria-label="Toggle navigation">
+            <!-- Mobile Drawer Button -->
+            <button class="menu-btn-toggle" onclick="toggleMobileDrawer()" type="button" aria-label="Toggle navigation">
                 <span>MENU</span>
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
     </header>
 
+    <!-- Mobile Navigation Drawer Structure -->
+    <div class="mobile-drawer-overlay" id="drawerOverlay" onclick="toggleMobileDrawer()"></div>
+    <aside class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <span>Navigation</span>
+            <button class="drawer-close-btn" onclick="toggleMobileDrawer()" type="button" aria-label="Close menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="drawer-body">
+            <ul class="mobile-menu">
+                <c:forEach var="pg" items="${pagesList}">
+                    <c:if test="${pg.slug ne 'home'}">
+                        <c:set var="isChildActive" value="false" />
+                        <c:if test="${not empty pg.children}">
+                            <c:forEach var="child" items="${pg.children}">
+                                <c:if test="${child.slug eq currentSlug}">
+                                    <c:set var="isChildActive" value="true" />
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+
+                        <li class="mobile-menu-item ${isChildActive ? 'expanded' : ''}">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}" 
+                                   class="mobile-menu-link ${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}" style="flex:1;">
+                                    <c:out value="${pg.title}" />
+                                </a>
+                                <c:if test="${not empty pg.children}">
+                                    <button type="button" class="submenu-toggle" onclick="toggleSubmenu(this)">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
+                                </c:if>
+                            </div>
+
+                            <c:if test="${not empty pg.children}">
+                                <ul class="mobile-submenu">
+                                    <c:forEach var="child" items="${pg.children}">
+                                        <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
+                                            <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
+                                                <c:out value="${child.title}" />
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </c:if>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </ul>
+        </div>
+    </aside>
+
     <script>
-        function toggleNavigation() {
-            const navWrapper = document.getElementById('navWrapper');
-            navWrapper.classList.toggle('open');
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function toggleSubmenu(button) {
+            const menuItem = button.closest('.mobile-menu-item');
+            menuItem.classList.toggle('expanded');
         }
     </script>
 </body>
