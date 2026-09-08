@@ -202,12 +202,85 @@
             padding-left: 22px;
         }
 
-        /* Mobile Inline Direct Navigation (Appears directly under the picture header) */
-        .mobile-nav-inline {
+        /* Mobile Controls */
+        .menu-btn-toggle {
             display: none;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Mobile Drawer Component */
+        .mobile-drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
             background-color: var(--white);
-            border-bottom: 2px solid var(--border-color);
-            width: 100%;
+            z-index: 1002;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-light);
+        }
+
+        .drawer-header span {
+            font-weight: 700;
+            color: var(--primary-brand);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drawer-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .drawer-body {
+            padding: 10px 0;
+            overflow-y: auto;
+            flex: 1;
         }
 
         .mobile-menu {
@@ -224,7 +297,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
+            padding: 14px 20px;
             color: var(--text-dark);
             text-decoration: none;
             font-size: 14px;
@@ -257,7 +330,6 @@
             font-size: 13px;
             font-weight: 500;
             background-color: var(--primary-brand);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .mobile-submenu li:hover a,
@@ -270,7 +342,7 @@
         .submenu-toggle {
             background: transparent;
             border: none;
-            padding: 12px 20px;
+            padding: 8px;
             color: var(--text-muted);
             cursor: pointer;
         }
@@ -298,12 +370,10 @@
                 display: none;
             }
 
-            .main-header {
-                justify-content: center; /* Center logo on mobile */
-            }
-
-            .mobile-nav-inline {
-                display: block;
+            .menu-btn-toggle {
+                display: flex;
+                align-items: center;
+                gap: 6px;
             }
         }
     </style>
@@ -324,7 +394,7 @@
             </div>
         </div>
 
-        <!-- Main Header with Logo -->
+        <!-- Main Header -->
         <div class="main-header">
             <div class="logo-area">
                 <a href="${pageContext.request.contextPath}/homepage">
@@ -371,12 +441,26 @@
                     </ul>
                 </nav>
             </div>
-        </div>
 
-        <!-- Inline Mobile Navigation rendered right below the logo picture -->
-        <nav class="mobile-nav-inline">
+            <!-- Mobile Drawer Button -->
+            <button class="menu-btn-toggle" onclick="toggleMobileDrawer()" type="button" aria-label="Toggle navigation">
+                <span>MENU</span>
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer Structure -->
+    <div class="mobile-drawer-overlay" id="drawerOverlay" onclick="toggleMobileDrawer()"></div>
+    <aside class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <span>Navigation</span>
+            <button class="drawer-close-btn" onclick="toggleMobileDrawer()" type="button" aria-label="Close menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="drawer-body">
             <ul class="mobile-menu">
-                <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
                 <c:forEach var="pg" items="${pagesList}">
                     <c:if test="${pg.slug ne 'home'}">
                         <c:set var="isChildActive" value="false" />
@@ -395,7 +479,7 @@
                                     <c:out value="${pg.title}" />
                                 </a>
                                 <c:if test="${not empty pg.children}">
-                                    <button type="button" class="submenu-toggle" onclick="toggleSubmenu(this)" aria-label="Toggle Submenu">
+                                    <button type="button" class="submenu-toggle" onclick="toggleSubmenu(this)">
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </button>
                                 </c:if>
@@ -416,10 +500,17 @@
                     </c:if>
                 </c:forEach>
             </ul>
-        </nav>
-    </header>
+        </div>
+    </aside>
 
     <script>
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
         function toggleSubmenu(button) {
             const menuItem = button.closest('.mobile-menu-item');
             menuItem.classList.toggle('expanded');
