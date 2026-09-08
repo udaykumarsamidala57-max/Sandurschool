@@ -202,85 +202,11 @@
             padding-left: 22px;
         }
 
-        /* Mobile Controls */
-        .menu-btn-toggle {
+        /* Direct Mobile Navigation (Visible on mobile screens) */
+        .mobile-direct-nav {
             display: none;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-dark);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        /* Mobile Drawer Component */
-        .mobile-drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .mobile-drawer-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .mobile-drawer {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
             background-color: var(--white);
-            z-index: 1002;
-            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
-            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .mobile-drawer.open {
-            right: 0;
-        }
-
-        .drawer-header {
-            padding: 16px 20px;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-light);
-        }
-
-        .drawer-header span {
-            font-weight: 700;
-            color: var(--primary-brand);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .drawer-close-btn {
-            background: transparent;
-            border: none;
-            font-size: 18px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .drawer-body {
-            padding: 10px 0;
-            overflow-y: auto;
-            flex: 1;
         }
 
         .mobile-menu {
@@ -311,15 +237,11 @@
 
         /* Brown Background & White Text Mobile Submenu Styling */
         .mobile-submenu {
-            display: none;
+            display: block; /* Direct display for child links */
             list-style: none;
             margin: 0;
             padding: 0;
             background-color: var(--primary-brand);
-        }
-
-        .mobile-menu-item.expanded .mobile-submenu {
-            display: block;
         }
 
         .mobile-submenu li a {
@@ -330,6 +252,7 @@
             font-size: 13px;
             font-weight: 500;
             background-color: var(--primary-brand);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .mobile-submenu li:hover a,
@@ -337,14 +260,6 @@
             color: var(--accent-gold);
             font-weight: 700;
             background-color: var(--primary-hover);
-        }
-
-        .submenu-toggle {
-            background: transparent;
-            border: none;
-            padding: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
         }
 
         /* Mobile Breakpoint Adjustments */
@@ -370,10 +285,8 @@
                 display: none;
             }
 
-            .menu-btn-toggle {
-                display: flex;
-                align-items: center;
-                gap: 6px;
+            .mobile-direct-nav {
+                display: block;
             }
         }
     </style>
@@ -397,7 +310,7 @@
         <!-- Main Header -->
         <div class="main-header">
             <div class="logo-area">
-                <a href="${pageContext.request.contextPath}/">
+                <a href="${pageContext.request.contextPath}/homepage">
                     <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
                 </a>
             </div>
@@ -441,25 +354,10 @@
                     </ul>
                 </nav>
             </div>
-
-            <!-- Mobile Drawer Button -->
-            <button class="menu-btn-toggle" onclick="toggleMobileDrawer()" type="button" aria-label="Toggle navigation">
-                <span>MENU</span>
-                <i class="fa-solid fa-bars"></i>
-            </button>
         </div>
-    </header>
 
-    <!-- Mobile Navigation Drawer Structure -->
-    <div class="mobile-drawer-overlay" id="drawerOverlay" onclick="toggleMobileDrawer()"></div>
-    <aside class="mobile-drawer" id="mobileDrawer">
-        <div class="drawer-header">
-            <span>Navigation</span>
-            <button class="drawer-close-btn" onclick="toggleMobileDrawer()" type="button" aria-label="Close menu">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="drawer-body">
+        <!-- Direct Mobile Navigation Structure -->
+        <nav class="mobile-direct-nav">
             <ul class="mobile-menu">
                 <c:forEach var="pg" items="${pagesList}">
                     <c:if test="${pg.slug ne 'home'}">
@@ -472,18 +370,11 @@
                             </c:forEach>
                         </c:if>
 
-                        <li class="mobile-menu-item ${isChildActive ? 'expanded' : ''}">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}" 
-                                   class="mobile-menu-link ${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}" style="flex:1;">
-                                    <c:out value="${pg.title}" />
-                                </a>
-                                <c:if test="${not empty pg.children}">
-                                    <button type="button" class="submenu-toggle" onclick="toggleSubmenu(this)">
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </button>
-                                </c:if>
-                            </div>
+                        <li class="mobile-menu-item">
+                            <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}" 
+                               class="mobile-menu-link ${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
+                                <c:out value="${pg.title}" />
+                            </a>
 
                             <c:if test="${not empty pg.children}">
                                 <ul class="mobile-submenu">
@@ -500,21 +391,7 @@
                     </c:if>
                 </c:forEach>
             </ul>
-        </div>
-    </aside>
-
-    <script>
-        function toggleMobileDrawer() {
-            const drawer = document.getElementById('mobileDrawer');
-            const overlay = document.getElementById('drawerOverlay');
-            drawer.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        function toggleSubmenu(button) {
-            const menuItem = button.closest('.mobile-menu-item');
-            menuItem.classList.toggle('expanded');
-        }
-    </script>
+        </nav>
+    </header>
 </body>
 </html>
