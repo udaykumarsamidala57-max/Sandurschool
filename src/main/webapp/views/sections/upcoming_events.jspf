@@ -1,80 +1,107 @@
-<%@ page import="java.sql.*, java.util.*, java.text.SimpleDateFormat, com.bean.DBUtil" %>
+<%@ page import="java.sql.*, java.util.*, java.text.SimpleDateFormat, java.util.Base64, com.bean.DBUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%
-    if (request.getAttribute("events") == null) {
-        List<Map<String, Object>> eventList = new ArrayList<>();
-        String sql = "SELECT id, event_date, event_name, time_from, time_to, place, event_description, image_blob " +
-                     "FROM upcoming_events WHERE event_date >= CURDATE() ORDER BY event_date ASC";
+if (request.getAttribute("events") == null) {
 
-        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        SimpleDateFormat inputTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        SimpleDateFormat displayTimeFormat = new SimpleDateFormat("hh:mm a");
+    List<Map<String, Object>> eventList = new ArrayList<>();
 
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+    String sql = "SELECT id, event_date, event_name, time_from, time_to, " +
+                 "place, event_description, image_blob " +
+                 "FROM upcoming_events " +
+                 "WHERE event_date >= CURDATE() " +
+                 "ORDER BY event_date ASC";
 
-            while (rs.next()) {
-                Map<String, Object> event = new HashMap<>();
-                event.put("id", rs.getInt("id"));
-                
-                // Format Date into Uppercase Display Format (e.g., 26 JANUARY 2026)
-                String rawDate = rs.getString("event_date");
-                if (rawDate != null) {
-                    try {
-                        java.util.Date parsedDate = dbDateFormat.parse(rawDate);
-                        event.put("eventDate", displayDateFormat.format(parsedDate).toUpperCase());
-                    } catch (Exception e) {
-                        event.put("eventDate", rawDate);
-                    }
-                } else {
-                    event.put("eventDate", "");
-                }
+    SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+    SimpleDateFormat inputTimeFormat = new SimpleDateFormat("HH:mm:ss");
+    SimpleDateFormat displayTimeFormat = new SimpleDateFormat("hh:mm a");
 
-                // Format Time Range (e.g., 10:00 AM - 01:00 PM)
-                String rawTimeFrom = rs.getString("time_from");
-                String rawTimeTo = rs.getString("time_to");
-                String timeFormatted = "";
+    try (
+        Connection conn = DBUtil.getConnection("SRS");
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()
+    ) {
+        while (rs.next()) {
+            Map<String, Object> event = new HashMap<>();
 
+            event.put("id", rs.getInt("id"));
+
+            String rawDate = rs.getString("event_date");
+            if (rawDate != null && !rawDate.trim().isEmpty()) {
                 try {
-                    if (rawTimeFrom != null) {
-                        timeFormatted += displayTimeFormat.format(inputTimeFormat.parse(rawTimeFrom));
-                    }
-                    if (rawTimeTo != null) {
-                        timeFormatted += " - " + displayTimeFormat.format(inputTimeFormat.parse(rawTimeTo));
-                    }
+                    java.util.Date parsedDate = dbDateFormat.parse(rawDate);
+                    event.put("eventDate", displayDateFormat.format(parsedDate).toUpperCase());
                 } catch (Exception e) {
-                    timeFormatted = (rawTimeFrom != null ? rawTimeFrom : "") + 
-                                    (rawTimeTo != null ? " - " + rawTimeTo : "");
+                    event.put("eventDate", rawDate);
                 }
-                event.put("timeRange", timeFormatted);
-
-                event.put("eventName", rs.getString("event_name"));
-                event.put("place", rs.getString("place"));
-                event.put("eventDescription", rs.getString("event_description"));
-
-                // Image Encoding
-                byte[] imgBytes = rs.getBytes("image_blob");
-                if (imgBytes != null && imgBytes.length > 0) {
-                    event.put("imageBase64", Base64.getEncoder().encodeToString(imgBytes));
-                } else {
-                    event.put("imageBase64", null);
-                }
-
-                eventList.add(event);
+            } else {
+                event.put("eventDate", "");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        request.setAttribute("events", eventList);
+            String rawTimeFrom = rs.getString("time_from");
+            String rawTimeTo = rs.getString("time_to");
+            String timeFormatted = "";
+
+            try {
+                if (rawTimeFrom != null && !rawTimeFrom.trim().isEmpty()) {
+                    timeFormatted += displayTimeFormat.format(inputTimeFormat.parse(rawTimeFrom));
+                }
+                if (rawTimeTo != null && !rawTimeTo.trim().isEmpty()) {
+                    if (!timeFormatted.isEmpty()) {
+                        timeFormatted += " - ";
+                    }
+                    timeFormatted += displayTimeFormat.format(inputTimeFormat.parse(rawTimeTo));
+                }
+            } catch (Exception e) {
+                timeFormatted = (rawTimeFrom != null ? rawTimeFrom : "");
+                if (rawTimeTo != null && !rawTimeTo.trim().isEmpty()) {
+                    timeFormatted += " - " + rawTimeTo;
+                }
+            }
+            event.put("timeRange", timeFormatted);
+
+            event.put("eventName", rs.getString("event_name"));
+            event.put("place", rs.getString("place"));
+            
+            String rawDesc = rs.getString("event_description");
+            event.put("eventDescription", rawDesc != null ? rawDesc : "");
+
+            byte[] imgBytes = rs.getBytes("image_blob");
+            if (imgBytes != null && imgBytes.length > 0) {
+                String mimeType = "image/jpeg";
+
+                if (imgBytes.length >= 8 &&
+                    (imgBytes[0] & 0xFF) == 0x89 && (imgBytes[1] & 0xFF) == 0x50 &&
+                    (imgBytes[2] & 0xFF) == 0x4E && (imgBytes[3] & 0xFF) == 0x47) {
+                    mimeType = "image/png";
+                } else if (imgBytes.length >= 6 && imgBytes[0] == 'G' && imgBytes[1] == 'I' && imgBytes[2] == 'F') {
+                    mimeType = "image/gif";
+                } else if (imgBytes.length >= 12 && imgBytes[0] == 'R' && imgBytes[1] == 'I' && imgBytes[2] == 'F' && imgBytes[3] == 'F' && imgBytes[8] == 'W' && imgBytes[9] == 'E' && imgBytes[10] == 'B' && imgBytes[11] == 'P') {
+                    mimeType = "image/webp";
+                } else if (imgBytes.length >= 2 && (imgBytes[0] & 0xFF) == 0xFF && (imgBytes[1] & 0xFF) == 0xD8) {
+                    mimeType = "image/jpeg";
+                }
+
+                String imageBase64 = Base64.getEncoder().encodeToString(imgBytes);
+                event.put("imageBase64", "data:" + mimeType + ";base64," + imageBase64);
+            } else {
+                event.put("imageBase64", "");
+            }
+
+            eventList.add(event);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    request.setAttribute("events", eventList);
+}
 %>
 
 <div class="campus-events-section">
+
     <div class="section-header">
         <h2 class="section-title">Upcoming Campus Events</h2>
         <p class="section-subtitle">Official announcements, academic schedules, and institutional events.</p>
@@ -84,32 +111,49 @@
         <c:choose>
             <c:when test="${not empty events}">
                 <c:forEach var="event" items="${events}">
-                    <div class="event-card" onclick="openEventModal(this)"
-                         data-title="${fn:escapeXml(event.eventName)}"
-                         data-date="${fn:escapeXml(event.eventDate)}"
-                         data-time="${fn:escapeXml(event.timeRange)}"
-                         data-place="${fn:escapeXml(event.place)}"
-                         data-description="${fn:escapeXml(event.eventDescription)}"
-                         data-image="${not empty event.imageBase64 ? 'data:image/jpeg;base64,'.concat(event.imageBase64) : ''}">
-                        
+                    <div class="event-card"
+                         onclick="ceOpenEventModal(this)">
+
                         <div class="card-info-box">
                             <div class="event-badge">${event.eventDate}</div>
                             <h3 class="event-title">${event.eventName}</h3>
-                            
+
                             <div class="event-meta">
                                 <div class="meta-item">
-                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
                                     <span>${event.eventDate}</span>
                                 </div>
+
                                 <div class="meta-item">
-                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
                                     <span>${event.timeRange}</span>
                                 </div>
+
                                 <div class="meta-item">
-                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
                                     <span>${event.place}</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="ce-data-store" style="display:none !important;">
+                            <span class="ce-data-title">${fn:escapeXml(event.eventName)}</span>
+                            <span class="ce-data-date">${fn:escapeXml(event.eventDate)}</span>
+                            <span class="ce-data-time">${fn:escapeXml(event.timeRange)}</span>
+                            <span class="ce-data-place">${fn:escapeXml(event.place)}</span>
+                            <div class="ce-data-desc">${fn:escapeXml(event.eventDescription)}</div>
+                            <div class="ce-data-img">${event.imageBase64}</div>
                         </div>
                     </div>
                 </c:forEach>
@@ -123,85 +167,111 @@
     </div>
 </div>
 
-<!-- Modal Dialog -->
-<div id="eventModal" class="event-modal" role="dialog" aria-modal="true">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeEventModal()" aria-label="Close modal">&times;</button>
-        
-        <div id="modalImageContainer" class="modal-image-container" style="display: none;">
-            <img id="modalImage" src="" alt="Event Banner">
+<div id="ceEventModal" class="ce-popup-modal" role="dialog" aria-modal="true" aria-labelledby="ceModalTitle">
+    <div class="ce-popup-content">
+        <button type="button" class="ce-popup-close-btn" onclick="ceCloseEventModal()" aria-label="Close modal">&times;</button>
+
+        <div id="ceModalImgContainer" class="ce-popup-img-container" style="display:none;">
+            <img id="ceModalImg" src="" alt="Event Image" class="ce-popup-img">
         </div>
-        
-        <div class="modal-body">
-            <h2 id="modalTitle"></h2>
-            
-            <div class="modal-meta">
-                <div class="modal-meta-item">
-                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    <span id="modalDate"></span>
+
+        <div class="ce-popup-body">
+            <h2 id="ceModalTitle" class="ce-popup-title"></h2>
+
+            <div class="ce-popup-meta">
+                <div class="ce-popup-meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span id="ceModalDate"></span>
                 </div>
-                <div class="modal-meta-item">
-                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span id="modalTime"></span>
+
+                <div class="ce-popup-meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="ceModalTime"></span>
                 </div>
-                <div class="modal-meta-item">
-                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    <span id="modalPlace"></span>
+
+                <div class="ce-popup-meta-item">
+                    <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span id="ceModalPlace"></span>
                 </div>
             </div>
-            
-            <p id="modalDescription" class="modal-description"></p>
+
+            <div id="ceModalDescription" class="ce-popup-description"></div>
         </div>
     </div>
 </div>
 
 <script>
-    function openEventModal(cardElement) {
-        var title = cardElement.getAttribute('data-title') || '';
-        var date = cardElement.getAttribute('data-date') || 'N/A';
-        var time = cardElement.getAttribute('data-time') || 'N/A';
-        var place = cardElement.getAttribute('data-place') || 'N/A';
-        var description = cardElement.getAttribute('data-description') || 'No description provided for this event.';
-        var imgSrc = cardElement.getAttribute('data-image');
+    function ceOpenEventModal(cardElement) {
+        if (!cardElement) return;
 
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalDate').textContent = date;
-        document.getElementById('modalTime').textContent = time;
-        document.getElementById('modalPlace').textContent = place;
-        document.getElementById('modalDescription').textContent = description;
+        var store = cardElement.querySelector(".ce-data-store");
+        if (!store) return;
 
-        var imgElement = document.getElementById('modalImage');
-        var imgContainer = document.getElementById('modalImageContainer');
+        var title = store.querySelector(".ce-data-title") ? store.querySelector(".ce-data-title").textContent : "";
+        var date = store.querySelector(".ce-data-date") ? store.querySelector(".ce-data-date").textContent : "N/A";
+        var time = store.querySelector(".ce-data-time") ? store.querySelector(".ce-data-time").textContent : "N/A";
+        var place = store.querySelector(".ce-data-place") ? store.querySelector(".ce-data-place").textContent : "N/A";
+        var desc = store.querySelector(".ce-data-desc") ? store.querySelector(".ce-data-desc").textContent : "No description provided for this event.";
+        var imgSrc = store.querySelector(".ce-data-img") ? store.querySelector(".ce-data-img").textContent.trim() : "";
 
-        if (imgSrc && imgSrc.trim() !== '') {
-            imgElement.src = imgSrc;
-            imgContainer.style.display = 'block';
+        document.getElementById("ceModalTitle").textContent = title;
+        document.getElementById("ceModalDate").textContent = date;
+        document.getElementById("ceModalTime").textContent = time;
+        document.getElementById("ceModalPlace").textContent = place;
+        document.getElementById("ceModalDescription").textContent = desc;
+
+        var imgElem = document.getElementById("ceModalImg");
+        var imgContainer = document.getElementById("ceModalImgContainer");
+
+        if (imgSrc && imgSrc.length > 30) {
+            imgElem.src = imgSrc;
+            imgContainer.style.display = "block";
         } else {
-            imgElement.src = '';
-            imgContainer.style.display = 'none';
+            imgElem.removeAttribute("src");
+            imgContainer.style.display = "none";
         }
 
-        var modal = document.getElementById('eventModal');
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        var modal = document.getElementById("ceEventModal");
+        modal.classList.add("ce-active");
+        document.body.style.overflow = "hidden";
     }
 
-    function closeEventModal() {
-        var modal = document.getElementById('eventModal');
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
+    function ceCloseEventModal() {
+        var modal = document.getElementById("ceEventModal");
+        var imgElem = document.getElementById("ceModalImg");
+        var imgContainer = document.getElementById("ceModalImgContainer");
+
+        modal.classList.remove("ce-active");
+        document.body.style.overflow = "";
+
+        imgElem.removeAttribute("src");
+        imgContainer.style.display = "none";
     }
 
-    window.addEventListener('click', function(event) {
-        var modal = document.getElementById('eventModal');
+    window.addEventListener("click", function(event) {
+        var modal = document.getElementById("ceEventModal");
         if (event.target === modal) {
-            closeEventModal();
+            ceCloseEventModal();
         }
     });
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeEventModal();
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            var modal = document.getElementById("ceEventModal");
+            if (modal && modal.classList.contains("ce-active")) {
+                ceCloseEventModal();
+            }
         }
     });
 </script>

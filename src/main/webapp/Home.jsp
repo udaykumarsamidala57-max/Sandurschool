@@ -32,6 +32,7 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/side_design.css">
 
+    <%-- Dynamic CSS Injections based on Section Types --%>
     <c:if test="${not empty pageData.sections}">
 
         <c:forEach var="sec" items="${pageData.sections}">
@@ -357,7 +358,7 @@
 
     <main class="main-content">
 
-        <%-- 1. Render Hero Sections --%>
+        <%-- SEQUENCE STEP 1: Render Hero Sections First --%>
         <c:forEach var="sec" items="${pageData.sections}">
             <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
             <c:if test="${sType eq 'HERO'}">
@@ -365,13 +366,12 @@
             </c:if>
         </c:forEach>
 
-        <%-- Resolve current active page/slug --%>
+        <%-- SEQUENCE STEP 2: Pre-Calculations & State Setup --%>
         <c:set var="currentSlug"
                value="${fn:toLowerCase(fn:trim(not empty param.slug ? param.slug : pageData.slug))}" />
 
         <c:set var="dynamicSubMenuItems" value="${null}" />
 
-        <%-- Locate child items for sidebar navigation --%>
         <c:forEach var="pg" items="${pagesList}">
             <c:set var="parentSlug" value="${fn:toLowerCase(fn:trim(pg.slug))}" />
             <c:set var="isParentOrChild" value="false" />
@@ -394,7 +394,6 @@
             </c:if>
         </c:forEach>
 
-        <%-- Check if side design component is active --%>
         <c:set var="hasSideDesign" value="false" />
         <c:if test="${not empty pageData.sections}">
             <c:forEach var="sec" items="${pageData.sections}">
@@ -405,7 +404,6 @@
             </c:forEach>
         </c:if>
 
-        <%-- Determine sidebar visibility --%>
         <c:set var="showSidebarNav" value="false" />
         <c:if test="${currentSlug ne 'about'
                       and currentSlug ne 'lag'
@@ -415,10 +413,13 @@
             <c:set var="showSidebarNav" value="true" />
         </c:if>
 
+        <%-- SEQUENCE STEP 3: Render Primary Body Structure --%>
         <div class="page-body-container ${(!hasSideDesign and !showSidebarNav) ? 'no-side-design' : ''}">
 
-            <%-- Main Content Column --%>
+            <%-- Primary Content Area (Strict Natural Array Order) --%>
             <div class="primary-content-area">
+
+                <c:set var="renderedEvents" value="false" scope="page" />
 
                 <c:forEach var="sec" items="${pageData.sections}">
                     <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
@@ -455,15 +456,21 @@
                         <%@ include file="views/sections/latest-news.jspf" %>
                     </c:if>
 
+                    <c:if test="${(sType eq 'UP-EVENT' or sType eq 'UP_EVENT') and not renderedEvents}">
+                        <%@ include file="views/sections/upcoming_events.jspf" %>
+                        <c:set var="renderedEvents" value="true" scope="page" />
+                    </c:if>
+
                 </c:forEach>
 
             </div>
 
-            <%-- Secondary Right Sidebar Column --%>
+            <%-- SEQUENCE STEP 4: Render Secondary Right Sidebar Column --%>
             <c:if test="${hasSideDesign or showSidebarNav}">
 
                 <aside class="right-side-column">
 
+                    <%-- Sub-sequence 4a: Sidebar Navigation --%>
                     <c:if test="${showSidebarNav}">
                         <div class="sidebar-nav-box">
                             <ul>
@@ -479,6 +486,7 @@
                         </div>
                     </c:if>
 
+                    <%-- Sub-sequence 4b: Side Design Widgets --%>
                     <c:forEach var="sec" items="${pageData.sections}">
                         <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
                         <c:if test="${sType eq 'SIDE_DESIGN'}">
@@ -493,16 +501,6 @@
             </c:if>
 
         </div>
-
-        <%-- 2. Render UP-EVENT Sections at full width right before Footer --%>
-        <c:set var="renderedEvents" value="false" scope="page" />
-        <c:forEach var="sec" items="${pageData.sections}">
-            <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
-            <c:if test="${(sType eq 'UP-EVENT' or sType eq 'UP_EVENT') and not renderedEvents}">
-                <%@ include file="views/sections/upcoming_events.jspf" %>
-                <c:set var="renderedEvents" value="true" scope="page" />
-            </c:if>
-        </c:forEach>
 
     </main>
 

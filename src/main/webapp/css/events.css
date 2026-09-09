@@ -1,6 +1,6 @@
 /* =========================================================
-   CAMPUS EVENTS
-   PROFESSIONAL • CLASSY • MODERN • INSTITUTIONAL
+   CAMPUS EVENTS — STRICT CLASSIC MODERN EDITION
+   PROFESSIONAL • CLASSY • EYE-CATCHING • INSTITUTIONAL
    BRAND COLOR: #612405
    ========================================================= */
 
@@ -19,35 +19,37 @@
     --primary-dark: #471a03;
     --primary-deep: #351202;
 
-    --primary-light: rgba(97, 36, 5, 0.07);
-    --primary-medium: rgba(97, 36, 5, 0.12);
+    --primary-light: rgba(97, 36, 5, 0.08);
+    --primary-medium: rgba(97, 36, 5, 0.16);
 
-    --primary-soft: #f7f0eb;
+    --primary-soft: #f6efe9;
     --primary-pale: #fbf7f4;
+
+    --accent-gold: #c5a059;
 
 
     /* ---------- SURFACES ---------- */
 
-    --surface-bg: #f7f6f4;
+    --surface-bg: #f6f5f3;
     --surface-card: #ffffff;
-    --surface-soft: #faf9f7;
+    --surface-soft: #f8f7f5;
 
     --surface-dark: #17110e;
 
 
     /* ---------- BORDERS ---------- */
 
-    --border-subtle: #e8e2dd;
-    --border-medium: #d8cec6;
+    --border-subtle: #e2dbd5;
+    --border-medium: #d1c5bc;
     --border-strong: #612405;
 
 
     /* ---------- TEXT ---------- */
 
-    --text-primary: #211712;
-    --text-secondary: #453a34;
-    --text-muted: #756b64;
-    --text-light: #9c938d;
+    --text-primary: #1c130e;
+    --text-secondary: #423630;
+    --text-muted: #6e645d;
+    --text-light: #988e87;
 
     --white: #ffffff;
 
@@ -55,23 +57,23 @@
     /* ---------- SHADOWS ---------- */
 
     --shadow-card:
-        0 1px 2px rgba(54, 24, 8, 0.04),
-        0 5px 18px rgba(54, 24, 8, 0.055);
+        0 2px 4px rgba(54, 24, 8, 0.03),
+        0 8px 24px rgba(54, 24, 8, 0.06);
 
     --shadow-card-hover:
-        0 10px 28px rgba(54, 24, 8, 0.11),
-        0 3px 8px rgba(54, 24, 8, 0.06);
+        0 14px 36px rgba(54, 24, 8, 0.12),
+        0 4px 12px rgba(54, 24, 8, 0.06);
 
     --shadow-modal:
-        0 30px 80px rgba(25, 12, 5, 0.32),
-        0 10px 30px rgba(25, 12, 5, 0.12);
+        0 25px 70px rgba(25, 12, 5, 0.35),
+        0 8px 24px rgba(25, 12, 5, 0.15);
 
 
-    /* ---------- RADIUS ---------- */
+    /* ---------- RADIUS (STRICT ARCHITECTURAL) ---------- */
 
-    --radius-sm: 3px;
-    --radius-md: 6px;
-    --radius-lg: 10px;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
 
 
     /* ---------- ANIMATION ---------- */
@@ -90,16 +92,12 @@
     width: 100%;
 
     padding:
-        78px
-        32px
-        84px;
+        56px
+        24px
+        48px;
 
     background:
-        linear-gradient(
-            180deg,
-            #faf9f7 0%,
-            #f5f4f2 100%
-        );
+        var(--surface-bg);
 
     font-family:
         'Plus Jakarta Sans',
@@ -131,31 +129,12 @@
     max-width: 1240px;
 
     margin:
-        0 auto 44px;
+        0 auto 48px;
 
-    padding-left: 22px;
+    padding-left: 20px;
 
     border-left:
-        4px solid
-        var(--text-primary);
-}
-
-
-/* Brand accent */
-
-.section-header::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: -4px;
-    top: 0;
-
-    width: 4px;
-    height: 32px;
-
-    background:
+        3px solid
         var(--primary);
 }
 
@@ -167,22 +146,22 @@
 .section-title {
 
     margin:
-        0 0 8px;
+        0 0 6px;
 
     color:
-        #612405;
+        var(--primary);
 
     font-size:
-        clamp(1.75rem, 3vw, 2.4rem);
+        clamp(1.75rem, 3vw, 2.3rem);
 
     font-weight:
         800;
 
     line-height:
-        1.12;
+        1.15;
 
     letter-spacing:
-        -0.035em;
+        -0.02em;
 
     text-transform:
         uppercase;
@@ -211,7 +190,7 @@
         500;
 
     line-height:
-        1.65;
+        1.6;
 
     letter-spacing:
         0.01em;
@@ -234,16 +213,16 @@
         flex;
 
     gap:
-        22px;
+        24px;
 
     overflow-x:
         auto;
 
     padding:
-        5px
-        5px
+        6px
+        4px
         24px
-        5px;
+        4px;
 
     scroll-snap-type:
         x mandatory;
@@ -267,7 +246,7 @@
 .events-grid::-webkit-scrollbar {
 
     height:
-        5px;
+        4px;
 }
 
 .events-grid::-webkit-scrollbar-track {
@@ -282,7 +261,7 @@
         var(--primary);
 
     border-radius:
-        10px;
+        0px;
 }
 
 .events-grid::-webkit-scrollbar-thumb:hover {
@@ -311,7 +290,7 @@
         column;
 
     min-height:
-        280px;
+        290px;
 
     overflow:
         hidden;
@@ -340,15 +319,13 @@
         pointer;
 
     transition:
-        transform 0.28s var(--ease),
-        box-shadow 0.28s var(--ease),
-        border-color 0.28s ease;
+        transform 0.3s var(--ease),
+        box-shadow 0.3s var(--ease),
+        border-color 0.3s ease;
 }
 
 
-/* =========================================================
-   LEFT ACCENT
-   ========================================================= */
+/* Left Accent Line */
 
 .event-card::before {
 
@@ -374,7 +351,7 @@
         var(--primary);
 
     transition:
-        height 0.32s var(--ease);
+        height 0.3s var(--ease);
 }
 
 
@@ -385,7 +362,7 @@
 .event-card:hover {
 
     transform:
-        translateY(-5px);
+        translateY(-6px);
 
     border-color:
         var(--border-medium);
@@ -403,6 +380,59 @@
 
 
 /* =========================================================
+   NO-IMAGE EVENT CARD (DISABLE POPUP & HOVER CLICKS)
+   ========================================================= */
+
+/* Add the 'no-image' or 'has-no-image' class to .event-card in HTML when there is no image */
+.event-card.no-image,
+.event-card.has-no-image,
+.event-card[data-has-image="false"] {
+
+    cursor:
+        default;
+
+    pointer-events:
+        none; /* Disables click events so modal cannot trigger */
+}
+
+.event-card.no-image:hover,
+.event-card.has-no-image:hover,
+.event-card[data-has-image="false"]:hover {
+
+    transform:
+        none;
+
+    box-shadow:
+        var(--shadow-card);
+
+    border-color:
+        var(--border-subtle);
+}
+
+.event-card.no-image:hover::before,
+.event-card.has-no-image:hover::before,
+.event-card[data-has-image="false"]:hover::before {
+
+    height:
+        0;
+}
+
+.event-card.no-image:hover .event-badge,
+.event-card.has-no-image:hover .event-badge,
+.event-card[data-has-image="false"]:hover .event-badge {
+
+    background:
+        var(--primary-soft);
+
+    color:
+        var(--primary);
+
+    transform:
+        none;
+}
+
+
+/* =========================================================
    CARD INFORMATION
    ========================================================= */
 
@@ -412,7 +442,7 @@
         100%;
 
     padding:
-        27px
+        28px
         26px
         24px;
 
@@ -440,13 +470,13 @@
         flex-start;
 
     min-height:
-        27px;
+        26px;
 
     margin-bottom:
         18px;
 
     padding:
-        5px 11px 5px 9px;
+        4px 10px;
 
     background:
         var(--primary-soft);
@@ -454,12 +484,16 @@
     color:
         var(--primary);
 
+    border:
+        1px solid
+        rgba(97, 36, 5, 0.18);
+
     border-left:
         3px solid
         var(--primary);
 
     border-radius:
-        2px;
+        1px;
 
     font-family:
         ui-monospace,
@@ -479,13 +513,14 @@
         1;
 
     letter-spacing:
-        0.075em;
+        0.08em;
 
     text-transform:
         uppercase;
 
     transition:
         background 0.25s ease,
+        color 0.25s ease,
         transform 0.25s var(--ease);
 }
 
@@ -493,10 +528,13 @@
 .event-card:hover .event-badge {
 
     background:
-        var(--primary-medium);
+        var(--primary);
+
+    color:
+        var(--white);
 
     transform:
-        translateX(3px);
+        translateX(2px);
 }
 
 
@@ -507,22 +545,22 @@
 .event-title {
 
     margin:
-        0 0 26px;
+        0 0 24px;
 
     color:
         var(--text-primary);
 
     font-size:
-        1.14rem;
+        1.15rem;
 
     font-weight:
         700;
 
     line-height:
-        1.42;
+        1.4;
 
     letter-spacing:
-        -0.018em;
+        -0.015em;
 
     display:
         -webkit-box;
@@ -551,13 +589,13 @@
         column;
 
     gap:
-        12px;
+        11px;
 
     margin-top:
         auto;
 
     padding-top:
-        17px;
+        18px;
 
     border-top:
         1px solid
@@ -578,7 +616,7 @@
         center;
 
     gap:
-        11px;
+        10px;
 
     min-height:
         20px;
@@ -587,7 +625,7 @@
         var(--text-secondary);
 
     font-size:
-        0.79rem;
+        0.8rem;
 
     font-weight:
         600;
@@ -604,13 +642,13 @@
 .meta-icon {
 
     width:
-        16px;
+        15px;
 
     height:
-        16px;
+        15px;
 
     flex:
-        0 0 16px;
+        0 0 15px;
 
     stroke:
         var(--primary);
@@ -639,7 +677,7 @@
         0 auto;
 
     padding:
-        58px 28px;
+        52px 28px;
 
     background:
         var(--surface-card);
@@ -679,34 +717,49 @@
 
 
 /* =========================================================
-   MODAL BACKDROP
+   FIXED CENTERED POPUP MODAL
    ========================================================= */
 
-.event-modal {
+.ce-popup-modal {
 
     position:
-        fixed;
+        fixed !important;
 
-    inset:
-        0;
+    top:
+        0 !important;
+
+    left:
+        0 !important;
+
+    right:
+        0 !important;
+
+    bottom:
+        0 !important;
+
+    width:
+        100vw !important;
+
+    height:
+        100vh !important;
 
     z-index:
-        1000;
+        999999 !important;
 
     display:
-        flex;
+        flex !important;
 
     align-items:
-        center;
+        center !important;
 
     justify-content:
-        center;
+        center !important;
 
     padding:
-        24px;
+        20px !important;
 
     background:
-        rgba(35, 14, 5, 0.78);
+        rgba(23, 14, 9, 0.78) !important;
 
     backdrop-filter:
         blur(6px);
@@ -720,27 +773,33 @@
     opacity:
         0;
 
+    pointer-events:
+        none;
+
     transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease;
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 }
 
 
-.event-modal.active {
+.ce-popup-modal.ce-active {
 
     visibility:
-        visible;
+        visible !important;
 
     opacity:
-        1;
+        1 !important;
+
+    pointer-events:
+        auto !important;
 }
 
 
 /* =========================================================
-   MODAL CONTENT
+   POPUP CONTENT CONTAINER (HORIZONTAL SPLIT DESKTOP)
    ========================================================= */
 
-.modal-content {
+.ce-popup-content {
 
     position:
         relative;
@@ -749,10 +808,19 @@
         100%;
 
     max-width:
-        680px;
+        860px;
 
     max-height:
-        88vh;
+        85vh;
+
+    margin:
+        auto !important;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        364px 1fr;
 
     overflow-y:
         auto;
@@ -769,39 +837,37 @@
         var(--primary);
 
     border-radius:
-        5px;
+        var(--radius-md);
 
     box-shadow:
         var(--shadow-modal);
 
     transform:
-        translateY(14px)
-        scale(0.985);
+        scale(0.92);
 
     opacity:
         0;
 
     transition:
-        transform 0.3s var(--ease),
-        opacity 0.22s ease;
+        transform 0.28s var(--ease),
+        opacity 0.25s ease;
 
     scrollbar-width:
         thin;
 
     scrollbar-color:
-        #a99e96
+        var(--border-medium)
         transparent;
 }
 
 
-.event-modal.active .modal-content {
+.ce-popup-modal.ce-active .ce-popup-content {
 
     transform:
-        translateY(0)
-        scale(1);
+        scale(1) !important;
 
     opacity:
-        1;
+        1 !important;
 }
 
 
@@ -809,25 +875,25 @@
    MODAL SCROLLBAR
    ========================================================= */
 
-.modal-content::-webkit-scrollbar {
+.ce-popup-content::-webkit-scrollbar {
 
     width:
-        6px;
+        5px;
 }
 
-.modal-content::-webkit-scrollbar-track {
+.ce-popup-content::-webkit-scrollbar-track {
 
     background:
         transparent;
 }
 
-.modal-content::-webkit-scrollbar-thumb {
+.ce-popup-content::-webkit-scrollbar-thumb {
 
     background:
-        #a99e96;
+        var(--border-medium);
 
     border-radius:
-        10px;
+        0px;
 }
 
 
@@ -835,25 +901,25 @@
    CLOSE BUTTON
    ========================================================= */
 
-.close-btn {
+.ce-popup-close-btn {
 
     position:
         absolute;
 
     top:
-        16px;
+        12px;
 
     right:
-        16px;
+        12px;
 
     z-index:
-        20;
+        30;
 
     width:
-        36px;
+        32px;
 
     height:
-        36px;
+        32px;
 
     display:
         flex;
@@ -868,19 +934,20 @@
         0;
 
     background:
-        rgba(50, 23, 8, 0.92);
+        var(--surface-card);
 
     color:
-        var(--white);
+        var(--text-primary);
 
     border:
-        none;
+        1px solid
+        var(--border-subtle);
 
     border-radius:
-        3px;
+        2px;
 
     font-size:
-        19px;
+        18px;
 
     font-weight:
         600;
@@ -891,38 +958,45 @@
     cursor:
         pointer;
 
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.1);
+
     transition:
         background 0.2s ease,
-        transform 0.2s var(--ease);
+        color 0.2s ease,
+        border-color 0.2s ease;
 }
 
 
-.close-btn:hover {
+.ce-popup-close-btn:hover {
 
     background:
         var(--primary);
 
-    transform:
-        rotate(90deg);
+    color:
+        var(--white);
+
+    border-color:
+        var(--primary);
 }
 
 
-.close-btn:focus-visible {
+.ce-popup-close-btn:focus-visible {
 
     outline:
-        3px solid
-        rgba(97, 36, 5, 0.25);
+        2px solid
+        var(--primary);
 
     outline-offset:
-        3px;
+        2px;
 }
 
 
 /* =========================================================
-   MODAL IMAGE
+   MODAL IMAGE CONTAINER & SIDE IMAGE
    ========================================================= */
 
-.modal-image-container {
+.ce-popup-img-container {
 
     position:
         relative;
@@ -931,64 +1005,71 @@
         100%;
 
     height:
-        290px;
+        100%;
 
-    overflow:
-        hidden;
+    min-height:
+        325px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        16px;
 
     background:
-        var(--surface-dark);
+        var(--surface-card); /* White surface background */
 
-    border-bottom:
+    border-right:
         1px solid
         var(--border-subtle);
-}
 
-
-.modal-image-container::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(35, 14, 5, 0.02) 40%,
-            rgba(35, 14, 5, 0.20) 100%
-        );
-
-    pointer-events:
+    border-bottom:
         none;
 }
 
 
-.modal-image-container img {
+.ce-popup-img-container::after {
+
+    content:
+        none;
+}
+
+
+.ce-popup-img {
+
+    max-width:
+        100%;
+
+    max-height:
+        100%;
 
     width:
-        100%;
+        auto;
 
     height:
-        100%;
+        auto;
 
     display:
         block;
 
     object-fit:
-        cover;
+        contain;
+
+    object-position:
+        center center;
 
     transition:
-        transform 0.5s var(--ease);
+        transform 0.35s var(--ease);
 }
 
 
-.event-modal.active
-.modal-image-container img {
+.ce-popup-modal.ce-active .ce-popup-img {
 
     transform:
         scale(1);
@@ -996,49 +1077,48 @@
 
 
 /* =========================================================
-   MODAL BODY
+   MODAL BODY & ELEMENTS
    ========================================================= */
 
-.modal-body {
+.ce-popup-body {
 
     padding:
-        34px
-        34px
-        36px;
+        28px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
 }
 
 
-/* =========================================================
-   MODAL TITLE
-   ========================================================= */
-
-.modal-body h2 {
+.ce-popup-title {
 
     margin:
-        0 0 22px;
+        0 0 18px;
 
     color:
         var(--text-primary);
 
     font-size:
-        clamp(1.4rem, 3vw, 1.75rem);
+        clamp(1.25rem, 2.2vw, 1.5rem);
 
     font-weight:
         800;
 
     line-height:
-        1.25;
+        1.3;
 
     letter-spacing:
-        -0.03em;
+        -0.02em;
 }
 
 
-/* =========================================================
-   MODAL META
-   ========================================================= */
-
-.modal-meta {
+.ce-popup-meta {
 
     display:
         grid;
@@ -1047,31 +1127,27 @@
         repeat(2, minmax(0, 1fr));
 
     gap:
-        0;
+        1px;
 
     margin-bottom:
-        26px;
+        22px;
 
     background:
-        var(--surface-soft);
+        var(--border-subtle);
 
     border:
         1px solid
         var(--border-subtle);
 
     border-radius:
-        4px;
+        var(--radius-sm);
 
     overflow:
         hidden;
 }
 
 
-/* =========================================================
-   MODAL META ITEM
-   ========================================================= */
-
-.modal-meta-item {
+.ce-popup-meta-item {
 
     display:
         flex;
@@ -1080,13 +1156,17 @@
         center;
 
     gap:
-        9px;
+        8px;
 
     min-width:
         0;
 
     padding:
-        14px 15px;
+        11px
+        13px;
+
+    background:
+        var(--surface-soft);
 
     color:
         var(--text-secondary);
@@ -1099,33 +1179,10 @@
 
     line-height:
         1.4;
-
-    border-bottom:
-        1px solid
-        var(--border-subtle);
 }
 
 
-.modal-meta-item:nth-child(odd) {
-
-    border-right:
-        1px solid
-        var(--border-subtle);
-}
-
-
-.modal-meta-item:nth-last-child(-n + 2) {
-
-    border-bottom:
-        none;
-}
-
-
-/* =========================================================
-   MODAL DESCRIPTION
-   ========================================================= */
-
-.modal-description {
+.ce-popup-description {
 
     margin:
         0;
@@ -1134,16 +1191,19 @@
         var(--text-muted);
 
     font-size:
-        0.92rem;
+        0.88rem;
 
     font-weight:
         500;
 
     line-height:
-        1.8;
+        1.7;
 
     white-space:
         pre-wrap;
+
+    word-break:
+        break-word;
 }
 
 
@@ -1154,16 +1214,16 @@
 .event-card:focus-visible {
 
     outline:
-        3px solid
-        rgba(97, 36, 5, 0.25);
+        2px solid
+        var(--primary);
 
     outline-offset:
-        4px;
+        3px;
 }
 
 
 /* =========================================================
-   TABLET
+   TABLET RESPONSIVE
    ========================================================= */
 
 @media (max-width: 900px) {
@@ -1171,16 +1231,15 @@
     .campus-events-section {
 
         padding:
-            60px
-            24px
-            68px;
+            44px
+            20px;
     }
 
 
     .section-header {
 
         margin-bottom:
-            34px;
+            36px;
     }
 
 
@@ -1195,19 +1254,45 @@
 
         flex-basis:
             320px;
+
+        min-height:
+            270px;
     }
 
 
-    .modal-image-container {
+    .ce-popup-content {
+
+        grid-template-columns:
+            1fr;
+
+        max-width:
+            500px;
+    }
+
+
+    .ce-popup-img-container {
 
         height:
-            250px;
+            260px;
+
+        min-height:
+            auto;
+
+        padding:
+            12px;
+
+        border-right:
+            none;
+
+        border-bottom:
+            1px solid
+            var(--border-subtle);
     }
 }
 
 
 /* =========================================================
-   MOBILE
+   MOBILE RESPONSIVE
    ========================================================= */
 
 @media (max-width: 600px) {
@@ -1215,16 +1300,15 @@
     .campus-events-section {
 
         padding:
-            48px
-            16px
-            56px;
+            36px
+            16px;
     }
 
 
     .section-header {
 
         padding-left:
-            16px;
+            14px;
 
         margin-bottom:
             28px;
@@ -1234,17 +1318,7 @@
     .section-title {
 
         font-size:
-            1.55rem;
-
-        letter-spacing:
-            -0.025em;
-    }
-
-
-    .section-subtitle {
-
-        font-size:
-            0.8rem;
+            1.45rem;
     }
 
 
@@ -1254,203 +1328,90 @@
             14px;
 
         padding-bottom:
-            18px;
+            16px;
     }
 
 
     .event-card {
 
         flex:
-            0 0 285px;
+            0 0 280px;
 
         min-height:
-            265px;
+            260px;
     }
 
 
     .card-info-box {
 
         padding:
-            23px
-            21px
-            21px;
+            20px;
     }
 
 
-    .event-title {
+    .ce-popup-modal {
 
-        font-size:
-            1.03rem;
+        align-items:
+            center !important;
 
-        margin-bottom:
-            22px;
+        padding:
+            14px !important;
     }
 
 
-    .event-meta {
+    .ce-popup-content {
 
-        gap:
+        max-height:
+            90vh;
+
+        transform:
+            scale(0.94);
+    }
+
+
+    .ce-popup-img-container {
+
+        height:
+            208px;
+
+        padding:
             10px;
     }
 
 
-    .meta-item {
-
-        font-size:
-            0.75rem;
-    }
-
-
-    /* ---------- MODAL ---------- */
-
-    .event-modal {
-
-        align-items:
-            flex-end;
+    .ce-popup-body {
 
         padding:
-            0;
+            20px
+            18px
+            22px;
     }
 
 
-    .modal-content {
-
-        max-width:
-            none;
-
-        max-height:
-            92vh;
-
-        border-radius:
-            7px
-            7px
-            0
-            0;
-
-        border-top-width:
-            3px;
-
-        transform:
-            translateY(25px);
-    }
-
-
-    .event-modal.active
-    .modal-content {
-
-        transform:
-            translateY(0);
-    }
-
-
-    .modal-image-container {
-
-        height:
-            215px;
-    }
-
-
-    .modal-body {
-
-        padding:
-            26px
-            21px
-            30px;
-    }
-
-
-    .modal-body h2 {
+    .ce-popup-title {
 
         font-size:
-            1.3rem;
+            1.2rem;
 
         margin-bottom:
-            19px;
+            14px;
     }
 
 
-    .modal-meta {
+    .ce-popup-meta {
 
         grid-template-columns:
             1fr;
 
         margin-bottom:
-            22px;
+            18px;
     }
 
 
-    .modal-meta-item {
-
-        border-right:
-            none !important;
-
-        border-bottom:
-            1px solid
-            var(--border-subtle);
-    }
-
-
-    .modal-meta-item:last-child {
-
-        border-bottom:
-            none;
-    }
-
-
-    .modal-description {
+    .ce-popup-description {
 
         font-size:
-            0.86rem;
-
-        line-height:
-            1.75;
-    }
-
-
-    .close-btn {
-
-        top:
-            12px;
-
-        right:
-            12px;
-
-        width:
-            34px;
-
-        height:
-            34px;
-    }
-}
-
-
-/* =========================================================
-   VERY SMALL DEVICES
-   ========================================================= */
-
-@media (max-width: 380px) {
-
-    .campus-events-section {
-
-        padding-left:
-            12px;
-
-        padding-right:
-            12px;
-    }
-
-
-    .event-card {
-
-        flex-basis:
-            270px;
-    }
-
-
-    .section-title {
-
-        font-size:
-            1.4rem;
+            0.85rem;
     }
 }
 
