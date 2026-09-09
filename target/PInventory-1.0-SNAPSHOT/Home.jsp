@@ -88,6 +88,11 @@
                 <link rel="stylesheet"
                       href="${pageContext.request.contextPath}/css/latest-news.css">
             </c:if>
+            
+            <c:if test="${secType eq 'UP-EVENT' or secType eq 'UP-EVENT'}">
+                <link rel="stylesheet"
+                      href="${pageContext.request.contextPath}/css/latest-news.css">
+            </c:if>
 
         </c:forEach>
 
@@ -448,6 +453,10 @@
                     
                     <c:if test="${sType eq 'LATEST-NEWS' or sType eq 'LATEST_NEWS'}">
                         <%@ include file="views/sections/latest-news.jspf" %>
+                    </c:if>
+                    
+                     <c:if test="${sType eq 'UP-EVENT' or sType eq 'UP-EVENT'}">
+                        <%@ include file="views/sections/upcoming_events.jspf" %>
                     </c:if>
 
                 </c:forEach>

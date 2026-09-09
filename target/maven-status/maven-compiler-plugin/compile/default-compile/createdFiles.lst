@@ -4,6 +4,7 @@ com\bean\PageBean$SectionImage.class
 com\servlet\NewsImageServlet.class
 com\servlet\HomeDataServlet.class
 com\servlet\ImageStreamServlet.class
+com\servlet\UpcomingEventsServlet.class
 com\servlet\HomePageServlet.class
 com\bean\DBUtil.class
 com\servlet\NavigationServlet.class

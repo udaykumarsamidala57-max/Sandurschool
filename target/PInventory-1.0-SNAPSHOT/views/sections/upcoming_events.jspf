@@ -1,0 +1,49 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<div class="events-container">
+    <c:choose>
+        <c:when test="${not empty events}">
+            <c:forEach var="event" items="${events}">
+                <div class="event-card">
+                    <!-- Event Image -->
+                    <div class="event-image-container">
+                        <c:choose>
+                            <c:when test="${not empty event.imageBase64}">
+                                <img class="event-image" 
+                                     src="data:image/jpeg;base64,${event.imageBase64}" 
+                                     alt="${event.eventName}" />
+                            </c:when>
+                            <c:otherwise>
+                                <span class="no-image">No Image</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
+                    <!-- Event Content -->
+                    <div class="event-details">
+                        <h3 class="event-title">${event.eventName}</h3>
+                        
+                        <div class="event-meta">
+                            <span class="event-meta-item">
+                                📅 <strong>${event.eventDate}</strong>
+                            </span>
+                            <span class="event-meta-item">
+                                ⏰ <strong>${event.timeFrom} - ${event.timeTo}</strong>
+                            </span>
+                            <span class="event-meta-item">
+                                📍 <strong>${event.place}</strong>
+                            </span>
+                        </div>
+
+                        <p class="event-description">${event.eventDescription}</p>
+                    </div>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <div class="no-events">
+                <p>No upcoming events scheduled right now.</p>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>

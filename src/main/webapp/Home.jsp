@@ -88,6 +88,11 @@
                 <link rel="stylesheet"
                       href="${pageContext.request.contextPath}/css/latest-news.css">
             </c:if>
+            
+            <c:if test="${secType eq 'UP-EVENT' or secType eq 'UP_EVENT'}">
+                <link rel="stylesheet"
+                      href="${pageContext.request.contextPath}/css/events.css">
+            </c:if>
 
         </c:forEach>
 
@@ -352,7 +357,7 @@
 
     <main class="main-content">
 
-        <%-- Render Hero Sections --%>
+        <%-- 1. Render Hero Sections --%>
         <c:forEach var="sec" items="${pageData.sections}">
             <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
             <c:if test="${sType eq 'HERO'}">
@@ -488,6 +493,16 @@
             </c:if>
 
         </div>
+
+        <%-- 2. Render UP-EVENT Sections at full width right before Footer --%>
+        <c:set var="renderedEvents" value="false" scope="page" />
+        <c:forEach var="sec" items="${pageData.sections}">
+            <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
+            <c:if test="${(sType eq 'UP-EVENT' or sType eq 'UP_EVENT') and not renderedEvents}">
+                <%@ include file="views/sections/upcoming_events.jspf" %>
+                <c:set var="renderedEvents" value="true" scope="page" />
+            </c:if>
+        </c:forEach>
 
     </main>
 
