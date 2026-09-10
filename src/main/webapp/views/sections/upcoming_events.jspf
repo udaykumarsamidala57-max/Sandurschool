@@ -101,12 +101,12 @@ if (request.getAttribute("events") == null) {
 %>
 
 <div class="campus-events-section">
-
-    <div class="section-header">
-        <h2 class="section-title">Upcoming Campus Events</h2>
+<center>
+    <div class="section-header" >
+        <h2 class="section-title">Upcoming Events</h2>
         <p class="section-subtitle">Official announcements, academic schedules, and institutional events.</p>
     </div>
-
+</center>
     <div class="events-grid">
         <c:choose>
             <c:when test="${not empty events}">
