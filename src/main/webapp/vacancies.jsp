@@ -421,13 +421,17 @@
                 width: 100%;
             }
         }
+        .header a {
+    text-decoration: none;
+    color: inherit; /* Preserves the h1 color instead of turning default link blue */
+}
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <a href="https://sandurschool-production.up.railway.app/homepage"><h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1></a>s
+        <a href="https://sandurschool-production.up.railway.app/homepage"><h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1></a>
         <h2>Current Job Vacancies</h2>
         <p class="tagline">Explore opportunities and build a meaningful career with SRS</p>
     </div>
