@@ -427,7 +427,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1>
+        <a href="https://sandurschool-production.up.railway.app/homepage"><h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1></a>s
         <h2>Current Job Vacancies</h2>
         <p class="tagline">Explore opportunities and build a meaningful career with SRS</p>
     </div>
