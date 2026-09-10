@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
-<%@ page import="com.bean.DBUtil2" %> <%-- Update with your actual package name --%>
+<%@ page import="com.bean.DBUtil2" %>
 
 <%!
     // Utility method to escape HTML special characters and prevent XSS
@@ -20,10 +20,13 @@
 
     StringBuilder sql = new StringBuilder("SELECT * FROM school_vacancies WHERE status = 'Open'");
     
-    if (filterType != null && !filterType.trim().isEmpty() && !filterType.equals("All")) {
+    boolean hasFilter = (filterType != null && !filterType.trim().isEmpty() && !filterType.equalsIgnoreCase("All"));
+    boolean hasSearch = (searchQuery != null && !searchQuery.trim().isEmpty());
+
+    if (hasFilter) {
         sql.append(" AND job_type = ?");
     }
-    if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+    if (hasSearch) {
         sql.append(" AND (job_title LIKE ? OR department LIKE ? OR subject LIKE ? OR location LIKE ?)");
     }
     sql.append(" ORDER BY display_order ASC, created_at DESC");
@@ -34,7 +37,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Current Job Vacancies</title>
+    <title>Careers & Vacancies | Sandur Residential School</title>
     <style>
         :root {
             --primary-dark: #612405;
@@ -55,11 +58,12 @@
         }
 
         body {
-            font-family:  sans-serif;
+            font-family: sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 1rem 1rem;
+            padding: 2rem 1rem;
+            line-height: 1.5;
         }
 
         .container {
@@ -67,49 +71,94 @@
             margin: 0 auto;
         }
 
+        /* Header Block */
         .header {
-            margin-bottom: 1.25rem;
             text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .header h1 {
             color: var(--primary-dark);
-            margin: 0 0 0.25rem 0;
+            margin: 0 0 0.5rem 0;
             font-size: 2.25rem;
             font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        .header p {
+        .header h2 {
+            color: var(--primary-accent);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header p.tagline {
             color: var(--text-muted);
             margin: 0;
             font-size: 1.05rem;
         }
 
+        /* Notice Banner */
+        .notice-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-accent);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .notice-card p {
+            margin: 0 0 0.75rem 0;
+        }
+
+        .notice-card p:last-child {
+            margin-bottom: 0;
+        }
+
         /* Search and Filter Form */
         .search-bar {
             background: var(--card-bg);
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             border-radius: 10px;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-color);
-            margin-bottom: 1.25rem;
+            margin-bottom: 2rem;
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
             align-items: center;
         }
 
+        .search-input-group {
+            position: relative;
+            flex: 2;
+            min-width: 260px;
+        }
+
         .search-bar input, .search-bar select {
-            padding: 0.5rem 0.85rem;
+            width: 100%;
+            padding: 0.65rem 0.85rem;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 0.95rem;
-            flex: 1;
-            min-width: 220px;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
             color: var(--text-main);
             background-color: #fff;
+        }
+
+        .search-bar select {
+            flex: 1;
+            min-width: 180px;
+            cursor: pointer;
         }
 
         .search-bar input:focus, .search-bar select:focus {
@@ -121,13 +170,17 @@
             background-color: var(--primary-accent);
             color: white;
             border: none;
-            padding: 0.5rem 1.25rem;
+            padding: 0.65rem 1.5rem;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.95rem;
             transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 2px 6px rgba(226, 106, 44, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .search-bar button:hover {
@@ -138,20 +191,20 @@
         /* Vacancy Cards Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 1rem;
+            padding: 1.25rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: var(--shadow-sm);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
         }
 
         .card:hover {
@@ -160,16 +213,22 @@
             border-color: var(--primary-accent);
         }
 
+        .card-header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
         .badge {
             display: inline-block;
-            padding: 0.2rem 0.6rem;
+            padding: 0.25rem 0.65rem;
             font-size: 0.75rem;
             font-weight: 700;
             border-radius: 9999px;
             background-color: var(--primary-light);
             color: var(--primary-dark);
             border: 1px solid rgba(97, 36, 5, 0.15);
-            margin-bottom: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -178,23 +237,23 @@
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary-dark);
-            margin: 0 0 0.25rem 0;
+            margin: 0 0 0.5rem 0;
             line-height: 1.3;
         }
 
         .card-meta {
             color: var(--text-muted);
             font-size: 0.875rem;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px dashed var(--border-color);
         }
 
         .info-details {
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
-            margin-bottom: 0.75rem;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
         }
 
         .info-row {
@@ -212,14 +271,15 @@
 
         .card-actions {
             margin-top: auto;
-            padding-top: 0.75rem;
+            padding-top: 1rem;
             display: flex;
             gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
         }
 
         .btn {
             flex: 1;
-            padding: 0.5rem 0.85rem;
+            padding: 0.55rem 0.85rem;
             border: 1px solid transparent;
             border-radius: 6px;
             cursor: pointer;
@@ -231,6 +291,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 0.35rem;
         }
 
         .btn-primary {
@@ -257,24 +318,41 @@
             border-color: var(--primary-dark);
         }
 
+        /* Empty State & Errors */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--primary-dark);
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(43, 18, 8, 0.6);
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            padding: 1rem;
         }
 
         .modal-content {
             background: white;
-            padding: 1.5rem;
+            padding: 1.75rem;
             border-radius: 12px;
             max-width: 650px;
-            width: 90%;
+            width: 100%;
             max-height: 85vh;
             overflow-y: auto;
             position: relative;
@@ -306,8 +384,8 @@
         }
 
         .modal-section {
-            margin-bottom: 0.85rem;
-            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -318,7 +396,7 @@
         }
 
         .modal-section h4 {
-            margin: 0 0 0.25rem 0;
+            margin: 0 0 0.35rem 0;
             color: var(--primary-accent);
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -331,6 +409,17 @@
             color: var(--text-main);
             line-height: 1.5;
             font-size: 0.95rem;
+            white-space: pre-line;
+        }
+
+        @media (max-width: 600px) {
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-bar button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -340,39 +429,45 @@
     <div class="header">
         <h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1>
         <h2>Current Job Vacancies</h2>
-        <p>Explore opportunities and apply today.</p>
+        <p class="tagline">Explore opportunities and build a meaningful career with SRS</p>
     </div>
 
-    <!-- Search and Filter Form -->
+    <div class="notice-card">
+        <p>We seek to recruit and retain dedicated professionals to support the SRS mission. The quality of our educational program reflects the quality of our staff. Explore our open roles below to see if your next career milestone is at SRS!</p>
+        <p><strong>Safeguarding Statement:</strong> SRS is committed to safeguarding and promoting the welfare of children. Background screening may be conducted at any stage of employment. Any misrepresentation or omission in application materials may result in disqualification or termination.</p>
+    </div>
+
     <form class="search-bar" method="GET" action="vacancies.jsp">
-        <input type="text" name="search" placeholder="Search by title, department, subject, location..." value="<%= searchQuery != null ? escapeHtml(searchQuery) : "" %>">
+        <div class="search-input-group">
+            <input type="text" name="search" placeholder="Search by title, department, subject, or location..." value="<%= searchQuery != null ? escapeHtml(searchQuery) : "" %>">
+        </div>
         
         <select name="job_type">
-            <option value="All">All Types</option>
+            <option value="All">All Job Types</option>
             <option value="Teaching" <%= "Teaching".equals(filterType) ? "selected" : "" %>>Teaching</option>
             <option value="Non-Teaching" <%= "Non-Teaching".equals(filterType) ? "selected" : "" %>>Non-Teaching</option>
         </select>
         
-        <button type="submit">Filter Results</button>
+        <button type="submit">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+            Filter Results
+        </button>
     </form>
 
     <!-- Vacancy Cards Grid -->
     <div class="grid">
         <%
-            Connection conn = null;
-            PreparedStatement pstmt = null;
-            ResultSet rs = null;
             boolean found = false;
 
-            try {
-                conn = DBUtil2.getConnection();
-                pstmt = conn.prepareStatement(sql.toString());
+            // Try-with-resources manages connections and prevents resource leaks
+            try (Connection conn = DBUtil2.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
                 int paramIdx = 1;
-                if (filterType != null && !filterType.trim().isEmpty() && !filterType.equals("All")) {
+                if (hasFilter) {
                     pstmt.setString(paramIdx++, filterType);
                 }
-                if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                if (hasSearch) {
                     String pattern = "%" + searchQuery.trim() + "%";
                     pstmt.setString(paramIdx++, pattern);
                     pstmt.setString(paramIdx++, pattern);
@@ -380,38 +475,41 @@
                     pstmt.setString(paramIdx++, pattern);
                 }
 
-                rs = pstmt.executeQuery();
-
-                while (rs.next()) {
-                    found = true;
-                    int id = rs.getInt("id");
-                    String title = rs.getString("job_title");
-                    String type = rs.getString("job_type");
-                    String dept = rs.getString("department");
-                    String subject = rs.getString("subject");
-                    String empType = rs.getString("employment_type");
-                    String location = rs.getString("location");
-                    String salary = rs.getString("salary");
-                    int vacancies = rs.getInt("number_of_vacancies");
-                    Date lastDate = rs.getDate("application_last_date");
-                    
-                    String qual = rs.getString("qualification");
-                    String exp = rs.getString("experience");
-                    String desc = rs.getString("job_description");
-                    String resp = rs.getString("responsibilities");
-                    String skills = rs.getString("skills_required");
-                    String email = rs.getString("application_email");
-                    String link = rs.getString("application_link");
-                    String contactPerson = rs.getString("contact_person");
-                    String contactPhone = rs.getString("contact_phone");
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        found = true;
+                        int id = rs.getInt("id");
+                        String title = rs.getString("job_title");
+                        String type = rs.getString("job_type");
+                        String dept = rs.getString("department");
+                        String subject = rs.getString("subject");
+                        String empType = rs.getString("employment_type");
+                        String location = rs.getString("location");
+                        String salary = rs.getString("salary");
+                        int vacancies = rs.getInt("number_of_vacancies");
+                        Date lastDate = rs.getDate("application_last_date");
+                        
+                        String qual = rs.getString("qualification");
+                        String exp = rs.getString("experience");
+                        String desc = rs.getString("job_description");
+                        String resp = rs.getString("responsibilities");
+                        String skills = rs.getString("skills_required");
+                        String email = rs.getString("application_email");
+                        String link = rs.getString("application_link");
+                        String contactPerson = rs.getString("contact_person");
+                        String contactPhone = rs.getString("contact_phone");
         %>
             <div class="card">
                 <div>
-                    <span class="badge"><%= escapeHtml(type) %></span>
-                    <h2 class="card-title"><%= escapeHtml(title) %></h2>
+                    <div class="card-header-meta">
+                        <span class="badge"><%= escapeHtml(type) %></span>
+                    </div>
+                    <h3 class="card-title"><%= escapeHtml(title) %></h3>
                     <div class="card-meta">
-                        Department : <%=   (dept != null && !dept.isEmpty()) ? escapeHtml(dept) : "General" %> <br>
-                        <%= (subject != null && !subject.isEmpty()) ? " Qualification : " + escapeHtml(subject) : "" %>
+                        <strong>Department:</strong> <%= (dept != null && !dept.trim().isEmpty()) ? escapeHtml(dept) : "General" %>
+                        <% if (subject != null && !subject.trim().isEmpty()) { %>
+                            <br><strong>Subject:</strong> <%= escapeHtml(subject) %>
+                        <% } %>
                     </div>
 
                     <div class="info-details">
@@ -428,16 +526,18 @@
                 </div>
 
                 <div class="card-actions">
-                    <button type="button" class="btn btn-secondary" onclick="openDetailsModal('<%= id %>')">View Details</button>
+                    <button type="button" class="btn btn-secondary" onclick="openDetailsModal('<%= id %>')">
+                        View Details
+                    </button>
                     <% if (link != null && !link.trim().isEmpty()) { %>
-                        <a href="<%= escapeHtml(link) %>" target="_blank" class="btn btn-primary">Apply Now</a>
+                        <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply Now</a>
                     <% } else if (email != null && !email.trim().isEmpty()) { %>
                         <a href="mailto:<%= escapeHtml(email) %>?subject=Application for <%= escapeHtml(title) %>" class="btn btn-primary">Apply Now</a>
                     <% } %>
                 </div>
             </div>
 
-            <!-- Hidden Template Data for Detail Modal -->
+            <!-- Hidden Data Container for JS Modal Popup -->
             <div id="details-<%= id %>" style="display:none;">
                 <span data-key="title"><%= escapeHtml(title) %></span>
                 <span data-key="type"><%= escapeHtml(type) %></span>
@@ -448,34 +548,38 @@
                 <span data-key="desc"><%= desc != null ? escapeHtml(desc) : "N/A" %></span>
                 <span data-key="resp"><%= resp != null ? escapeHtml(resp) : "N/A" %></span>
                 <span data-key="skills"><%= skills != null ? escapeHtml(skills) : "N/A" %></span>
-                <span data-key="contact"><%= (contactPerson != null ? escapeHtml(contactPerson) : "HR") + (contactPhone != null ? " (" + escapeHtml(contactPhone) + ")" : "") %></span>
+                <span data-key="contact"><%= (contactPerson != null ? escapeHtml(contactPerson) : "HR Department") + (contactPhone != null && !contactPhone.trim().isEmpty() ? " (" + escapeHtml(contactPhone) + ")" : "") %></span>
             </div>
         <%
+                    }
                 }
                 if (!found) {
         %>
-            <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem 0; font-size: 1.1rem;">
-                No open vacancies found matching your criteria.
-            </p>
+            <div class="empty-state">
+                <h3>No Vacancies Found</h3>
+                <p>We couldn't find any job openings matching your current search or filter criteria. Please check back later or reset your query.</p>
+            </div>
         <%
                 }
             } catch (Exception e) {
-                out.println("<p style='color:red; grid-column: 1 / -1;'>Error loading vacancies: " + escapeHtml(e.getMessage()) + "</p>");
-            } finally {
-                if (rs != null) try { rs.close(); } catch (Exception e) {}
-                if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
-                if (conn != null) try { conn.close(); } catch (Exception e) {}
+        %>
+            <div class="empty-state" style="border-color: var(--primary-accent);">
+                <h3 style="color: var(--primary-accent);">Unable to Load Vacancies</h3>
+                <p>An unexpected error occurred while fetching the listings. Please try again later.</p>
+                <small><%= escapeHtml(e.getMessage()) %></small>
+            </div>
+        <%
             }
         %>
     </div>
 </div>
 
 <!-- Job Details Modal -->
-<div id="modal" class="modal">
+<div id="modal" class="modal" role="dialog" aria-modal="true">
     <div class="modal-content">
-        <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
+        <button type="button" class="close-btn" onclick="closeModal()" aria-label="Close modal">&times;</button>
         <span class="badge" id="m-type"></span>
-        <h2 id="m-title" style="margin-top:0.25rem; color: var(--primary-dark);"></h2>
+        <h2 id="m-title" style="margin-top: 0.5rem; color: var(--primary-dark);"></h2>
         
         <div class="modal-section">
             <h4>Department & Subject</h4>
@@ -503,12 +607,12 @@
         </div>
 
         <div class="modal-section">
-            <h4>Key Skills</h4>
+            <h4>Key Skills Required</h4>
             <p id="m-skills"></p>
         </div>
 
         <div class="modal-section">
-            <h4>Contact Info</h4>
+            <h4>Contact Details</h4>
             <p id="m-contact"></p>
         </div>
     </div>
@@ -536,10 +640,12 @@
         document.getElementById('m-contact').textContent = getVal('contact');
 
         document.getElementById('modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
     }
 
     function closeModal() {
         document.getElementById('modal').style.display = 'none';
+        document.body.style.overflow = '';
     }
 
     window.onclick = function(event) {
@@ -547,7 +653,13 @@
         if (event.target === modal) {
             closeModal();
         }
-    }
+    };
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
 </script>
 
 </body>
