@@ -607,7 +607,7 @@
                                             <% if (link != null && !link.trim().isEmpty()) { %>
                                                 <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
                                             <% } else if (email != null && !email.trim().isEmpty()) { %>
-                                                <a href="mailto:<%= escapeHtml(email) %>?subject=Application for <%= escapeHtml(title) %>" class="btn btn-primary">Apply</a>
+                                                <a href="https://srsadmincentral.in/candidateForm.jsp" class="btn btn-primary">Apply</a>
                                             <% } %>
                                         </div>
                                     </div>
@@ -692,7 +692,7 @@
                                             <% if (link != null && !link.trim().isEmpty()) { %>
                                                 <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
                                             <% } else if (email != null && !email.trim().isEmpty()) { %>
-                                                <a href="mailto:<%= escapeHtml(email) %>?subject=Application for <%= escapeHtml(title) %>" class="btn btn-primary">Apply</a>
+                                                <a href="https://srsadmincentral.in/candidateForm.jsp" class="btn btn-primary">Apply</a>
                                             <% } %>
                                         </div>
                                     </div>
