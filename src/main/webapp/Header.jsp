@@ -296,7 +296,7 @@
             </div>
             <div class="ribbon-right">
                 <a href="${pageContext.request.contextPath}/homepage?slug=admissions">Admissions</a>
-                <a href="${pageContext.request.contextPath}/vacancies.jsp">Recruitment</a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=RECRUITMENT"">Recruitment</a>
                 <a href="${pageContext.request.contextPath}/homepage?slug=alumni">Alumni</a>
             </div>
         </div>
