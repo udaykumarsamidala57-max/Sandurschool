@@ -5,7 +5,7 @@
 
 <style>
   footer {
-    background-color: #542901; /* Deep classic brown */
+    background-color: #612405; /* Deep classic brown */
     color: #ffffff;
     font-family: 'Georgia', 'Times New Roman', serif;
     padding: 60px 7% 80px 7%;

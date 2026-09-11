@@ -1,0 +1,663 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.bean.DBUtil2" %>
+
+<%!
+    // Utility method to escape HTML special characters and prevent XSS
+    private String escapeHtml(String input) {
+        if (input == null) return "";
+        return input.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
+    }
+%>
+
+<%
+    String filterType = request.getParameter("job_type");
+    String searchQuery = request.getParameter("search");
+
+    StringBuilder sql = new StringBuilder("SELECT * FROM school_vacancies WHERE status = 'Open'");
+    
+    boolean hasFilter = (filterType != null && !filterType.trim().isEmpty() && !filterType.equalsIgnoreCase("All"));
+    boolean hasSearch = (searchQuery != null && !searchQuery.trim().isEmpty());
+
+    if (hasFilter) {
+        sql.append(" AND job_type = ?");
+    }
+    if (hasSearch) {
+        sql.append(" AND (job_title LIKE ? OR department LIKE ? OR subject LIKE ? OR location LIKE ?)");
+    }
+    sql.append(" ORDER BY display_order ASC, created_at DESC");
+%>
+
+<style>
+    .srs-vacancies-wrapper {
+        --primary-dark: #612405;
+        --primary-accent: #e26a2c;
+        --primary-light: #fdf5f0;
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #2b1208;
+        --text-muted: #6e5c54;
+        --border-color: #e5d8cf;
+        --shadow-sm: 0 2px 8px rgba(97, 36, 5, 0.06);
+        --shadow-md: 0 6px 18px rgba(97, 36, 5, 0.12);
+        --shadow-lg: 0 12px 28px rgba(97, 36, 5, 0.2);
+        
+        font-family: inherit;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        padding: 2rem 1rem;
+        line-height: 1.5;
+        box-sizing: border-box;
+    }
+
+    .srs-vacancies-wrapper * {
+        box-sizing: border-box;
+    }
+
+    .srs-vacancies-wrapper .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header Block */
+    .srs-vacancies-wrapper .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .header a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .srs-vacancies-wrapper .header h1 {
+        color: var(--primary-dark);
+        margin: 0 0 0.5rem 0;
+        font-size: 2.25rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .srs-vacancies-wrapper .header h2 {
+        color: var(--primary-accent);
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .srs-vacancies-wrapper .header p.tagline {
+        color: var(--text-muted);
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    /* Notice Banner */
+    .srs-vacancies-wrapper .notice-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--primary-accent);
+        border-radius: 8px;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+        font-size: 0.95rem;
+        color: var(--text-main);
+    }
+
+    .srs-vacancies-wrapper .notice-card p {
+        margin: 0 0 0.75rem 0;
+    }
+
+    .srs-vacancies-wrapper .notice-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Search and Filter Form */
+    .srs-vacancies-wrapper .search-bar {
+        background: var(--card-bg);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .srs-vacancies-wrapper .search-input-group {
+        position: relative;
+        flex: 2;
+        min-width: 260px;
+    }
+
+    .srs-vacancies-wrapper .search-bar input, 
+    .srs-vacancies-wrapper .search-bar select {
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        color: var(--text-main);
+        background-color: #fff;
+    }
+
+    .srs-vacancies-wrapper .search-bar select {
+        flex: 1;
+        min-width: 180px;
+        cursor: pointer;
+    }
+
+    .srs-vacancies-wrapper .search-bar input:focus, 
+    .srs-vacancies-wrapper .search-bar select:focus {
+        border-color: var(--primary-accent);
+        box-shadow: 0 0 0 3px rgba(226, 106, 44, 0.15);
+    }
+
+    .srs-vacancies-wrapper .search-bar button {
+        background-color: var(--primary-accent);
+        color: white;
+        border: none;
+        padding: 0.65rem 1.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+        box-shadow: 0 2px 6px rgba(226, 106, 44, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .srs-vacancies-wrapper .search-bar button:hover {
+        background-color: var(--primary-dark);
+        box-shadow: 0 4px 10px rgba(97, 36, 5, 0.25);
+    }
+
+    /* Vacancy Cards Grid */
+    .srs-vacancies-wrapper .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .srs-vacancies-wrapper .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .srs-vacancies-wrapper .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-accent);
+    }
+
+    .srs-vacancies-wrapper .card-header-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .srs-vacancies-wrapper .badge {
+        display: inline-block;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 9999px;
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+        border: 1px solid rgba(97, 36, 5, 0.15);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .srs-vacancies-wrapper .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 0 0 0.5rem 0;
+        line-height: 1.3;
+    }
+
+    .srs-vacancies-wrapper .card-meta {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px dashed var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .info-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .srs-vacancies-wrapper .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.875rem;
+        color: var(--text-main);
+    }
+
+    .srs-vacancies-wrapper .info-row strong {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .srs-vacancies-wrapper .card-actions {
+        margin-top: auto;
+        padding-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .btn {
+        flex: 1;
+        padding: 0.55rem 0.85rem;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+    }
+
+    .srs-vacancies-wrapper .btn-primary {
+        background-color: var(--primary-accent);
+        color: white;
+        border-color: var(--primary-accent);
+        box-shadow: 0 2px 4px rgba(226, 106, 44, 0.25);
+    }
+
+    .srs-vacancies-wrapper .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+        box-shadow: 0 4px 8px rgba(97, 36, 5, 0.2);
+    }
+
+    .srs-vacancies-wrapper .btn-secondary {
+        background-color: #ffffff;
+        color: var(--primary-dark);
+        border-color: var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .btn-secondary:hover {
+        background-color: var(--primary-light);
+        border-color: var(--primary-dark);
+    }
+
+    /* Empty State & Errors */
+    .srs-vacancies-wrapper .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        background: var(--card-bg);
+        border: 1px dashed var(--border-color);
+        border-radius: 10px;
+        padding: 3rem 1.5rem;
+        color: var(--text-muted);
+    }
+
+    .srs-vacancies-wrapper .empty-state h3 {
+        margin: 0 0 0.5rem 0;
+        color: var(--primary-dark);
+    }
+
+    /* Modal Styles */
+    .srs-vacancies-wrapper .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(43, 18, 8, 0.6);
+        backdrop-filter: blur(3px);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+    }
+
+    .srs-vacancies-wrapper .modal-content {
+        background: white;
+        padding: 1.75rem;
+        border-radius: 12px;
+        max-width: 650px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .srs-vacancies-wrapper .close-btn:hover {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+    }
+
+    .srs-vacancies-wrapper .modal-section {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .srs-vacancies-wrapper .modal-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .srs-vacancies-wrapper .modal-section h4 {
+        margin: 0 0 0.35rem 0;
+        color: var(--primary-accent);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+    }
+
+    .srs-vacancies-wrapper .modal-section p {
+        margin: 0;
+        color: var(--text-main);
+        line-height: 1.5;
+        font-size: 0.95rem;
+        white-space: pre-line;
+    }
+
+    @media (max-width: 600px) {
+        .srs-vacancies-wrapper .search-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .srs-vacancies-wrapper .search-bar button {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="srs-vacancies-wrapper">
+    <div class="container">
+        <div class="header">
+            <a href="https://sandurschool-production.up.railway.app/homepage"><h1>SANDUR RESIDENTIAL SCHOOL, SANDUR</h1></a>
+            <h2>Current Job Vacancies</h2>
+            <p class="tagline">Explore opportunities and build a meaningful career with SRS</p>
+        </div>
+
+        <div class="notice-card">
+            <p>We seek to recruit and retain dedicated professionals to support the SRS mission. The quality of our educational program reflects the quality of our staff. Explore our open roles below to see if your next career milestone is at SRS!</p>
+            <p><strong>Safeguarding Statement:</strong> SRS is committed to safeguarding and promoting the welfare of children. Background screening may be conducted at any stage of employment. Any misrepresentation or omission in application materials may result in disqualification or termination.</p>
+        </div>
+
+        <form class="search-bar" method="GET" action="">
+            <div class="search-input-group">
+                <input type="text" name="search" placeholder="Search by title, department, subject, or location..." value="<%= searchQuery != null ? escapeHtml(searchQuery) : "" %>">
+            </div>
+            
+            <select name="job_type">
+                <option value="All">All Job Types</option>
+                <option value="Teaching" <%= "Teaching".equals(filterType) ? "selected" : "" %>>Teaching</option>
+                <option value="Non-Teaching" <%= "Non-Teaching".equals(filterType) ? "selected" : "" %>>Non-Teaching</option>
+            </select>
+            
+            <button type="submit">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                Filter Results
+            </button>
+        </form>
+
+        <!-- Vacancy Cards Grid -->
+        <div class="grid">
+            <%
+                boolean found = false;
+
+                try (Connection conn = DBUtil2.getConnection();
+                     PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+
+                    int paramIdx = 1;
+                    if (hasFilter) {
+                        pstmt.setString(paramIdx++, filterType);
+                    }
+                    if (hasSearch) {
+                        String pattern = "%" + searchQuery.trim() + "%";
+                        pstmt.setString(paramIdx++, pattern);
+                        pstmt.setString(paramIdx++, pattern);
+                        pstmt.setString(paramIdx++, pattern);
+                        pstmt.setString(paramIdx++, pattern);
+                    }
+
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                    	while (rs.next()) {
+                            found = true;
+                            int id = rs.getInt("id");
+                            String title = rs.getString("job_title");
+                            String type = rs.getString("job_type");
+                            String dept = rs.getString("department");
+                            String subject = rs.getString("subject");
+                            String empType = rs.getString("employment_type");
+                            String location = rs.getString("location");
+                            String salary = rs.getString("salary");
+                            int vacancies = rs.getInt("number_of_vacancies");
+                            
+                            // Explicitly qualified to avoid ambiguity with java.util.Date
+                            java.sql.Date lastDate = rs.getDate("application_last_date");
+                            
+                            String qual = rs.getString("qualification");
+                            String exp = rs.getString("experience");
+                            String desc = rs.getString("job_description");
+                            String resp = rs.getString("responsibilities");
+                            String skills = rs.getString("skills_required");
+                            String email = rs.getString("application_email");
+                            String link = rs.getString("application_link");
+                            String contactPerson = rs.getString("contact_person");
+                            String contactPhone = rs.getString("contact_phone");
+            %>
+                <div class="card">
+                    <div>
+                        <div class="card-header-meta">
+                            <span class="badge"><%= escapeHtml(type) %></span>
+                        </div>
+                        <h3 class="card-title"><%= escapeHtml(title) %></h3>
+                        <div class="card-meta">
+                            <strong>Department:</strong> <%= (dept != null && !dept.trim().isEmpty()) ? escapeHtml(dept) : "General" %>
+                            <% if (subject != null && !subject.trim().isEmpty()) { %>
+                                <br><strong>Subject:</strong> <%= escapeHtml(subject) %>
+                            <% } %>
+                        </div>
+
+                        <div class="info-details">
+                            <div class="info-row"><strong>Employment:</strong> <span><%= empType != null ? escapeHtml(empType) : "N/A" %></span></div>
+                            <div class="info-row"><strong>Location:</strong> <span><%= location != null ? escapeHtml(location) : "N/A" %></span></div>
+                            <div class="info-row"><strong>Vacancies:</strong> <span><%= vacancies %></span></div>
+                            <% if (salary != null && !salary.trim().isEmpty()) { %>
+                                <div class="info-row"><strong>Salary:</strong> <span><%= escapeHtml(salary) %></span></div>
+                            <% } %>
+                            <% if (lastDate != null) { %>
+                                <div class="info-row"><strong>Last Date:</strong> <span><%= lastDate.toString() %></span></div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-secondary" onclick="openDetailsModal('<%= id %>')">
+                            View Details
+                        </button>
+                        <% if (link != null && !link.trim().isEmpty()) { %>
+                            <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply Now</a>
+                        <% } else if (email != null && !email.trim().isEmpty()) { %>
+                            <a href="mailto:<%= escapeHtml(email) %>?subject=Application for <%= escapeHtml(title) %>" class="btn btn-primary">Apply Now</a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Hidden Data Container for JS Modal Popup -->
+                <div id="details-<%= id %>" style="display:none;">
+                    <span data-key="title"><%= escapeHtml(title) %></span>
+                    <span data-key="type"><%= escapeHtml(type) %></span>
+                    <span data-key="dept"><%= dept != null ? escapeHtml(dept) : "N/A" %></span>
+                    <span data-key="subject"><%= subject != null ? escapeHtml(subject) : "N/A" %></span>
+                    <span data-key="qual"><%= qual != null ? escapeHtml(qual) : "Not specified" %></span>
+                    <span data-key="exp"><%= exp != null ? escapeHtml(exp) : "Not specified" %></span>
+                    <span data-key="desc"><%= desc != null ? escapeHtml(desc) : "N/A" %></span>
+                    <span data-key="resp"><%= resp != null ? escapeHtml(resp) : "N/A" %></span>
+                    <span data-key="skills"><%= skills != null ? escapeHtml(skills) : "N/A" %></span>
+                    <span data-key="contact"><%= (contactPerson != null ? escapeHtml(contactPerson) : "HR Department") + (contactPhone != null && !contactPhone.trim().isEmpty() ? " (" + escapeHtml(contactPhone) + ")" : "") %></span>
+                </div>
+            <%
+                        }
+                    }
+                    if (!found) {
+            %>
+                <div class="empty-state">
+                    <h3>No Vacancies Found</h3>
+                    <p>We couldn't find any job openings matching your current search or filter criteria. Please check back later or reset your query.</p>
+                </div>
+            <%
+                    }
+                } catch (Exception e) {
+            %>
+                <div class="empty-state" style="border-color: var(--primary-accent);">
+                    <h3 style="color: var(--primary-accent);">Unable to Load Vacancies</h3>
+                    <p>An unexpected error occurred while fetching the listings. Please try again later.</p>
+                    <small><%= escapeHtml(e.getMessage()) %></small>
+                </div>
+            <%
+                }
+            %>
+        </div>
+    </div>
+
+    <!-- Job Details Modal -->
+    <div id="modal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <button type="button" class="close-btn" onclick="closeModal()" aria-label="Close modal">&times;</button>
+            <span class="badge" id="m-type"></span>
+            <h2 id="m-title" style="margin-top: 0.5rem; color: var(--primary-dark);"></h2>
+            
+            <div class="modal-section">
+                <h4>Department & Subject</h4>
+                <p><span id="m-dept"></span> (<span id="m-subject"></span>)</p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Qualifications Required</h4>
+                <p id="m-qual"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Experience Required</h4>
+                <p id="m-exp"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Job Description</h4>
+                <p id="m-desc"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Responsibilities</h4>
+                <p id="m-resp"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Key Skills Required</h4>
+                <p id="m-skills"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Contact Details</h4>
+                <p id="m-contact"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDetailsModal(id) {
+        const dataContainer = document.getElementById('details-' + id);
+        if (!dataContainer) return;
+
+        const getVal = (key) => {
+            const el = dataContainer.querySelector('[data-key="' + key + '"]');
+            return el ? el.textContent : '';
+        };
+
+        document.getElementById('m-title').textContent = getVal('title');
+        document.getElementById('m-type').textContent = getVal('type');
+        document.getElementById('m-dept').textContent = getVal('dept');
+        document.getElementById('m-subject').textContent = getVal('subject');
+        document.getElementById('m-qual').textContent = getVal('qual');
+        document.getElementById('m-exp').textContent = getVal('exp');
+        document.getElementById('m-desc').textContent = getVal('desc');
+        document.getElementById('m-resp').textContent = getVal('resp');
+        document.getElementById('m-skills').textContent = getVal('skills');
+        document.getElementById('m-contact').textContent = getVal('contact');
+
+        document.getElementById('modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
