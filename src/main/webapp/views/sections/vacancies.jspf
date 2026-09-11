@@ -690,10 +690,10 @@
                                                 Details
                                             </button>
                                             <% if (link != null && !link.trim().isEmpty()) { %>
-                                                <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
-                                            <% } else if (email != null && !email.trim().isEmpty()) { %>
-                                                <a href="https://srsadmincentral.in/candidateForm.jsp" class="btn btn-primary">Apply</a>
-                                            <% } %>
+    <a href="<%= escapeHtml(link) %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
+<% } else if (email != null && !email.trim().isEmpty()) { %>
+    <a href="https://srsadmincentral.in/candidateForm.jsp" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
+<% } %>
                                         </div>
                                     </div>
                                 <%  } %>
