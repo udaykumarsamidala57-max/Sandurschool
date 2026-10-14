@@ -57,6 +57,9 @@
             <c:if test="${secType eq 'LATEST-NEWS' or secType eq 'LATEST_NEWS'}">
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/latest-news.css">
             </c:if>
+            <c:if test="${secType eq 'ACCORDION'}">
+                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/accordion.css">
+            </c:if>
             <c:if test="${secType eq 'UP-EVENT' or secType eq 'UP_EVENT'}">
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/events.css">
             </c:if>
@@ -177,6 +180,8 @@
 
                 <c:set var="renderedEvents" value="false" scope="page" />
                 <c:set var="renderedRecruitment" value="false" scope="page" />
+                <c:set var="prevSType" value="" scope="page" />
+                <c:set var="accAttached" value="false" scope="page" />
 
                 <c:forEach var="sec" items="${pageData.sections}">
                     <c:set var="sType" value="${fn:toUpperCase(fn:trim(sec.sectionType))}" />
@@ -202,6 +207,9 @@
                     <c:if test="${sType eq 'DIRECTOR'}">
                         <%@ include file="views/sections/directorSection.jspf" %>
                     </c:if>
+                    <c:if test="${sType eq 'ACCORDION'}">
+                        <%@ include file="views/sections/accordion.jspf" %>
+                    </c:if>
                     <c:if test="${sType eq 'LATEST-NEWS' or sType eq 'LATEST_NEWS'}">
                         <%@ include file="views/sections/latest-news.jspf" %>
                     </c:if>
@@ -215,6 +223,7 @@
                         <%@ include file="views/sections/vacancies.jspf" %>
                         <c:set var="renderedRecruitment" value="true" scope="page" />
                     </c:if>
+                    <c:set var="prevSType" value="${sType}" scope="page" />
                 </c:forEach>
 
             </div>

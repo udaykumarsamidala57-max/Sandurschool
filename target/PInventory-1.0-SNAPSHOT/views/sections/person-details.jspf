@@ -65,4 +65,24 @@
 
     </div>
 
+    <script>
+        /* Turn "<br><br>"-separated bio text into paragraphs, so a paragraph that
+           starts beside the photo finishes beside it, and only the next
+           paragraph moves under the photo. (Runs once per page.) */
+        if (!window.__personParas) {
+            window.__personParas = true;
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.person-details-section .person-description').forEach(function (desc) {
+                    if (desc.querySelector('p')) return;              /* already has paragraphs */
+                    var parts = desc.innerHTML.split(/(?:\s*<br\s*\/?>\s*){2,}/i);
+                    desc.innerHTML = parts
+                        .map(function (h) { return h.trim(); })
+                        .filter(function (h) { return h.length; })
+                        .map(function (h) { return '<p>' + h + '</p>'; })
+                        .join('');
+                });
+            });
+        }
+    </script>
+
 </section>

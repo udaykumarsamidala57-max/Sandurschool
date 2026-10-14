@@ -1,0 +1,232 @@
+/* =========================================================
+   ACCORDION SECTION
+   Closed: "+" and a thin grey line between items.
+   Open:   "−", thick brown line on top, brown heading.
+   ========================================================= */
+
+.accordion-section {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 clamp(12px, 3vw, 24px);
+    box-sizing: border-box;
+}
+
+/* space above the first item of a group and below the last one */
+.accordion-section:not(.accordion-section + .accordion-section) {
+    margin-top: clamp(20px, 3vw, 32px);
+}
+.accordion-section:not(:has(+ .accordion-section)) {
+    margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+/* ---------- Item ---------- */
+
+.accordion-item {
+    border-top: 1px solid #d6d6d6;
+    transition: border-color 0.2s ease;
+}
+.accordion-section:not(:has(+ .accordion-section)) .accordion-item {
+    border-bottom: 1px solid #d6d6d6;
+}
+.accordion-item[open] {
+    border-top: 3px solid #4a2a0b;
+}
+
+/* ---------- Header ---------- */
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 18px;
+    cursor: pointer;
+    list-style: none;                 /* hide default triangle */
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+.accordion-header::-webkit-details-marker { display: none; }
+.accordion-header::marker { content: ''; }
+
+.accordion-header:hover {
+    background-color: #faf7f4;
+}
+.accordion-header:focus-visible {
+    outline: 2px solid #c4561d;
+    outline-offset: 2px;
+}
+
+.accordion-title {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #1f1f1f;
+    line-height: 1.4;
+}
+.accordion-item[open] .accordion-title {
+    color: #4a2a0b;
+}
+
+/* plus / minus icon drawn with two bars */
+.accordion-icon {
+    position: relative;
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+}
+.accordion-icon::before,
+.accordion-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 14px;
+    height: 2.5px;
+    margin-top: -1.25px;
+    background: #1f1f1f;
+    border-radius: 1px;
+    transition: transform 0.25s ease, background-color 0.2s ease;
+}
+.accordion-icon::after {
+    transform: rotate(90deg);
+}
+.accordion-item[open] .accordion-icon::before,
+.accordion-item[open] .accordion-icon::after {
+    background: #4a2a0b;
+}
+.accordion-item[open] .accordion-icon::after {
+    transform: rotate(0deg);          /* vertical bar folds flat: + becomes − */
+}
+
+/* ---------- Body ---------- */
+
+.accordion-body {
+    padding: 22px 0 30px 18px;
+    animation: accordion-open 0.3s ease;
+}
+.accordion-body::after {              /* contain the floated image */
+    content: '';
+    display: table;
+    clear: both;
+}
+
+@keyframes accordion-open {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* image on the left, text flows beside and below it */
+.accordion-image {
+    float: left;
+    width: min(400px, 48%);
+    margin: 4px 26px 16px 0;
+}
+.accordion-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.accordion-image figcaption {
+    margin-top: 8px;
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #6b6b6b;
+}
+
+.accordion-content {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: clamp(12.5px, 1.2vw, 13.5px);   /* same as person-details bio */
+    font-weight: 400;
+    line-height: 1.85;
+    color: #2b2b2b;
+}
+.accordion-content p {
+    margin: 0 0 16px;
+}
+.accordion-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   ATTACHED TO A PERSON_DETAILS CARD
+   Same width as the card, no gap, shares its border and
+   rounded bottom corners.
+   ========================================================= */
+
+/* the card above loses its bottom gap and bottom corners */
+.person-details-section:has(+ .accordion-attached) {
+    margin-bottom: 0 !important;
+}
+.person-details-section:has(+ .accordion-attached) .person-details-profile {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.accordion-section.accordion-attached {
+    max-width: 1100px;                          /* same as .person-details-section */
+    padding: 0 clamp(12px, 3vw, 24px);
+    margin-top: 0 !important;
+}
+
+.accordion-attached .accordion-item {
+    background: #ffffff;
+    border-left: 1px solid rgba(226, 212, 201, 0.6);
+    border-right: 1px solid rgba(226, 212, 201, 0.6);
+    border-top: 1px solid #e6dcd2;
+}
+.accordion-attached .accordion-item[open] {
+    border-top: 3px solid #4a2a0b;
+}
+
+/* last attached item closes the card */
+.accordion-attached:not(:has(+ .accordion-section)) .accordion-item {
+    border-bottom: 1px solid rgba(226, 212, 201, 0.6);
+    border-radius: 0 0 14px 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04),
+                0 2px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* line the text up with the card's inner padding */
+.accordion-attached .accordion-header {
+    padding-left: clamp(20px, 3.5vw, 36px);
+    padding-right: clamp(20px, 3.5vw, 36px);
+}
+.accordion-attached .accordion-body {
+    padding-left: clamp(20px, 3.5vw, 36px);
+    padding-right: clamp(20px, 3.5vw, 36px);
+}
+
+@media (max-width: 480px) {
+    .accordion-section.accordion-attached {
+        padding: 0 8px;                         /* matches person-details on phones */
+    }
+    .person-details-section:has(+ .accordion-attached) .person-details-profile {
+        border-radius: 12px 12px 0 0;
+    }
+    .accordion-attached:not(:has(+ .accordion-section)) .accordion-item {
+        border-radius: 0 0 12px 12px;
+    }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 640px) {
+    .accordion-header {
+        padding: 16px 10px;
+    }
+    .accordion-title {
+        font-size: 13px;
+    }
+    .accordion-body {
+        padding: 16px 4px 24px;
+    }
+    .accordion-image {
+        float: none;
+        width: 100%;
+        margin: 0 0 18px;
+    }
+}

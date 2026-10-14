@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/peacock.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/site-font.css">
 
     <style>
         /* Modern Design System Reset & Base Polish */
@@ -193,16 +195,6 @@
         nav .main-menu > li:hover > a {
             background-color: #ffffff;
             color: #612405;
-        }
-
-        nav .main-menu > li.active-tab > a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #612405;
         }
 
         nav .main-menu > li:hover > a i {

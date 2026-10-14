@@ -1,0 +1,42 @@
+/* =========================================================
+   Small peacock-feather pattern (top brown strip + footer).
+   Artwork: /Home/peacock/pattern.svg
+   ========================================================= */
+
+/* Top brown ribbon */
+.top-ribbon {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+.top-ribbon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../Home/peacock/pattern.svg') repeat;
+    background-size: 42px 48px;
+    opacity: 0.14;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Footer background */
+footer {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../Home/peacock/pattern.svg') repeat;
+    background-size: 56px 64px;
+    opacity: 0.06;
+    z-index: -1;
+    pointer-events: none;
+}
+footer .footer-container {
+    position: relative;
+    z-index: 1;
+}

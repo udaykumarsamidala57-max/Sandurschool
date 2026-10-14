@@ -1,0 +1,62 @@
+<%--
+    ACCORDION section
+    One row in `sections` = one accordion item.
+      sections.title    -> item heading   (falls back to the image's Heading1)
+      sections.content  -> item text (HTML allowed)
+      section_images    -> optional; the first image is shown on the left
+    Consecutive ACCORDION rows join into one list.
+    Directly below a PERSON_DETAILS section, the list joins onto that card.
+--%>
+<c:set var="accHeading" value="${sec.title}" />
+<c:if test="${empty accHeading and not empty sec.images}">
+    <c:set var="accHeading" value="${sec.images[0].heading1}" />
+</c:if>
+
+<%-- attached = directly below a PERSON_DETAILS card (or below an accordion that is) --%>
+<c:choose>
+    <c:when test="${prevSType eq 'PERSON_DETAILS'}">
+        <c:set var="accAttached" value="true" />
+    </c:when>
+    <c:when test="${prevSType eq 'ACCORDION' and accAttached}">
+        <c:set var="accAttached" value="true" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="accAttached" value="false" />
+    </c:otherwise>
+</c:choose>
+
+<section class="accordion-section${accAttached ? ' accordion-attached' : ''}">
+    <details class="accordion-item" id="acc-${sec.id}">
+
+        <summary class="accordion-header">
+            <span class="accordion-icon" aria-hidden="true"></span>
+            <span class="accordion-title"><c:out value="${accHeading}" /></span>
+        </summary>
+
+        <div class="accordion-body">
+
+            <c:if test="${not empty sec.images}">
+                <c:forEach var="img" items="${sec.images}" varStatus="status">
+                    <c:if test="${status.first}">
+                        <figure class="accordion-image">
+                            <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                                 alt="<c:out value='${not empty img.altText ? img.altText : accHeading}' />"
+                                 loading="lazy">
+                            <c:if test="${not empty img.heading2}">
+                                <figcaption><c:out value="${img.heading2}" /></figcaption>
+                            </c:if>
+                        </figure>
+                    </c:if>
+                </c:forEach>
+            </c:if>
+
+            <c:if test="${not empty sec.content}">
+                <div class="accordion-content">
+                    <c:out value="${sec.content}" escapeXml="false" />
+                </div>
+            </c:if>
+
+        </div>
+
+    </details>
+</section>

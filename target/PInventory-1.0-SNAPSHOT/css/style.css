@@ -131,14 +131,13 @@ nav {
     font-weight: 700;
     font-size: 17px;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    border-bottom: 3px solid transparent;
+    border-bottom: none;
 }
 
 .main-menu li:hover > a,
 .main-menu li.active-tab > a {
     background: #e6ddd3;
     color: var(--sec-brand-dark);
-    border-bottom-color: var(--sec-brand-orange);
 }
 
 /* Base Wrapper for Dynamic Page Sections */

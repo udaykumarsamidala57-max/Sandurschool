@@ -78,6 +78,7 @@
 
     <!-- html2canvas for High-Definition Image Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/site-font.css">
 
     <style>
         :root {

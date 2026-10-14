@@ -1,0 +1,29 @@
+/* =========================================================
+   ONE CONTINUOUS BACKGROUND PATTERN
+   A single soft diamond pattern runs down the whole page,
+   from section to section, without restarting at each
+   section or card edge. It is pinned to the window
+   (background-attachment: fixed), so every light block
+   shows the same pattern lined up exactly.
+   Peacock feathers are used ONLY in the header and footer.
+   To remove the pattern everywhere, delete this file's rules.
+   ========================================================= */
+
+html body,
+html body .desc-section,
+html body .desc-content,
+html body .page-desc-section,
+html body .page-desc-box,
+html body .person-details-section .person-details-profile,
+html body .accordion-attached .accordion-item,
+html body .distinct-intro,
+html body .house-grid-section,
+html body .director-welcome-section,
+html body .latest-news-section,
+html body .campus-events-section {
+    background-image: url('../Home/peacock/soft-lattice.svg') !important;
+    background-repeat: repeat !important;
+    background-size: 36px 36px !important;
+    background-position: 0 0 !important;
+    background-attachment: fixed !important;
+}

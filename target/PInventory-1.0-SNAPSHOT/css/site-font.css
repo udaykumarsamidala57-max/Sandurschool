@@ -1,0 +1,77 @@
+/* =========================================================
+   ONE FONT FOR THE WHOLE WEBSITE: Merriweather
+   Loaded by Header.jsp (every page) and vacancy_poster.jsp.
+   Overrides every other font-family in the site's CSS and
+   inline styles. Icon fonts (Font Awesome) are left alone.
+   To change the site font later, edit only this file.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap');
+
+:root {
+    --site-font: 'Merriweather', Georgia, 'Times New Roman', serif;
+
+    /* ONE body-text size for the whole site (same as Person Details bio).
+       Change these two lines to resize all paragraph text at once. */
+    --body-text-size: clamp(12.5px, 1.2vw, 13.5px);
+    --body-text-line: 1.85;
+}
+
+html body,
+html body *:not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands),
+html body input,
+html body button,
+html body select,
+html body textarea {
+    font-family: var(--site-font) !important;
+
+    /* Merriweather's letters are large; this shrinks them evenly
+       (about 13%) so text matches the size of the old fonts.
+       Lower = smaller, higher = bigger (try 0.45 - 0.52). */
+    font-size-adjust: 0.48;
+}
+
+
+/* =========================================================
+   SAME BODY-TEXT SIZE EVERYWHERE
+   All paragraph / description text uses the Person Details
+   bio size. Headings, menus, buttons, the hero banner and
+   the Distinct card hover text keep their own sizes.
+   ========================================================= */
+
+/* plain paragraphs anywhere except the header, menu and hero banner */
+html body p:not(header p):not(nav p):not(.hero-fullscreen-container p),
+
+/* description blocks in each section type (and anything inside them) */
+html body :is(
+    .person-description,
+    .accordion-content,
+    .desc-content,
+    .page-desc-content,
+    .welcome-text,
+    .house-modal-desc,
+    .distinct-intro p,
+    .distinct-modal-desc,
+    .latest-news-description,
+    .modal-payload-description,
+    .ce-popup-description,
+    footer .address,
+    footer .disclaimer
+),
+html body :is(
+    .person-description,
+    .accordion-content,
+    .desc-content,
+    .page-desc-content,
+    .welcome-text,
+    .house-modal-desc,
+    .distinct-modal-desc,
+    .latest-news-description,
+    .modal-payload-description,
+    .ce-popup-description,
+    footer .disclaimer
+) :is(p, span, div, li, font, td) {
+    font-size: var(--body-text-size) !important;
+    line-height: var(--body-text-line) !important;
+    font-weight: 400 !important;
+}
