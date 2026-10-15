@@ -1,0 +1,23 @@
+/* =========================================================
+   DESC, DESC2, DESC3 ONE BELOW ANOTHER
+   When these sections follow each other directly, close the
+   big gap between them to a short, even 12px.
+   Loaded through site-font.css (every page).
+   ========================================================= */
+
+/* a Desc section that has another Desc section right after it:
+   no bottom padding, and its last block keeps no bottom margin */
+html body :is(.desc-v1, .desc-v2, .desc-v3):has(+ :is(.desc-v1, .desc-v2, .desc-v3)) {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+html body :is(.desc-v1, .desc-v3):has(+ :is(.desc-v1, .desc-v2, .desc-v3)) .desc-images > :last-child,
+html body .desc-v2:has(+ :is(.desc-v1, .desc-v2, .desc-v3)) .page-desc-container > :last-child {
+    margin-bottom: 0 !important;
+}
+
+/* a Desc section that comes right after another one: small top gap */
+html body :is(.desc-v1, .desc-v2, .desc-v3) + :is(.desc-v1, .desc-v2, .desc-v3) {
+    padding-top: 12px !important;
+    margin-top: 0 !important;
+}

@@ -1,160 +1,96 @@
-.desc-section {
+/* =========================================================
+   DESC  (section type DESC)  - scoped to .desc-v1
+   Per image: heading 1, heading 2, text, then a full-width
+   image. Text sizes come from site-font.css.
+   ========================================================= */
+
+.desc-v1 {
     width: 100%;
-    background: #ffffff;
     box-sizing: border-box;
+    padding: clamp(28px, 4vw, 48px) clamp(16px, 4vw, 32px) clamp(20px, 3vw, 36px);
 }
 
-.desc-container {
-    width: 100%;
-    max-width: 1180px;
+.desc-v1 .desc-container {
+    max-width: 920px;
     margin: 0 auto;
-    padding: 0 0 40px 0;
-    box-sizing: border-box;
 }
 
-.desc-title {
-    margin: 0 0 45px 0;
-    padding: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 52px;
-    line-height: 1.1;
+.desc-v1 .desc-images {
+    display: flex;
+    flex-direction: column;
+}
+
+/* heading 1: brown, with a short orange-gold bar underneath */
+.desc-v1 .desc-heading1 {
+    margin: 0 0 10px;
+    color: #612405;
     font-weight: 700;
-    color: #5a2d0c;
+}
+.desc-v1 .desc-heading1::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin-top: 14px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #e0701b, #c99a3c);
 }
 
-.desc-heading1 {
-    margin: 0 0 22px 0;
-    padding: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 40px;
-    line-height: 1.3;
+/* heading 2: warm orange-brown sub-heading */
+.desc-v1 .desc-heading2 {
+    margin: 18px 0 12px;
+    color: #9a3f12;
     font-weight: 700;
-    color: #542b0d;
 }
 
-.desc-content {
-    width: 100%;
-    margin: 0 0 42px 0;
-    padding: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 17px;
-    line-height: 1.8;
-    color: #142c42;
+/* text */
+.desc-v1 .desc-content {
+    margin: 6px 0 28px;
+    color: #2f2a26;
 }
-
-.desc-content p {
-    margin: 0 0 24px 0;
-    padding: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 16px;
-    line-height: 1.8;
-    color: #142c42;
-}
-
-.desc-content p:last-child {
-    margin-bottom: 0;
-}
-
-.desc-content strong,
-.desc-content b {
+.desc-v1 .desc-content p { margin: 0 0 16px; }
+.desc-v1 .desc-content p:last-child { margin-bottom: 0; }
+.desc-v1 .desc-content strong,
+.desc-v1 .desc-content b { color: #3b1603; }
+.desc-v1 .desc-content a {
+    color: #b8542b;
     font-weight: 700;
-    color: #142c42;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
+.desc-v1 .desc-content ul,
+.desc-v1 .desc-content ol { margin: 0 0 16px; padding-left: 22px; }
+.desc-v1 .desc-content li { margin-bottom: 6px; }
+.desc-v1 .desc-content li::marker { color: #e0701b; }
 
-.desc-heading2 {
-    margin: 30px 0 25px 0;
-    padding: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 23px;
-    line-height: 1.4;
-    font-weight: 700;
-    color: #542b0d;
-}
-
-.desc-images {
-    width: 100%;
-    margin: 45px 0 0 0;
-    padding: 0;
-}
-
-.desc-image-wrapper {
-    width: 100%;
-    margin: 0 0 25px 0;
-    padding: 0;
+/* image: rounded with a soft shadow */
+.desc-v1 .desc-image-wrapper {
+    margin: 0 0 clamp(32px, 5vw, 52px);
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 16px 36px -18px rgba(59, 22, 3, 0.35);
 }
-
-.desc-image-wrapper:last-child {
-    margin-bottom: 0;
-}
-
-.desc-image {
+.desc-v1 .desc-image {
     display: block;
     width: 100%;
     height: auto;
-    margin: 0;
-    padding: 0;
     object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.desc-v1 .desc-image-wrapper:hover .desc-image {
+    transform: scale(1.02);
 }
 
-/* Tablet Layout */
-@media (max-width: 768px) {
-    .desc-container {
-        padding: 0 25px 35px 25px;
-    }
-
-    .desc-title {
-        font-size: 42px;
-        margin-bottom: 32px;
-    }
-
-    .desc-heading1 {
-        font-size: 25px;
-        margin-bottom: 18px;
-    }
-
-    .desc-content,
-    .desc-content p {
-        font-size: 16px;
-        line-height: 1.7;
-    }
-
-    .desc-heading2 {
-        font-size: 21px;
-    }
-
-    .desc-images {
-        margin-top: 35px;
-    }
+@media (max-width: 600px) {
+    .desc-v1 .desc-image-wrapper { border-radius: 10px; }
 }
 
-/* Mobile Layout */
-@media (max-width: 480px) {
-    .desc-container {
-        padding: 0 18px 30px 18px;
-    }
-
-    .desc-title {
-        font-size: 34px;
-        margin-bottom: 27px;
-    }
-
-    .desc-heading1 {
-        font-size: 22px;
-        margin-bottom: 16px;
-    }
-
-    .desc-content,
-    .desc-content p {
-        font-size: 16px;
-        line-height: 1.7;
-    }
-
-    .desc-heading2 {
-        font-size: 20px;
-    }
-
-    .desc-images {
-        margin-top: 30px;
-    }
+/* heading sizes: heading 1 leads, heading 2 is a smaller sub-heading */
+html body .desc-section.desc-v1 .desc-heading1 {
+    font-size: clamp(21px, 2.6vw, 26px) !important;
+    line-height: 1.3 !important;
+}
+html body .desc-section.desc-v1 .desc-heading2 {
+    font-size: clamp(16px, 1.8vw, 18px) !important;
+    line-height: 1.4 !important;
 }

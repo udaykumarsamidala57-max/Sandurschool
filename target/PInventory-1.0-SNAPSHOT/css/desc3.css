@@ -1,509 +1,142 @@
-
-
-.desc-section {
-
-    width: 100%;
-
-    margin: 0;
-
-    padding: 3px 12px 12px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-}
-
-
 /* =========================================================
-   MAIN CONTAINER
+   DESC3  (section type DESC3)  - scoped to .desc-v3
+   Per image: heading 1, heading 2, then the image with its
+   text in a framed card underneath.
+   Text sizes come from site-font.css.
    ========================================================= */
 
-.desc-section .desc-container {
-
+.desc-v3 {
     width: 100%;
+    box-sizing: border-box;
+    padding: clamp(28px, 4vw, 48px) clamp(16px, 4vw, 32px) clamp(20px, 3vw, 36px);
+}
 
-    max-width: 1250px;
-
+.desc-v3 .desc-container {
+    max-width: 1100px;
     margin: 0 auto;
-
-    padding: 0;
-
-    box-sizing: border-box;
 }
 
-
-/* =========================================================
-   SECTION TITLE
-   ========================================================= */
-
-.desc-section .desc-title {
-
-    margin: 0 0 10px 0;
-
-    padding: 0;
-
-    font-family: "Merriweather", Georgia, serif;
-
-    font-size: 48px;
-
-    line-height: 1.15;
-
-    font-weight: 700;
-
+.desc-v3 .desc-title {
+    margin: 0 0 22px;
     color: #612405;
-
-    text-align: left;
-
-    box-sizing: border-box;
+    font-weight: 700;
 }
 
-
-/* =========================================================
-   IMAGE / CONTENT AREA
-   ========================================================= */
-
-.desc-section .desc-images {
-
-    width: 100%;
-
-    max-width: 900px;
-
+.desc-v3 .desc-images {
+    max-width: 920px;
     margin: 0 auto;
-
-    padding: 0;
-
-    box-sizing: border-box;
 }
 
-
-/* =========================================================
-   HEADING 1
-   ========================================================= */
-
-.desc-section .desc-heading1 {
-
-    margin: 0 0 14px 0;
-
-    padding: 0;
-
-    font-family: "Merriweather", Georgia, serif;
-
-    font-size: 36px;
-
-    line-height: 1.2;
-
-    font-weight: 700;
-
+/* heading 1 with a short orange-gold bar */
+.desc-v3 .desc-heading1 {
+    margin: 0 0 10px;
     color: #612405;
-
-    text-align: left;
-
-    box-sizing: border-box;
-}
-
-
-/* =========================================================
-   HEADING 2
-   ========================================================= */
-
-.desc-section .desc-heading2 {
-
-    margin: 0 0 12px 0;
-
-    padding: 0;
-
-    font-family: "Merriweather", Georgia, serif;
-
-    font-size: 24px;
-
-    line-height: 1.3;
-
     font-weight: 700;
-
-    color: #612405;
-
-    text-align: left;
-
-    box-sizing: border-box;
+}
+.desc-v3 .desc-heading1::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin-top: 14px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #e0701b, #c99a3c);
 }
 
+.desc-v3 .desc-heading2 {
+    margin: 16px 0 16px;
+    color: #9a3f12;
+    font-weight: 700;
+}
 
-/* =========================================================
-   IMAGE WRAPPER
-   ========================================================= */
-
-.desc-section .desc-image-wrapper {
-
-    width: 100%;
-
+/* image = top of the card */
+.desc-v3 .desc-image-wrapper {
     margin: 0;
-
-    padding: 0;
-
     line-height: 0;
-
-    box-sizing: border-box;
-
+    border-radius: 14px 14px 0 0;
     overflow: hidden;
 }
-
-
-/* =========================================================
-   IMAGE
-   ========================================================= */
-
-.desc-section .desc-image {
-
+.desc-v3 .desc-image {
     display: block;
-
     width: 100%;
-
     height: auto;
-
-    margin: 0;
-
-    padding: 0;
-
-    border: 0;
-
     object-fit: cover;
+}
 
+/* text = bottom of the card, closed by an orange band */
+.desc-v3 .desc-content {
+    position: relative;
+    margin: 0 0 clamp(32px, 5vw, 52px);
+    padding: clamp(18px, 3vw, 28px) clamp(18px, 3.5vw, 32px) clamp(24px, 3.5vw, 34px);
+    background-color: #ffffff;
+    border: 1px solid #efe3d6;
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 18px 38px -22px rgba(59, 22, 3, 0.32);
+    color: #2f2a26;
+    overflow: hidden;
     box-sizing: border-box;
 }
-
-
-/* =========================================================
-   DESCRIPTION CONTENT BOX
-   ========================================================= */
-
-.desc-section .desc-content {
-
-    width: 100%;
-
-    margin: 0;
-
-    padding: 18px 24px 20px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border-left: 1px solid #f07832;
-
-    border-right: 1px solid #f07832;
-
-    border-top: 1px solid #f07832;
-
-    font-family: "Merriweather", Georgia, serif;
-
-    font-size: 16px;
-
-    line-height: 1.6;
-
-    font-weight: 500;
-
-    color: #351d12;
-
-    text-align: left;
-
-    overflow-wrap: break-word;
+.desc-v3 .desc-content::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #e0701b, #c99a3c);
+}
+/* if there is no image above, the card is rounded on top too */
+.desc-v3 .desc-heading2 + .desc-content,
+.desc-v3 .desc-heading1 + .desc-content {
+    border-top: 1px solid #efe3d6;
+    border-radius: 14px;
 }
 
-
-/* =========================================================
-   CONTENT PARAGRAPHS
-   ========================================================= */
-
-.desc-section .desc-content p {
-
-    margin: 0 0 16px 0;
-
-    padding: 0;
-
-    font-family: inherit;
-
-    font-size: inherit;
-
-    line-height: inherit;
-
-    font-weight: inherit;
-
-    color: inherit;
-}
-
-
-.desc-section .desc-content p:last-child {
-
-    margin-bottom: 0;
-}
-
-
-/* =========================================================
-   CONTENT LINKS
-   ========================================================= */
-
-.desc-section .desc-content a {
-
-    color: #351d12;
-
+.desc-v3 .desc-content p { margin: 0 0 16px; }
+.desc-v3 .desc-content p:last-child { margin-bottom: 0; }
+.desc-v3 .desc-content strong,
+.desc-v3 .desc-content b { color: #3b1603; }
+.desc-v3 .desc-content a {
+    color: #b8542b;
     font-weight: 700;
-
     text-decoration: underline;
+    text-underline-offset: 3px;
 }
-
-
-.desc-section .desc-content a:hover {
-
-    color: #f07832;
-
-    text-decoration: underline;
-}
-
-
-/* =========================================================
-   CONTENT BOLD TEXT
-   ========================================================= */
-
-.desc-section .desc-content strong,
-.desc-section .desc-content b {
-
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   CONTENT LISTS
-   ========================================================= */
-
-.desc-section .desc-content ul,
-.desc-section .desc-content ol {
-
-    margin-top: 0;
-
-    margin-bottom: 16px;
-
-    padding-left: 22px;
-}
-
-
-.desc-section .desc-content li {
-
-    margin-bottom: 5px;
-}
-
-
-/* =========================================================
-   IMAGES INSIDE CONTENT
-   ========================================================= */
-
-.desc-section .desc-content img {
-
-    max-width: 100%;
-
-    height: auto;
-
-    display: block;
-
-    margin: 12px auto;
-}
-
-
-/* =========================================================
-   ORANGE BOTTOM STRIP
-   ========================================================= */
-
-.desc-section .desc-content::after {
-
-    content: "";
-
-    display: block;
-
-    height: 8px;
-
-    margin: 18px -24px -20px -24px;
-
-    background: #f07832;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 900px) {
-
-    .desc-section {
-
-        padding: 3px 10px 10px;
-    }
-
-
-    .desc-section .desc-container {
-
-        max-width: 100%;
-    }
-
-
-    .desc-section .desc-title {
-
-        font-size: 42px;
-
-        margin-bottom: 8px;
-    }
-
-
-    .desc-section .desc-images {
-
-        max-width: 100%;
-    }
-
-
-    .desc-section .desc-heading1 {
-
-        font-size: 32px;
-
-        margin-bottom: 12px;
-    }
-
-
-    .desc-section .desc-heading2 {
-
-        font-size: 22px;
-
-        margin-bottom: 11px;
-    }
-
-
-    .desc-section .desc-content {
-
-        padding: 14px 20px 18px;
-
-        font-size: 16px;
-
-        line-height: 1.6;
-    }
-
-
-    .desc-section .desc-content::after {
-
-        height: 8px;
-
-        margin: 15px -20px -18px -20px;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
+.desc-v3 .desc-content ul,
+.desc-v3 .desc-content ol { margin: 0 0 16px; padding-left: 22px; }
+.desc-v3 .desc-content li { margin-bottom: 6px; }
+.desc-v3 .desc-content li::marker { color: #e0701b; }
 
 @media (max-width: 600px) {
-
-    .desc-section {
-
-        padding: 2px 6px 8px;
-    }
-
-
-    .desc-section .desc-title {
-
-        font-size: 34px;
-
-        margin-bottom: 7px;
-    }
-
-
-    .desc-section .desc-heading1 {
-
-        font-size: 28px;
-
-        margin-bottom: 10px;
-    }
-
-
-    .desc-section .desc-heading2 {
-
-        font-size: 20px;
-
-        margin-bottom: 9px;
-    }
-
-
-    .desc-section .desc-content {
-
-        padding: 10px 14px 16px;
-
-        font-size: 16px;
-
-        line-height: 1.6;
-    }
-
-
-    .desc-section .desc-content p {
-
-        margin-bottom: 14px;
-    }
-
-
-    .desc-section .desc-content::after {
-
-        height: 7px;
-
-        margin: 14px -14px -16px -14px;
-    }
+    .desc-v3 .desc-image-wrapper { border-radius: 10px 10px 0 0; }
+    .desc-v3 .desc-content { border-radius: 0 0 10px 10px; }
 }
 
+/* heading sizes: heading 1 leads, heading 2 is a smaller sub-heading */
+html body .desc-section.desc-v3 .desc-heading1 {
+    font-size: clamp(21px, 2.6vw, 26px) !important;
+    line-height: 1.3 !important;
+}
+html body .desc-section.desc-v3 .desc-heading2 {
+    font-size: clamp(16px, 1.8vw, 18px) !important;
+    line-height: 1.4 !important;
+}
 
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-    .desc-section {
-
-        padding: 2px 4px 6px;
-    }
-
-
-    .desc-section .desc-title {
-
-        font-size: 30px;
-
-        margin-bottom: 5px;
-    }
-
-
-    .desc-section .desc-heading1 {
-
-        font-size: 25px;
-
-        margin-bottom: 9px;
-    }
-
-
-    .desc-section .desc-heading2 {
-
-        font-size: 18px;
-
-        margin-bottom: 8px;
-    }
-
-
-    .desc-section .desc-content {
-
-        padding: 8px 10px 12px;
-
-        font-size: 16px;
-
-        line-height: 1.6;
-    }
-
-
-    .desc-section .desc-content::after {
-
-        height: 6px;
-
-        margin: 12px -10px -12px -10px;
-    }
+/* DESC3 used as a page banner (picture with no text under it):
+   round all corners, add the soft shadow, and keep very tall
+   pictures to a sensible banner height */
+.desc-v3 .desc-image-wrapper:not(:has(+ .desc-content)) {
+    border-radius: 14px;
+    margin-bottom: clamp(8px, 1.5vw, 14px);
+    box-shadow: 0 18px 38px -22px rgba(59, 22, 3, 0.35);
+}
+.desc-v3 .desc-image-wrapper:not(:has(+ .desc-content)) .desc-image {
+    max-height: 480px;
+    object-position: center 35%;
+}
+/* banner section sits closer to the text that follows it */
+.desc-v3:has(.desc-image-wrapper:last-child) {
+    padding-bottom: clamp(6px, 1vw, 10px);
+}
+@media (max-width: 600px) {
+    .desc-v3 .desc-image-wrapper:not(:has(+ .desc-content)) { border-radius: 10px; }
 }

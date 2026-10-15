@@ -1,0 +1,494 @@
+/* =========================================================
+   DISTINCT3 - EXPANDING PANELS  (section type DISTINCT3)
+   Heading and intro on top, then tall picture panels side by
+   side. The panel under the pointer widens smoothly and shows
+   its heading, short text and "Read more"; the others narrow
+   and show their title running up the edge. The first panel
+   is open when the pointer is elsewhere. Click opens a pop-up.
+   On phones the panels stack with every caption shown.
+   ========================================================= */
+
+.d3-section {
+    --d3-brown: #612405;
+    --d3-orange: #e0701b;
+    --d3-gold: #c99a3c;
+    --d3-gap: clamp(10px, 1.2vw, 14px);
+
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(28px, 4vw, 52px) clamp(14px, 3vw, 24px) clamp(24px, 3.5vw, 44px);
+    box-sizing: border-box;
+}
+
+/* ---------- heading and intro ---------- */
+
+.d3-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    align-items: end;
+    gap: clamp(12px, 3vw, 40px);
+    margin-bottom: clamp(18px, 2.5vw, 28px);
+}
+
+html body .d3-section .d3-title {
+    margin: 0;
+    color: var(--d3-brown);
+    font-size: clamp(22px, 2.9vw, 30px) !important;
+    line-height: 1.25 !important;
+    font-weight: 700;
+}
+.d3-title::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--d3-orange), var(--d3-gold));
+}
+
+html body .d3-section .d3-text,
+html body .d3-section .d3-text :is(p, span) {
+    margin: 0;
+    color: #4a4039;
+    font-size: clamp(14px, 1.35vw, 15px) !important;
+    line-height: 1.75 !important;
+}
+
+/* ---------- expanding panels ---------- */
+
+.d3-grid {
+    display: flex;
+    gap: var(--d3-gap);
+    height: clamp(360px, 38vw, 470px);
+}
+
+/* every panel shares the width; the open one takes much more.
+   Open = the panel under the pointer, or the first one when the
+   pointer is not over the row (works without JavaScript). */
+.d3-card {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #2b1a10;
+    cursor: pointer;
+    isolation: isolate;
+    box-shadow: 0 16px 34px -20px rgba(59, 22, 3, 0.5);
+    outline: none;
+    text-align: left;
+    transition: flex-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s ease;
+}
+.d3-card:hover,
+.d3-card:focus-visible,
+.d3-grid:not(:hover):not(:focus-within) .d3-card.d3-feature {
+    flex-grow: 5.2;
+}
+.d3-card:focus-visible {
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px var(--d3-orange);
+}
+
+.d3-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transform: scale(1.04);
+    filter: saturate(0.85);
+    transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.6s ease;
+}
+
+.d3-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to top,
+        rgba(28, 12, 4, 0.85) 0%,
+        rgba(28, 12, 4, 0.35) 45%,
+        rgba(28, 12, 4, 0.15) 100%);
+    transition: background 0.6s ease;
+}
+
+/* closed panel: its title runs upwards along the bottom-left edge */
+.d3-card::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    max-height: calc(100% - 44px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    writing-mode: vertical-rl;
+    transform: translateX(-50%) rotate(180deg);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+/* open panel: full caption */
+.d3-caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(18px, 2.2vw, 30px);
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.35s ease, transform 0.5s ease;
+    pointer-events: none;
+}
+
+html body .d3-section .d3-card-title {
+    display: block;
+    max-width: 30em;
+    font-size: clamp(19px, 2vw, 24px) !important;
+    line-height: 1.3 !important;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.d3-card-title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    margin-top: 10px;
+    border-radius: 2px;
+    background: var(--d3-orange);
+}
+html body .d3-section .d3-card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 36em;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    color: rgba(255, 255, 255, 0.92);
+}
+.d3-more {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffd9b8;
+}
+
+/* open state */
+.d3-card:hover img,
+.d3-card:focus-visible img,
+.d3-grid:not(:hover):not(:focus-within) .d3-feature img {
+    transform: scale(1);
+    filter: saturate(1);
+}
+.d3-card:hover::after,
+.d3-card:focus-visible::after,
+.d3-grid:not(:hover):not(:focus-within) .d3-feature::after {
+    opacity: 0;
+}
+.d3-card:hover .d3-caption,
+.d3-card:focus-visible .d3-caption,
+.d3-grid:not(:hover):not(:focus-within) .d3-feature .d3-caption {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+/* ---------- pop-up ---------- */
+
+.d3-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(28, 12, 4, 0.7);
+    animation: d3-fade 0.25s ease;
+}
+.d3-modal[hidden] { display: none; }
+
+.d3-modal-box {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    width: 100%;
+    max-width: 880px;
+    max-height: 86vh;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+    animation: d3-rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.d3-modal-img {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    object-fit: cover;
+    display: block;
+}
+.d3-modal-body {
+    padding: clamp(22px, 3vw, 34px);
+    overflow-y: auto;
+}
+html body .d3-section .d3-modal-title {
+    margin: 0 0 14px;
+    color: var(--d3-brown);
+    font-size: clamp(19px, 2.1vw, 22px) !important;
+    line-height: 1.3 !important;
+}
+.d3-modal-title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    margin-top: 10px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--d3-orange), var(--d3-gold));
+}
+html body .d3-section .d3-modal-desc,
+html body .d3-section .d3-modal-desc :is(p, span, li, div) {
+    color: #3b332d;
+    font-size: clamp(14px, 1.4vw, 15px) !important;
+    line-height: 1.8 !important;
+}
+.d3-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--d3-brown);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.d3-modal-close:hover { background: var(--d3-brown); color: #ffffff; }
+
+@keyframes d3-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes d3-rise {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- tablet and phone: panels stack, all captions shown ---------- */
+@media (max-width: 760px) {
+    .d3-intro { grid-template-columns: 1fr; }
+    .d3-grid {
+        flex-direction: column;
+        height: auto;
+    }
+    .d3-card,
+    .d3-card:hover,
+    .d3-grid:not(:hover):not(:focus-within) .d3-card.d3-feature {
+        flex: 0 0 auto;
+        height: 220px;
+    }
+    .d3-card::after { display: none; }
+    .d3-card .d3-caption {
+        opacity: 1;
+        transform: none;
+    }
+    .d3-card img { transform: none; filter: none; }
+    .d3-modal-box { grid-template-columns: 1fr; }
+    .d3-modal-img { max-height: 38vh; min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .d3-card, .d3-card img, .d3-caption, .d3-modal, .d3-modal-box { transition: none; animation: none; }
+}
+
+/* ---------- larger text on desktop / laptop screens ---------- */
+@media (min-width: 992px) {
+    html body .d3-section .d3-title {
+        font-size: clamp(30px, 2.6vw, 36px) !important;
+    }
+    html body .d3-section .d3-text,
+    html body .d3-section .d3-text :is(p, span) {
+        font-size: clamp(15.5px, 1.2vw, 17px) !important;
+    }
+    html body .d3-section .d3-card-title {
+        font-size: clamp(24px, 2vw, 28px) !important;
+    }
+    html body .d3-section .d3-card-text {
+        font-size: clamp(15.5px, 1.2vw, 17px) !important;
+        line-height: 1.7 !important;
+        -webkit-line-clamp: 5;
+    }
+    .d3-more { font-size: 13.5px; }
+    .d3-card::after { font-size: 18px; }
+    html body .d3-section .d3-modal-title {
+        font-size: clamp(22px, 1.9vw, 26px) !important;
+    }
+    html body .d3-section .d3-modal-desc,
+    html body .d3-section .d3-modal-desc :is(p, span, li, div) {
+        font-size: clamp(15.5px, 1.2vw, 17px) !important;
+    }
+}
+
+/* =========================================================
+   POP-UP - firm and structured
+   Square corners, solid brown top rule, square close button,
+   bold title with a solid bar, picture on the left.
+   ========================================================= */
+.d3-modal {
+    background: rgba(28, 12, 4, 0.78);
+}
+.d3-modal-box {
+    max-width: 920px;
+    border-radius: 0;
+    border-top: 5px solid var(--d3-brown);
+    box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.55);
+}
+.d3-modal-img {
+    border-right: 1px solid #ddcbb8;
+}
+.d3-modal-body {
+    padding: clamp(26px, 3.4vw, 40px) clamp(24px, 3.2vw, 38px);
+}
+html body .d3-section .d3-modal-title {
+    margin: 0 0 18px;
+    padding-right: 36px;
+    color: #2b1206;
+    font-weight: 700;
+}
+.d3-modal-title::after {
+    width: 64px;
+    height: 3px;
+    margin-top: 14px;
+    border-radius: 0;
+    background: var(--d3-orange);
+}
+html body .d3-section .d3-modal-desc,
+html body .d3-section .d3-modal-desc :is(p, span, li, div) {
+    color: #2f2a26;
+}
+.d3-modal-desc p { margin: 0 0 12px; }
+.d3-modal-desc p:last-child { margin-bottom: 0; }
+.d3-modal-close {
+    top: 0;
+    right: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 0;
+    background: var(--d3-brown);
+    color: #ffffff;
+    font-size: 24px;
+    box-shadow: none;
+}
+.d3-modal-close:hover {
+    background: var(--d3-orange);
+    color: #ffffff;
+}
+@media (max-width: 760px) {
+    .d3-modal-img { border-right: none; border-bottom: 1px solid #ddcbb8; }
+}
+
+/* =========================================================
+   EQUAL-WIDTH CARDS
+   Every card has the same width (no panel widens). Each card
+   shows its title across the bottom; pointing at a card lifts
+   its short text into view. Click still opens the pop-up.
+   ========================================================= */
+/* at rest every card is the same width */
+.d3-card,
+.d3-grid:not(:hover):not(:focus-within) .d3-card.d3-feature {
+    flex: 1 1 0;
+}
+/* the card under the cursor widens, the others narrow evenly */
+.d3-card:hover,
+.d3-card:focus-visible {
+    flex: 2.6 1 0;
+}
+.d3-card:hover .d3-card-title,
+.d3-card:focus-visible .d3-card-title {
+    white-space: normal;
+}
+.d3-card::after { display: none; }
+
+/* caption always shown */
+.d3-card .d3-caption {
+    opacity: 1;
+    transform: none;
+    gap: 6px;
+    padding: clamp(14px, 1.6vw, 20px);
+    transition: none;
+}
+html body .d3-section .d3-card-title {
+    font-size: clamp(17px, 1.5vw, 20px) !important;
+    line-height: 1.3 !important;
+}
+.d3-card-title::after { width: 36px; margin-top: 8px; }
+
+/* short text hidden until the card is pointed at */
+html body .d3-section .d3-card .d3-card-text {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    font-size: clamp(13.5px, 1.1vw, 14.5px) !important;
+    line-height: 1.6 !important;
+    -webkit-line-clamp: 5;
+    transition: max-height 0.5s ease, opacity 0.35s ease;
+}
+html body .d3-section .d3-card:hover .d3-card-text,
+html body .d3-section .d3-card:focus-visible .d3-card-text {
+    max-height: 9em;
+    opacity: 1;
+}
+
+/* picture: still until pointed at, then a gentle zoom and darker shade */
+.d3-card img,
+.d3-grid:not(:hover):not(:focus-within) .d3-feature img {
+    transform: scale(1);
+    filter: saturate(0.95);
+}
+.d3-card:hover img,
+.d3-card:focus-visible img {
+    transform: scale(1.06);
+    filter: saturate(1);
+}
+.d3-card:hover .d3-shade,
+.d3-card:focus-visible .d3-shade {
+    background: linear-gradient(to top,
+        rgba(28, 12, 4, 0.92) 0%,
+        rgba(28, 12, 4, 0.6) 55%,
+        rgba(28, 12, 4, 0.25) 100%);
+}
+
+/* phones: two cards per row */
+@media (max-width: 760px) {
+    .d3-grid { flex-direction: row; flex-wrap: wrap; }
+    .d3-card,
+    .d3-card:hover,
+    .d3-grid:not(:hover):not(:focus-within) .d3-card.d3-feature {
+        flex: 1 1 calc(50% - var(--d3-gap));
+        height: 240px;
+    }
+    html body .d3-section .d3-card .d3-card-text { display: none; }
+}
+@media (max-width: 420px) {
+    .d3-card,
+    .d3-card:hover,
+    .d3-grid:not(:hover):not(:focus-within) .d3-card.d3-feature {
+        flex-basis: 100%;
+        height: 220px;
+    }
+}

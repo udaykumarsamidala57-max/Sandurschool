@@ -33,6 +33,9 @@
             <c:if test="${secType eq 'DISTINCT'}">
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/distinct.css">
             </c:if>
+            <c:if test="${secType eq 'DISTINCT3'}">
+                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/distinct3.css">
+            </c:if>
             <c:if test="${secType eq 'DISTINCT2'}">
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/distinct2.css">
             </c:if>
@@ -188,6 +191,9 @@
 
                     <c:if test="${sType eq 'DISTINCT'}">
                         <%@ include file="views/sections/distinct.jspf" %>
+                    </c:if>
+                    <c:if test="${sType eq 'DISTINCT3'}">
+                        <%@ include file="views/sections/distinct3.jspf" %>
                     </c:if>
                     <c:if test="${sType eq 'DISTINCT2'}">
                         <%@ include file="views/sections/distinct2.jspf" %>

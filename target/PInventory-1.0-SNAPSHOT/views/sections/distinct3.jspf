@@ -1,0 +1,97 @@
+<%--
+    DISTINCT3 - Expanding panels
+    Same data as DISTINCT:
+      sections.title / sections.content  -> heading and intro text
+      each image: Heading1 -> picture title
+                  Heading2 -> short text on the open panel (if empty, alt text is used)
+                  alt text -> description, shown on the open panel and in the pop-up
+    The first picture is the panel that is open by default.
+--%>
+<section class="d3-section" id="d3-${sec.id}">
+
+    <div class="d3-intro">
+        <c:if test="${not empty sec.title}">
+            <h2 class="d3-title"><c:out value="${sec.title}" /></h2>
+        </c:if>
+        <c:if test="${not empty sec.content}">
+            <div class="d3-text"><c:out value="${sec.content}" escapeXml="false" /></div>
+        </c:if>
+    </div>
+
+    <div class="d3-grid">
+        <c:forEach var="img" items="${sec.images}" varStatus="st">
+            <div class="d3-card${st.first ? ' d3-feature' : ''}" role="button" tabindex="0"
+                    data-title="<c:out value='${not empty img.heading1 ? img.heading1 : img.altText}' />"
+                    data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}">
+
+                <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                     alt="<c:out value='${not empty img.altText ? img.altText : img.heading1}' />"
+                     loading="lazy">
+
+                <span class="d3-shade" aria-hidden="true"></span>
+
+                <span class="d3-caption">
+                    <c:if test="${not empty img.heading1}">
+                        <span class="d3-card-title"><c:out value="${img.heading1}" /></span>
+                    </c:if>
+                    <c:choose>
+                        <c:when test="${not empty img.heading2}">
+                            <span class="d3-card-text"><c:out value="${img.heading2}" escapeXml="false" /></span>
+                        </c:when>
+                        <c:when test="${not empty img.altText}">
+                            <span class="d3-card-text"><c:out value="${img.altText}" /></span>
+                        </c:when>
+                    </c:choose>
+                    <span class="d3-more">Read more <span aria-hidden="true">&rarr;</span></span>
+                </span>
+
+                <template class="d3-desc"><c:choose><c:when test="${not empty img.altText}"><c:out value="${img.altText}" /></c:when><c:otherwise><c:out value="${img.heading2}" escapeXml="false" /></c:otherwise></c:choose></template>
+            </div>
+        </c:forEach>
+    </div>
+
+    <div class="d3-modal" role="dialog" aria-modal="true" aria-label="Details" hidden>
+        <div class="d3-modal-box">
+            <button type="button" class="d3-modal-close" aria-label="Close">&times;</button>
+            <img class="d3-modal-img" src="" alt="">
+            <div class="d3-modal-body">
+                <h3 class="d3-modal-title"></h3>
+                <div class="d3-modal-desc"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* DISTINCT3 pop-up (set up once per page, works for every mosaic) */
+        if (!window.__d3Ready) {
+            window.__d3Ready = true;
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".d3-section").forEach(function (sec) {
+                    var modal = sec.querySelector(".d3-modal");
+                    if (!modal) return;
+                    function close() { modal.hidden = true; document.body.style.overflow = ""; }
+                    sec.querySelectorAll(".d3-card").forEach(function (card) {
+                        card.addEventListener("keydown", function (e) {
+                            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.click(); }
+                        });
+                        card.addEventListener("click", function () {
+                            var desc = card.querySelector(".d3-desc").innerHTML.trim();
+                            modal.querySelector(".d3-modal-img").src = card.getAttribute("data-img");
+                            modal.querySelector(".d3-modal-img").alt = card.getAttribute("data-title");
+                            modal.querySelector(".d3-modal-title").textContent = card.getAttribute("data-title");
+                            modal.querySelector(".d3-modal-desc").innerHTML =
+                                desc ? desc.replace(/\r?\n/g, "<br>") : "<p>No description available.</p>";
+                            modal.hidden = false;
+                            document.body.style.overflow = "hidden";
+                            modal.querySelector(".d3-modal-close").focus();
+                        });
+                    });
+                    modal.querySelector(".d3-modal-close").addEventListener("click", close);
+                    modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
+                    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) close(); });
+                });
+            });
+        }
+    </script>
+
+</section>

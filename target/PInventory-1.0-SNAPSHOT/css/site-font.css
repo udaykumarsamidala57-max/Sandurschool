@@ -6,15 +6,13 @@
    To change the site font later, edit only this file.
    ========================================================= */
 
+@import url('patterns.css');   /* soft background patterns for each design */
+@import url('desc-flow.css');  /* no big gaps between Desc / Desc2 / Desc3 */
+@import url('animations.css'); /* scroll animations: Distinct, News, Events */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap');
 
 :root {
     --site-font: 'Merriweather', Georgia, 'Times New Roman', serif;
-
-    /* ONE body-text size for the whole site (same as Person Details bio).
-       Change these two lines to resize all paragraph text at once. */
-    --body-text-size: clamp(12.5px, 1.2vw, 13.5px);
-    --body-text-line: 1.85;
 }
 
 html body,
@@ -33,45 +31,172 @@ html body textarea {
 
 
 /* =========================================================
-   SAME BODY-TEXT SIZE EVERYWHERE
-   All paragraph / description text uses the Person Details
-   bio size. Headings, menus, buttons, the hero banner and
-   the Distinct card hover text keep their own sizes.
+   TEXT SIZE SCALE  (one size per role, all in Merriweather)
+   Sizes shrink a little on small screens (clamp: min, fluid, max).
+   To adjust a role everywhere, change its variable here.
    ========================================================= */
 
-/* plain paragraphs anywhere except the header, menu and hero banner */
-html body p:not(header p):not(nav p):not(.hero-fullscreen-container p),
+:root {
+    --ts-hero-title:    clamp(26px, 4vw, 40px);
+    --ts-page-title:    clamp(24px, 3.4vw, 34px);
+    --ts-section-title: clamp(20px, 2.6vw, 26px);
+    --ts-sub-heading:   clamp(17px, 2.1vw, 21px);
+    --ts-card-title:    clamp(16px, 1.8vw, 19px);
+    --ts-reading:       clamp(14px, 1.3vw, 15px);
+    --ts-popup:         clamp(13.5px, 1.25vw, 14.5px);
+    --ts-card-text:     clamp(13px, 1.2vw, 14px);
+    --ts-profile:       clamp(12.5px, 1.2vw, 13.5px);
+    --ts-button:        12.5px;
+    --ts-label:         12px;
+}
 
-/* description blocks in each section type (and anything inside them) */
-html body :is(
-    .person-description,
-    .accordion-content,
-    .desc-content,
-    .page-desc-content,
-    .welcome-text,
-    .house-modal-desc,
-    .distinct-intro p,
-    .distinct-modal-desc,
-    .latest-news-description,
-    .modal-payload-description,
-    .ce-popup-description,
-    footer .address,
-    footer .disclaimer
-),
-html body :is(
-    .person-description,
-    .accordion-content,
-    .desc-content,
-    .page-desc-content,
-    .welcome-text,
-    .house-modal-desc,
-    .distinct-modal-desc,
-    .latest-news-description,
-    .modal-payload-description,
-    .ce-popup-description,
-    footer .disclaimer
-) :is(p, span, div, li, font, td) {
-    font-size: var(--body-text-size) !important;
-    line-height: var(--body-text-line) !important;
-    font-weight: 400 !important;
+/* Hero banner title */
+html body .slide-content h2 {
+    font-size: var(--ts-hero-title) !important;
+}
+
+/* Page title: Desc, Desc2, Desc3, Side design, Director welcome */
+html body .desc-title,
+html body .desc-section .desc-title,
+html body .page-desc-title,
+html body .page-desc-section .page-desc-title,
+html body .welcome-title {
+    font-size: var(--ts-page-title) !important;
+    line-height: 1.25 !important;
+}
+
+/* Section heading: Distinct, Houses, News, Events, Director, Person details */
+html body .distinct-intro h2,
+html body .section-heading,
+html body .latest-news-header h2,
+html body .section-title,
+html body .director-subtitle,
+html body .person-details-section .person-section-title {
+    font-size: var(--ts-section-title) !important;
+    line-height: 1.3 !important;
+}
+
+/* Sub-heading: Desc headings 1 and 2 */
+html body .desc-heading1,
+html body .desc-heading2,
+html body .desc-section .desc-heading1,
+html body .desc-section .desc-heading2 {
+    font-size: var(--ts-sub-heading) !important;
+    line-height: 1.35 !important;
+}
+
+/* Card or person name */
+html body .distinct-overlay .image-heading1,
+html body .distinct-card:hover .image-heading1,
+html body .distinct-card.touch-active .image-heading1,
+html body .house-title-link,
+html body .latest-news-title,
+html body .event-title,
+html body .person-details-section .person-name {
+    font-size: var(--ts-card-title) !important;
+    line-height: 1.3 !important;
+}
+
+/* Long reading text: Desc pages, Side design, Director welcome */
+html body .desc-content,
+html body .desc-section .desc-content,
+html body .page-desc-content,
+html body .page-desc-section .page-desc-content,
+html body .welcome-text,
+html body :is(.desc-content, .page-desc-content, .welcome-text) :is(p, span, li, div, font) {
+    font-size: var(--ts-reading) !important;
+    line-height: 1.85 !important;
+}
+
+/* Pop-up text: Distinct, Houses, News, Events */
+html body .distinct-modal-desc,
+html body .house-modal-desc,
+html body .modal-full-desc,
+html body .ce-popup-description,
+html body :is(.distinct-modal-desc, .house-modal-desc, .modal-full-desc, .ce-popup-description) :is(p, span, li, div, font) {
+    font-size: var(--ts-popup) !important;
+    line-height: 1.8 !important;
+}
+
+/* Card text: Distinct hover, News cards */
+html body .distinct-overlay h3,
+html body .latest-news-description:not(.modal-full-desc) {
+    font-size: var(--ts-card-text) !important;
+    line-height: 1.65 !important;
+}
+
+/* Profile text: Person details bio, Accordion */
+html body .person-details-section .person-description,
+html body .accordion-content {
+    font-size: var(--ts-profile) !important;
+    line-height: 1.85 !important;
+}
+
+/* Buttons and links */
+html body .distinct-read-more,
+html body .latest-news-readmore {
+    font-size: var(--ts-button) !important;
+}
+
+/* Labels and dates */
+html body .latest-news-label,
+html body .latest-news-date,
+html body .event-badge,
+html body .meta-item,
+html body .person-details-section .person-designation {
+    font-size: var(--ts-label) !important;
+}
+
+
+/* =========================================================
+   LARGER TEXT FOR DISTINCT AND PERSON DETAILS
+   (overrides the general scale above for these two designs)
+   ========================================================= */
+
+/* ---- Distinct ---- */
+html body .distinct-intro h2 {
+    font-size: clamp(22px, 2.9vw, 30px) !important;
+}
+html body .distinct-intro p {
+    font-size: clamp(14px, 1.4vw, 15px) !important;
+    line-height: 1.8 !important;
+}
+html body .distinct-overlay .image-heading1 {
+    font-size: clamp(18px, 2.1vw, 22px) !important;
+}
+html body .distinct-card:hover .image-heading1,
+html body .distinct-card.touch-active .image-heading1 {
+    font-size: clamp(17px, 2vw, 21px) !important;
+}
+html body .distinct-overlay h3 {
+    font-size: clamp(14px, 1.45vw, 15.5px) !important;
+    line-height: 1.65 !important;
+}
+html body .distinct-read-more {
+    font-size: 13px !important;
+}
+html body .distinct-modal-title {
+    font-size: clamp(19px, 2.1vw, 22px) !important;
+}
+html body .distinct-modal-desc,
+html body .distinct-modal-desc :is(p, span, li, div, font) {
+    font-size: clamp(14px, 1.45vw, 15.5px) !important;
+}
+
+/* ---- Person details (and the accordion attached to it) ---- */
+html body .person-details-section .person-section-title {
+    font-size: clamp(22px, 2.9vw, 30px) !important;
+}
+html body .person-details-section .person-designation {
+    font-size: 13px !important;
+}
+html body .person-details-section .person-name {
+    font-size: clamp(18px, 2.1vw, 22px) !important;
+}
+html body .person-details-section .person-description,
+html body .accordion-content {
+    font-size: clamp(14px, 1.4vw, 15px) !important;
+}
+html body .accordion-title {
+    font-size: 14.5px !important;
 }

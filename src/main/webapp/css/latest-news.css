@@ -435,3 +435,162 @@
     }
 
 }
+
+/* =========================================================
+   REFINED DESIGN - firm and structured
+   (same layout, slider and pop-up; overrides the rules above)
+   Square edges, a solid brown rule on every card, a firm
+   date block, bold dark titles, tight even spacing.
+   ========================================================= */
+
+.latest-news-section {
+    padding: clamp(28px, 3.5vw, 44px) 16px clamp(24px, 3vw, 36px);
+}
+
+/* ---- header ---- */
+.latest-news-header {
+    margin-bottom: 20px;
+}
+.latest-news-header h2 {
+    letter-spacing: 0.06em;
+    color: #3b1603;
+}
+html body .latest-news-section .latest-news-label {
+    display: block;
+    max-width: 620px;
+    margin: 6px auto 0;
+    color: #5a4f48;
+    font-size: 13px !important;
+    font-weight: 400;
+    line-height: 1.55;
+}
+.latest-news-line {
+    width: 64px;
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 0;
+    background: #612405;
+}
+
+/* ---- arrows: solid square buttons ---- */
+.news-slider-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 0;
+    background: #ffffff;
+    color: #e0701b;
+    border: 2px solid #e0701b;
+    box-shadow: 0 4px 10px -6px rgba(59, 22, 3, 0.35);
+}
+.news-slider-arrow:hover {
+    background: #e0701b;
+    color: #ffffff;
+    transform: translateY(-50%);
+}
+.prev-arrow { left: -20px; }
+.next-arrow { right: -20px; }
+
+/* ---- track ---- */
+.latest-news-grid {
+    gap: 18px;
+    padding: 6px 2px 14px;
+}
+
+/* ---- card: square, firm border, solid brown rule on top ---- */
+.latest-news-card {
+    flex: 0 0 calc((100% - 36px) / 3);
+    position: relative;
+    border-radius: 0;
+    border: 1px solid #ddcbb8;
+    border-top: 4px solid #612405;
+    box-shadow: 0 2px 0 rgba(59, 22, 3, 0.06);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.latest-news-card:hover {
+    transform: translateY(-3px);
+    border-color: #c9ab90;
+    border-top-color: #e0701b;
+    box-shadow: 0 12px 24px -14px rgba(59, 22, 3, 0.45);
+}
+
+/* ---- picture ---- */
+.latest-news-image {
+    height: 200px;
+    background: #f3ebe2;
+    border-bottom: 1px solid #ddcbb8;
+}
+.latest-news-image img {
+    object-position: center top;   /* keep poster headings in view */
+}
+.latest-news-card:hover .latest-news-image img {
+    transform: scale(1.03);
+}
+.latest-news-no-image {
+    background: #f3ebe2;
+    color: #612405;
+}
+
+/* ---- text ---- */
+.latest-news-content {
+    padding: 16px 18px 18px;
+}
+
+/* date: firm square block */
+.latest-news-date {
+    align-self: flex-start;
+    margin-bottom: 10px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: #e0701b;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* title: bold, dark, at most 2 lines so every card lines up */
+.latest-news-title {
+    margin: 0 0 8px;
+    color: #2b1206;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em;
+}
+
+.latest-news-description {
+    color: #4a413b;
+    margin-bottom: 14px;
+}
+
+/* read more: firm uppercase link with a short rule */
+.latest-news-readmore {
+    margin-top: auto;
+    padding: 0 0 3px;
+    border-bottom: 2px solid #e0701b;
+    color: #612405;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: none;
+}
+.latest-news-readmore:hover {
+    color: #e0701b;
+    transform: none;
+}
+
+/* ---- tablet and phone ---- */
+@media (max-width: 900px) {
+    .latest-news-card { flex: 0 0 calc((100% - 18px) / 2); }
+    .prev-arrow { left: -6px; }
+    .next-arrow { right: -6px; }
+}
+@media (max-width: 600px) {
+    .latest-news-card { flex: 0 0 86%; }
+    .latest-news-image { height: 185px; }
+    .news-slider-arrow { width: 34px; height: 34px; }
+}

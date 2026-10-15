@@ -1,8 +1,7 @@
 <%-- =========================================================
      SIDE DESIGN SECTION (EXACT LAYOUT: IMAGE ON TOP, BOX BELOW)
      ========================================================= --%>
-<br>
-<section class="page-desc-section">
+<section class="page-desc-section side-v">
 
     <div class="page-desc-container">
 
@@ -29,14 +28,37 @@
 
                
                 <c:if test="${not empty sec.content}">
-                    <div class="page-desc-content">
-                        ${sec.content}
-                    </div>
+                    <div class="page-desc-content">${sec.content}</div>
                 </c:if>
 
             </div>
         </c:if>
 
     </div>
+
+    <script>
+        /* Tidy DESC2 and Side Design text once per page: drop leading/trailing blank lines,
+           turn typed line breaks into <br>, and never allow more than one
+           empty line between paragraphs. */
+        if (!window.__descTidy) {
+            window.__descTidy = true;
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".desc-v2 .page-desc-content, .side-v .page-desc-content").forEach(function (el) {
+                    var h = el.innerHTML.replace(/\r/g, "");
+                    h = h.replace(/>[ \t]*\n\s*</g, "><");            /* layout whitespace between tags */
+                    h = h.replace(/\n/g, "<br>");                       /* typed line breaks */
+                    h = h.replace(/<br\s*\/?>/gi, "<br>");
+                    h = h.replace(/(\s*<br>\s*){3,}/g, "<br><br>");     /* at most one empty line */
+                    h = h.replace(/^(\s|<br>)+|(\s|<br>)+$/g, "");      /* none at start or end */
+                    if (!/<(p|ul|ol|div|table|h[1-6])\b/i.test(h)) {     /* plain text: real paragraphs */
+                        h = h.split(/\s*<br>\s*<br>\s*/).filter(function (x) { return x.trim(); })
+                             .map(function (x) { return "<p>" + x.trim() + "</p>"; }).join("");
+                    }
+                    el.innerHTML = h;
+                    el.classList.add("is-clean");
+                });
+            });
+        }
+    </script>
 
 </section>

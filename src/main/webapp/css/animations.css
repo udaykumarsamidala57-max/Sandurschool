@@ -1,0 +1,79 @@
+/* =========================================================
+   SCROLL ANIMATIONS (Distinct, Latest News, Events)
+   Works with js/reveal.js. Loaded through site-font.css.
+   ========================================================= */
+
+@keyframes srs-rise {
+    from { opacity: 0; transform: translateY(28px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes srs-from-left {
+    from { opacity: 0; transform: translateX(-36px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes srs-drop {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes srs-grow-x {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+@keyframes srs-pop {
+    0%   { transform: scale(0.6); opacity: 0; }
+    70%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* waiting to scroll into view: hidden */
+html.anim-ready .anim-sec:not(.anim-in) .anim-item {
+    opacity: 0;
+}
+
+/* in view: each card rises in, one after another.
+   "backwards" fill = after the animation the card's own
+   styles (hover effects etc.) take over again. */
+html.anim-ready .anim-sec.anim-in .anim-item {
+    animation: srs-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(var(--anim-i, 0) * 110ms);
+}
+
+/* ---- Distinct ---- */
+html.anim-ready .distinct-section.anim-in .distinct-intro.anim-item {
+    animation-name: srs-from-left;
+}
+/* the orange block behind the cards sweeps in from the right */
+html.anim-ready .distinct-section.anim-sec:not(.anim-in)::before {
+    transform: scaleX(0);
+}
+html.anim-ready .distinct-section.anim-in::before {
+    transform-origin: right center;
+    animation: srs-grow-x 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+/* ---- Latest News ---- */
+html.anim-ready .latest-news-section.anim-in .latest-news-header.anim-item {
+    animation-name: srs-drop;
+}
+html.anim-ready .latest-news-section.anim-in .latest-news-line {
+    animation: srs-grow-x 0.9s ease 0.3s backwards;
+}
+
+/* ---- Events ---- */
+html.anim-ready .campus-events-section.anim-in .section-header.anim-item {
+    animation-name: srs-drop;
+}
+/* the date badge pops in just after its card */
+html.anim-ready .campus-events-section.anim-in .event-card .event-badge {
+    animation: srs-pop 0.55s ease backwards;
+    animation-delay: calc(var(--anim-i, 0) * 110ms + 450ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.anim-ready .anim-sec .anim-item,
+    html.anim-ready .anim-sec::before {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
