@@ -13,266 +13,574 @@
     </title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/peacock.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/site-font.css">
 
     <style>
-        /* Modern Design System Reset & Base Polish */
-        header {
-            padding-top: 0;
+        /* =========================================================
+           HEADER - one line with a wide menu
+           Thin brown strip on top (quick links), then one white bar:
+           logo and name on the left, menu on the right, search.
+           A menu item with sub-pages opens a full-width panel.
+           Below 1100px the menu folds into a drawer (button with
+           three lines), sub-pages open by tapping the arrow.
+           ========================================================= */
+
+        header.srs-header {
+            --h-brown: #612405;
+            --h-brown-deep: #3b1603;
+            --h-orange: #e0701b;
+            --h-gold: #c99a3c;
+            --h-line: #eadfd3;
+
+            position: sticky;
+            top: -32px;               /* the brown strip scrolls away, the white bar stays */
+            z-index: 1000;
             width: 100%;
-            position: relative;
-            background-color: #ffffff;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            padding: 0;
+            background: #ffffff;
+            box-shadow: 0 8px 22px -16px rgba(59, 22, 3, 0.45);
         }
 
-        /* Top Brown Ribbon Styles */
-        .top-ribbon {
-            background-color: #612405; /* Original Brown */
-            color: #ffffff;
-            padding: 7px 35px;
-            font-size: 12.5px;
+        /* ---------- top brown strip ---------- */
+        header.srs-header .top-ribbon {
+            height: 32px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 20px;
+            padding: 0 clamp(16px, 3vw, 40px);
+            background: var(--h-brown);
+            color: #ffffff;
+            font-size: 11.5px;
+            letter-spacing: 0.03em;
         }
-
-        .top-ribbon .ribbon-left {
-            font-weight: 500;
-            letter-spacing: 0.4px;
-            opacity: 0.95;
+        header.srs-header .ribbon-left {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0.92;
         }
-
-        .top-ribbon .ribbon-right {
+        header.srs-header .ribbon-right {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 20px;
+            white-space: nowrap;
         }
-
-        .top-ribbon .ribbon-right a {
+        header.srs-header .ribbon-right a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 12px;
-            letter-spacing: 0.3px;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .top-ribbon .ribbon-right a:hover {
-            color: #ffffff;
-            opacity: 1;
-        }
-
-        .top-ribbon .ribbon-right a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: #ffffff;
-            transition: width 0.25s ease;
-        }
-
-        .top-ribbon .ribbon-right a:hover::after {
-            width: 100%;
-        }
-
-        /* Top Branding Header - Reduced Top & Bottom Padding */
-        .top-header {
-            padding: 8px 35px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #ffffff;
-        }
-
-        .top-header .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .top-header .logo-area img {
-            height: 104px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
-        }
-
-        .top-header .logo-area h1 {
-            font-family: 'Merriweather', serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: #612405;
-            margin: 0;
-            letter-spacing: -0.2px;
-        }
-
-        /* Top Header Action Links */
-        .top-header .top-links {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-        }
-
-        .top-header .top-links a {
-            color: #333333;
-            text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 500;
             transition: color 0.2s ease;
         }
-
-        .top-header .top-links a:hover {
-            color: #612405;
+        header.srs-header .ribbon-right a:hover { color: #ffd9b8; }
+        header.srs-header .ribbon-right .sep {
+            width: 1px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        .top-header .top-links a[aria-label="Search"] {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background-color: #f5f5f7;
-            color: #444444;
-            transition: all 0.2s ease;
-        }
-
-        .top-header .top-links a[aria-label="Search"]:hover {
-            background-color: #612405;
-            color: #ffffff;
-            transform: scale(1.05);
-        }
-
-        /* Main Navigation Bar */
-        nav {
-            background-color: #FAF8F7;
-            border-top: 1px solid #efebe8;
-            border-bottom: 1px solid #e8e3de;
-        }
-
-        nav .main-menu {
-            list-style: none;
-            margin: 0;
-            padding: 0 12px;
-            display: flex;
-            background-color: #FAF8F7;
-        }
-
-        nav .main-menu > li {
+        /* ---------- white bar ---------- */
+        header.srs-header .hdr-bar {
             position: relative;
-        }
-
-        nav .main-menu > li > a {
             display: flex;
             align-items: center;
-            gap: 7px;
-            padding: 15px 22px;
-            color: #2c2c2c;
+            gap: clamp(12px, 2vw, 28px);
+            min-height: 96px;
+            padding: 0 clamp(16px, 3vw, 40px);
+            background: #ffffff;
+            border-bottom: 3px solid var(--h-orange);
+        }
+
+        header.srs-header .hdr-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 0 0 auto;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.2px;
-            transition: all 0.2s ease;
+        }
+        header.srs-header .hdr-logo img {
+            height: clamp(66px, 5.8vw, 84px);
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+        header.srs-header .hdr-name {
+            display: block;
+            max-width: none;
+            white-space: nowrap;
+            margin: 0;
+            color: var(--h-brown);
+            font-size: clamp(20px, 1.75vw, 25px);
+            font-weight: 700;
+            line-height: 1.22;
+        }
+        header.srs-header .hdr-name small {
+            display: block;
+            margin-top: 4px;
+            color: #9a3f12;
+            font-size: 10.5px;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        /* ---------- menu (desktop) ---------- */
+        header.srs-header nav.hdr-nav {
+            position: static;
+            display: block;
+            margin-left: auto;
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+        header.srs-header nav.hdr-nav .main-menu {
+            display: flex;
+            align-items: stretch;
+            justify-content: flex-end;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            background: none;
+        }
+        header.srs-header nav.hdr-nav .main-menu > li {
+            position: static;
+            display: flex;
+            align-items: stretch;
+        }
+        header.srs-header nav.hdr-nav .main-menu > li > a {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 clamp(8px, 0.95vw, 14px);
+            min-height: 96px;
+            background: none;
+            border: none;
+            color: var(--h-brown-deep);
+            font-size: clamp(12.5px, 1vw, 14px);
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.2s ease;
         }
-
-        nav .main-menu > li > a i {
-            font-size: 11px;
-            transition: transform 0.2s ease;
-            opacity: 0.7;
+        header.srs-header nav.hdr-nav .main-menu > li > a i {
+            font-size: 10px;
+            opacity: 0.6;
+            transition: transform 0.25s ease;
         }
-
-        nav .main-menu > li.active-tab > a,
-        nav .main-menu > li:hover > a {
-            background-color: #ffffff;
-            color: #612405;
+        /* orange line under the selected / pointed item */
+        header.srs-header nav.hdr-nav .main-menu > li > a::after {
+            content: '';
+            position: absolute;
+            left: clamp(8px, 0.95vw, 14px);
+            right: clamp(8px, 0.95vw, 14px);
+            bottom: 28px;
+            height: 3px;
+            background: var(--h-orange);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
         }
-
-        nav .main-menu > li:hover > a i {
+        header.srs-header nav.hdr-nav .main-menu > li:hover > a,
+        header.srs-header nav.hdr-nav .main-menu > li:focus-within > a,
+        header.srs-header nav.hdr-nav .main-menu > li.active-tab > a {
+            background: none;
+            color: var(--h-brown);
+        }
+        header.srs-header nav.hdr-nav .main-menu > li:hover > a::after,
+        header.srs-header nav.hdr-nav .main-menu > li.active-tab > a::after {
+            transform: scaleX(1);
+        }
+        header.srs-header nav.hdr-nav .main-menu > li:hover > a i {
             transform: rotate(180deg);
             opacity: 1;
         }
+        header.srs-header .sub-toggle { display: none; }
 
-        /* Enhanced Dropdown Menu */
-        nav .dropdown-menu {
-            display: none;
+        /* ---------- full-width panel ---------- */
+        header.srs-header nav.hdr-nav .mega {
             position: absolute;
-            top: 100%;
             left: 0;
-            min-width: 230px;
-            background-color: #612405; /* Original Brown */
-            list-style: none;
-            margin: 0;
-            padding: 8px 0;
-            border: none;
-            border-radius: 0 0 6px 6px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-            z-index: 1000;
+            right: 0;
+            top: calc(100% + 3px);
+            z-index: 1001;
+            display: block;
+            visibility: hidden;
             opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translateY(8px);
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            border-top: 1px solid var(--h-line);
+            box-shadow: 0 22px 34px -20px rgba(59, 22, 3, 0.5);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
         }
-
-        nav .main-menu > li:hover .dropdown-menu {
-            display: block;
+        header.srs-header nav.hdr-nav .main-menu > li:hover > .mega,
+        header.srs-header nav.hdr-nav .main-menu > li:focus-within > .mega {
+            visibility: visible;
             opacity: 1;
-            transform: translateY(0);
+            transform: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
         }
-
-        nav .dropdown-menu li {
-            border-bottom: none;
-            background-color: #612405;
+        header.srs-header .mega-inner {
+            display: grid;
+            grid-template-columns: 270px minmax(0, 1fr);
+            gap: clamp(20px, 3vw, 40px);
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 24px clamp(16px, 3vw, 40px) 28px;
         }
-
-        nav .dropdown-menu li a {
-            display: block;
-            padding: 11px 20px;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 500;
-            background-color: #612405;
-            transition: all 0.2s ease;
-        }
-
-        nav .dropdown-menu li:hover a,
-        nav .dropdown-menu li.active-child a {
-            background-color: rgba(255, 255, 255, 0.12);
+        header.srs-header .mega-lead {
+            padding: 20px 22px;
+            background: var(--h-brown);
+            border-bottom: 4px solid var(--h-gold);
             color: #ffffff;
+        }
+        header.srs-header .mega-lead strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 20px;
+            line-height: 1.25;
+        }
+        header.srs-header .mega-lead span {
+            display: block;
+            margin-bottom: 16px;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        header.srs-header .mega-lead a {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-bottom: 2px solid var(--h-orange);
+            padding-bottom: 2px;
+        }
+        header.srs-header .mega-lead a:hover { color: #ffd9b8; }
+
+        header.srs-header .mega-links {
+            columns: 2;
+            column-gap: clamp(20px, 3vw, 40px);
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        header.srs-header .mega-links li {
+            break-inside: avoid;
+            border-bottom: 1px solid #f1e6db;
+            background: none;
+        }
+        header.srs-header .mega-links li a {
+            display: block;
+            padding: 11px 4px 11px 18px;
+            position: relative;
+            background: none;
+            color: #2b1206;
+            font-size: 13.5px;
+            font-weight: 400;
+            text-decoration: none;
+            border: none;
+            transition: color 0.2s ease, padding-left 0.2s ease;
+        }
+        header.srs-header .mega-links li a::before {
+            content: '\203A';
+            position: absolute;
+            left: 4px;
+            color: var(--h-orange);
+            font-weight: 700;
+        }
+        header.srs-header .mega-links li a:hover,
+        header.srs-header .mega-links li.active-child a {
             padding-left: 24px;
+            color: var(--h-brown);
+            font-weight: 700;
         }
 
-        /* Responsive Mobile Adjustments */
-        @media (max-width: 992px) {
-            .top-ribbon {
-                flex-direction: column;
-                gap: 8px;
-                padding: 8px 15px;
-                text-align: center;
+        /* ---------- search and menu buttons ---------- */
+        header.srs-header .hdr-search,
+        header.srs-header .hdr-menu-btn {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: var(--h-brown);
+            color: #ffffff;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        header.srs-header .hdr-search:hover,
+        header.srs-header .hdr-menu-btn:hover { background: var(--h-orange); }
+        header.srs-header .hdr-menu-btn { display: none; border-radius: 0; }
+
+        /* =========================================================
+           TABLETS AND PHONES (below 1100px): menu becomes a drawer
+           ========================================================= */
+        @media (max-width: 1100px) {
+            header.srs-header .ribbon-left { display: none; }
+            header.srs-header .top-ribbon { justify-content: center; }
+            header.srs-header .ribbon-right {
+                gap: 14px;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+            header.srs-header .ribbon-right::-webkit-scrollbar { display: none; }
+            header.srs-header .ribbon-right {
+                max-width: 100%;
+                padding-right: 24px;
+                -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+                mask-image: linear-gradient(90deg, #000 85%, transparent);
             }
 
-            .top-header {
+            header.srs-header .hdr-bar { min-height: 76px; gap: 10px; }
+            header.srs-header .hdr-logo img { height: 60px; }
+            header.srs-header .hdr-name { font-size: clamp(14px, 3.2vw, 21px); }
+            header.srs-header .hdr-logo { min-width: 0; flex: 0 1 auto; }
+            header.srs-header .hdr-search { margin-left: auto; }
+            header.srs-header .hdr-menu-btn { display: inline-flex; }
+
+            /* the drawer */
+            header.srs-header nav.hdr-nav {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: calc(100% + 3px);
+                display: none !important;
+                max-height: calc(100vh - 110px);
+                overflow-y: auto;
+                margin: 0;
+                background: #ffffff;
+                box-shadow: 0 22px 34px -20px rgba(59, 22, 3, 0.55);
+            }
+            header.srs-header.menu-open nav.hdr-nav { display: block !important; }
+
+            header.srs-header nav.hdr-nav .main-menu {
                 flex-direction: column;
-                gap: 15px;
-                padding: 10px 15px;
-                text-align: center;
+                align-items: stretch;
+            }
+            header.srs-header nav.hdr-nav .main-menu > li {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                border-bottom: 1px solid #f1e6db;
+            }
+            header.srs-header nav.hdr-nav .main-menu > li > a {
+                min-height: 0;
+                padding: 15px 20px;
+                font-size: 15px;
+            }
+            header.srs-header nav.hdr-nav .main-menu > li > a i { display: none; }
+            header.srs-header nav.hdr-nav .main-menu > li > a::after { display: none; }
+            header.srs-header nav.hdr-nav .main-menu > li.active-tab > a {
+                color: var(--h-orange);
+                box-shadow: inset 4px 0 0 var(--h-orange);
             }
 
-            .top-header .logo-area {
-                flex-direction: column;
+            header.srs-header .sub-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 54px;
+                border: none;
+                border-left: 1px solid #f1e6db;
+                background: none;
+                color: var(--h-brown);
+                font-size: 14px;
+                cursor: pointer;
             }
+            header.srs-header .sub-toggle i { transition: transform 0.25s ease; }
+            header.srs-header li.sub-open > .sub-toggle i { transform: rotate(180deg); }
 
-            nav .main-menu {
-                flex-wrap: wrap;
+            /* sub-pages open in place under their item */
+            header.srs-header nav.hdr-nav .mega,
+            header.srs-header nav.hdr-nav .main-menu > li:hover > .mega,
+            header.srs-header nav.hdr-nav .main-menu > li:focus-within > .mega {
+                grid-column: 1 / -1;
+                position: static;
+                display: none;
+                visibility: visible;
+                opacity: 1;
+                transform: none;
+                border-top: 1px solid #f1e6db;
+                box-shadow: none;
+                background: #fbf6f0;
+                transition: none;
+            }
+            header.srs-header nav.hdr-nav .main-menu > li.sub-open > .mega { display: block; }
+            header.srs-header .mega-inner { display: block; padding: 4px 0 8px; }
+            header.srs-header .mega-lead { display: none; }
+            header.srs-header .mega-links { columns: 1; }
+            header.srs-header .mega-links li { border-bottom: none; }
+            header.srs-header .mega-links li a { padding: 11px 20px 11px 40px; font-size: 14px; }
+            header.srs-header .mega-links li a::before { left: 26px; }
+            header.srs-header .mega-links li a:hover,
+            header.srs-header .mega-links li.active-child a { padding-left: 40px; }
+        }
+
+        @media (max-width: 600px) {
+            header.srs-header .hdr-bar { gap: 8px; padding: 0 12px; }
+            header.srs-header .hdr-logo { gap: 8px; }
+            header.srs-header .hdr-name { font-size: clamp(13px, 4.1vw, 17px); }
+            header.srs-header .hdr-logo img { height: 46px; }
+            header.srs-header .hdr-search,
+            header.srs-header .hdr-menu-btn { width: 36px; height: 36px; font-size: 14px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            header.srs-header * { transition: none !important; }
+        }
+
+        /* =========================================================
+           POLISH
+           ========================================================= */
+
+        /* top strip: small icons, gold hairline at the bottom */
+        header.srs-header .top-ribbon { border-bottom: 1px solid rgba(201, 154, 60, 0.55); }
+        header.srs-header .top-ribbon i {
+            margin-right: 6px;
+            color: #f0b67c;
+            font-size: 10.5px;
+        }
+        header.srs-header .ribbon-right a { display: inline-flex; align-items: center; }
+
+        /* white bar: soft warm tint, brown line with orange on top */
+        header.srs-header .hdr-bar {
+            background: linear-gradient(180deg, #ffffff 0%, #fffaf4 100%);
+            border-bottom: 3px solid var(--h-orange);
+            box-shadow: 0 3px 0 -1px var(--h-brown);
+            transition: min-height 0.3s ease;
+        }
+
+        /* logo and name: gold divider between them */
+        header.srs-header .hdr-logo { gap: 16px; }
+        header.srs-header .hdr-logo img { transition: height 0.3s ease; }
+        header.srs-header .hdr-name {
+            padding-left: 16px;
+            border-left: 2px solid var(--h-gold);
+            letter-spacing: 0.01em;
+            transition: font-size 0.3s ease;
+        }
+
+        /* menu: hover turns the text orange-brown, rounded gradient underline */
+        header.srs-header nav.hdr-nav .main-menu > li > a { transition: color 0.2s ease, min-height 0.3s ease; }
+        header.srs-header nav.hdr-nav .main-menu > li:hover > a { color: #b8542b; }
+        header.srs-header nav.hdr-nav .main-menu > li.active-tab > a { color: var(--h-brown); }
+        header.srs-header nav.hdr-nav .main-menu > li > a::after {
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--h-orange), var(--h-gold));
+        }
+
+        /* search: outlined circle that fills on hover */
+        header.srs-header .hdr-search {
+            background: #ffffff;
+            color: var(--h-brown);
+            box-shadow: inset 0 0 0 2px var(--h-brown);
+        }
+        header.srs-header .hdr-search:hover {
+            background: var(--h-brown);
+            color: #ffffff;
+        }
+
+        /* smaller laptops: tighter spacing so everything fits on one line */
+        @media (min-width: 1101px) and (max-width: 1300px) {
+            header.srs-header .hdr-bar { gap: 12px; }
+            header.srs-header .hdr-logo { gap: 10px; }
+            header.srs-header .hdr-logo img { height: 62px; }
+            header.srs-header .hdr-name { padding-left: 10px; font-size: 19px; }
+            header.srs-header nav.hdr-nav .main-menu > li > a { padding: 0 8px; font-size: 12.5px; }
+            header.srs-header nav.hdr-nav .main-menu > li > a::after { left: 8px; right: 8px; }
+        }
+
+        /* compact bar after scrolling (desktop) */
+        @media (min-width: 1101px) {
+            header.srs-header.is-scrolled .hdr-bar { min-height: 72px; }
+            header.srs-header.is-scrolled nav.hdr-nav .main-menu > li > a { min-height: 72px; }
+            header.srs-header.is-scrolled nav.hdr-nav .main-menu > li > a::after { bottom: 18px; }
+            header.srs-header.is-scrolled .hdr-logo img { height: 56px; }
+            header.srs-header.is-scrolled .hdr-name { font-size: 20px; }
+        }
+        /* compact bar after scrolling (tablets and phones) */
+        @media (max-width: 1100px) {
+            header.srs-header.is-scrolled .hdr-bar { min-height: 64px; }
+            header.srs-header.is-scrolled .hdr-logo img { height: 46px; }
+            header.srs-header .hdr-logo { gap: 12px; }
+            header.srs-header .hdr-name { padding-left: 12px; }
+        }
+        @media (max-width: 600px) {
+            header.srs-header .hdr-logo { gap: 8px; }
+            header.srs-header .hdr-name { padding-left: 8px; border-left-width: 1.5px; }
+            header.srs-header.is-scrolled .hdr-logo img { height: 40px; }
+            header.srs-header.is-scrolled .hdr-bar { min-height: 58px; }
+        }
+
+        /* =========================================================
+           MORE POLISH
+           ========================================================= */
+
+        /* top strip: thin dividers between the links */
+        header.srs-header .ribbon-right a + a { position: relative; }
+        header.srs-header .ribbon-right a + a::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            width: 1px;
+            height: 10px;
+            margin-top: -5px;
+            background: rgba(255, 255, 255, 0.22);
+        }
+        header.srs-header .ribbon-right .sep { display: none; }
+        header.srs-header .ribbon-left { letter-spacing: 0.06em; }
+
+        /* white bar: faint peacock-feather pattern that fades in towards the right */
+        header.srs-header .hdr-bar { isolation: isolate; }
+        header.srs-header .hdr-bar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: url('${pageContext.request.contextPath}/Home/peacock/pattern.svg') repeat;
+            background-size: 46px 52px;
+            opacity: 0.07;
+            -webkit-mask-image: linear-gradient(90deg, transparent 22%, #000 70%);
+            mask-image: linear-gradient(90deg, transparent 22%, #000 70%);
+            pointer-events: none;
+        }
+
+        /* menu: small gold diamonds between the items */
+        header.srs-header nav.hdr-nav .main-menu > li + li > a::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            width: 4px;
+            height: 4px;
+            margin-top: -2px;
+            background: var(--h-gold);
+            opacity: 0.75;
+            transform: rotate(45deg);
+        }
+        header.srs-header nav.hdr-nav .main-menu > li > a { font-weight: 700; letter-spacing: 0.01em; }
+
+        /* school name: a touch more presence */
+        header.srs-header .hdr-name { color: #57210a; text-shadow: 0 1px 0 #ffffff; }
+
+        @media (max-width: 1100px) {
+            header.srs-header nav.hdr-nav .main-menu > li + li > a::before { display: none; }
+            header.srs-header .ribbon-right a + a::before { left: -7px; }
+            header.srs-header .hdr-bar::before {
+                -webkit-mask-image: linear-gradient(90deg, transparent 40%, #000 90%);
+                mask-image: linear-gradient(90deg, transparent 40%, #000 90%);
             }
         }
     </style>
@@ -280,78 +588,140 @@
 
 <body>
 
-    <header>
-        <!-- Top Brown Ribbon -->
+    <header class="srs-header">
+
+        <!-- Top brown strip -->
         <div class="top-ribbon">
             <div class="ribbon-left">
-                Sandur Residential School | Affiliated to CISCE
+                <i class="fa-solid fa-location-dot"></i> Shivapur, Sandur &middot; Ballari District, Karnataka &middot; Affiliated to CISCE
             </div>
             <div class="ribbon-right">
-                <a href="${pageContext.request.contextPath}/homepage?slug=admissions">Admissions</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=Current job openings">Recruitment</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=alumni">Alumni</a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=calendar"><i class="fa-regular fa-calendar"></i>Calendar</a>
+                <a href="#"><i class="fa-solid fa-link"></i>Quick Links</a>
+                <a href="#"><i class="fa-solid fa-user-lock"></i>Portal Login</a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=admissions"><i class="fa-solid fa-school"></i>Admissions</a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=Current job openings"><i class="fa-solid fa-briefcase"></i>Recruitment</a>
+                <a href="${pageContext.request.contextPath}/homepage?slug=alumni"><i class="fa-solid fa-user-graduate"></i>Alumni</a>
             </div>
         </div>
 
-        <!-- Top Header Logo & Quick Actions -->
-        <div class="top-header">
-            <div class="logo-area">
+        <!-- Logo, menu and search in one line -->
+        <div class="hdr-bar">
+
+            <a class="hdr-logo" href="${pageContext.request.contextPath}/homepage">
                 <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
-                <h1>Sandur Residential School</h1>
-            </div>
+                <h1 class="hdr-name">Sandur Residential School</h1>
+            </a>
 
-            <div class="top-links">
-                <a href="${pageContext.request.contextPath}/homepage?slug=calendar">Calendar</a>
-                <a href="#">Quick Links</a>
-                <a href="#">Portal Login</a>
-                <a href="#" aria-label="Search"><i class="fa fa-search"></i></a>
-            </div>
-        </div>
+            <nav class="hdr-nav" aria-label="Main menu">
+                <ul class="main-menu">
+                    <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
 
-        <div class="menu-toggle"><i class="fa fa-bars"></i></div>
-
-        <!-- Main Navigation Bar -->
-        <nav>
-            <ul class="main-menu">
-                <c:set var="currentSlug" value="${not empty param.slug ? param.slug : (not empty pageData.slug ? pageData.slug : 'home')}" />
-
-                <c:forEach var="pg" items="${pagesList}">
-                    <c:if test="${pg.slug ne 'home'}">
-                        <c:set var="isChildActive" value="false" />
-
-                        <c:if test="${not empty pg.children}">
-                            <c:forEach var="child" items="${pg.children}">
-                                <c:if test="${child.slug eq currentSlug}">
-                                    <c:set var="isChildActive" value="true" />
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
-
-                        <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
-                            <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
-                                <c:out value="${pg.title}" />
-                                <c:if test="${not empty pg.children}">
-                                    <i class="fa fa-angle-down"></i>
-                                </c:if>
-                            </a>
+                    <c:forEach var="pg" items="${pagesList}">
+                        <c:if test="${pg.slug ne 'home'}">
+                            <c:set var="isChildActive" value="false" />
 
                             <c:if test="${not empty pg.children}">
-                                <ul class="dropdown-menu">
-                                    <c:forEach var="child" items="${pg.children}">
-                                        <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
-                                            <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
-                                                <c:out value="${child.title}" />
-                                            </a>
-                                        </li>
-                                    </c:forEach>
-                                </ul>
+                                <c:forEach var="child" items="${pg.children}">
+                                    <c:if test="${child.slug eq currentSlug}">
+                                        <c:set var="isChildActive" value="true" />
+                                    </c:if>
+                                </c:forEach>
                             </c:if>
-                        </li>
-                    </c:if>
-                </c:forEach>
-            </ul>
-        </nav>
+
+                            <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
+                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
+                                    <c:out value="${pg.title}" />
+                                    <c:if test="${not empty pg.children}">
+                                        <i class="fa fa-angle-down"></i>
+                                    </c:if>
+                                </a>
+
+                                <c:if test="${not empty pg.children}">
+                                    <button type="button" class="sub-toggle" aria-label="Show <c:out value='${pg.title}' /> pages" aria-expanded="false">
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+
+                                    <div class="mega">
+                                        <div class="mega-inner">
+                                            <div class="mega-lead">
+                                                <strong><c:out value="${pg.title}" /></strong>
+                                                <span>Sandur Residential School</span>
+                                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">Go to <c:out value="${pg.title}" /> &rarr;</a>
+                                            </div>
+                                            <ul class="mega-links">
+                                                <c:forEach var="child" items="${pg.children}">
+                                                    <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
+                                                        <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
+                                                            <c:out value="${child.title}" />
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </c:if>
+                            </li>
+                        </c:if>
+                    </c:forEach>
+                </ul>
+            </nav>
+
+            <a href="#" class="hdr-search" aria-label="Search"><i class="fa fa-search"></i></a>
+
+            <button type="button" class="hdr-menu-btn" aria-label="Open menu" aria-expanded="false">
+                <i class="fa fa-bars"></i>
+            </button>
+
+        </div>
     </header>
+
+    <script>
+        /* Header: menu drawer and sub-page arrows on tablets and phones */
+        (function () {
+            var header = document.querySelector("header.srs-header");
+            if (!header) return;
+            var btn = header.querySelector(".hdr-menu-btn");
+
+            btn.addEventListener("click", function () {
+                var open = header.classList.toggle("menu-open");
+                btn.setAttribute("aria-expanded", open ? "true" : "false");
+                btn.querySelector("i").className = open ? "fa fa-xmark" : "fa fa-bars";
+            });
+
+            header.querySelectorAll(".sub-toggle").forEach(function (t) {
+                t.addEventListener("click", function () {
+                    var li = t.parentElement;
+                    var open = li.classList.toggle("sub-open");
+                    t.setAttribute("aria-expanded", open ? "true" : "false");
+                });
+            });
+
+            /* open the section of the current page when the drawer is used */
+            /* compact white bar once the page is scrolled */
+            var ticking = false;
+            function onScroll() {
+                header.classList.toggle("is-scrolled", window.scrollY > 60);
+                ticking = false;
+            }
+            window.addEventListener("scroll", function () {
+                if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+            }, { passive: true });
+            onScroll();
+
+            var current = header.querySelector(".main-menu > li.active-tab");
+            if (current && current.querySelector(".sub-toggle")) current.classList.add("sub-open");
+
+            /* close the drawer when the screen grows back to desktop size */
+            window.addEventListener("resize", function () {
+                if (window.innerWidth > 1100 && header.classList.contains("menu-open")) {
+                    header.classList.remove("menu-open");
+                    btn.setAttribute("aria-expanded", "false");
+                    btn.querySelector("i").className = "fa fa-bars";
+                }
+            });
+        })();
+    </script>
 
 </body>
 </html>
