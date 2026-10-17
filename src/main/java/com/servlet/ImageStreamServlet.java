@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.bean.PhotoStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,12 +15,16 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @WebServlet("/imageStream")
 public class ImageStreamServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final int BUFFER_SIZE = 8192;
+
+    /** while the file_key column does not exist yet (before the move), skip the bucket check; re-check every 10 minutes */
+    private static volatile long skipKeyUntil = 0;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,18 +46,42 @@ public class ImageStreamServlet extends HttpServlet {
             return;
         }
 
-        // Standardized 'img_blob' alias to prevent ResultSet column reading mismatch
-        String sql;
-        if ("news".equalsIgnoreCase(type)) {
-            sql = "SELECT image AS img_blob, 'image/jpeg' AS image_type, OCTET_LENGTH(image) AS image_size " +
-                  "FROM latest_news WHERE id = ?";
-        } else {
-            sql = "SELECT image_data AS img_blob, image_type, OCTET_LENGTH(image_data) AS image_size " +
-                  "FROM section_images WHERE id = ?";
-        }
+        boolean news = "news".equalsIgnoreCase(type);
 
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtil.getConnection("SRS")) {
+
+            // 1) photo already moved to the bucket? send the browser there
+            if (PhotoStore.enabled() && System.currentTimeMillis() > skipKeyUntil) {
+                String key = null;
+                try (PreparedStatement kp = conn.prepareStatement(news
+                        ? "SELECT file_key FROM latest_news WHERE id = ?"
+                        : "SELECT file_key FROM section_images WHERE id = ?")) {
+                    kp.setLong(1, imageId);
+                    try (ResultSet kr = kp.executeQuery()) {
+                        if (kr.next()) key = kr.getString(1);
+                    }
+                } catch (SQLException noColumnYet) {
+                    skipKeyUntil = System.currentTimeMillis() + 10L * 60L * 1000L;
+                }
+                if (key != null && !key.trim().isEmpty()) {
+                    response.setHeader("Cache-Control", "private, max-age=2400");
+                    response.sendRedirect(PhotoStore.url(key.trim()));
+                    return;
+                }
+            }
+
+            // 2) otherwise read it from MySQL as before
+            // Standardized 'img_blob' alias to prevent ResultSet column reading mismatch
+            String sql;
+            if (news) {
+                sql = "SELECT image AS img_blob, 'image/jpeg' AS image_type, OCTET_LENGTH(image) AS image_size " +
+                      "FROM latest_news WHERE id = ?";
+            } else {
+                sql = "SELECT image_data AS img_blob, image_type, OCTET_LENGTH(image_data) AS image_size " +
+                      "FROM section_images WHERE id = ?";
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, imageId);
 
@@ -99,6 +128,7 @@ public class ImageStreamServlet extends HttpServlet {
                         outputStream.flush();
                     }
                 }
+            }
             }
         } catch (Exception e) {
             e.printStackTrace();
