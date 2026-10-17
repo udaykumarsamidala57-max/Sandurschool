@@ -1,4 +1,4 @@
-<%@ page import="java.sql.*, java.util.*, java.text.SimpleDateFormat, java.util.Base64, com.bean.DBUtil" %>
+<%@ page import="java.sql.*, java.util.*, java.text.SimpleDateFormat, java.util.Base64, com.bean.DBUtil, com.bean.PhotoStore" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -7,8 +7,25 @@ if (request.getAttribute("events") == null) {
 
     List<Map<String, Object>> eventList = new ArrayList<>();
 
+    // photos moved to the bucket: use their link instead of loading the picture from MySQL
+    boolean evUseBucket = false;
+    if (PhotoStore.enabled()) {
+        try (Connection c0 = DBUtil.getConnection("SRS");
+             PreparedStatement p0 = c0.prepareStatement(
+                 "SELECT 1 FROM information_schema.columns WHERE table_schema = DATABASE() " +
+                 "AND table_name = 'upcoming_events' AND column_name = 'file_key'");
+             ResultSet r0 = p0.executeQuery()) {
+            evUseBucket = r0.next();
+        } catch (Exception e0) {
+            evUseBucket = false;
+        }
+    }
+
     String sql = "SELECT id, event_date, event_name, time_from, time_to, " +
-                 "place, event_description, image_blob " +
+                 "place, event_description, " +
+                 (evUseBucket
+                     ? "file_key, CASE WHEN file_key IS NULL OR file_key = '' THEN image_blob END AS image_blob "
+                     : "image_blob ") +
                  "FROM upcoming_events " +
                  "WHERE event_date >= CURDATE() " +
                  "ORDER BY event_date ASC";
@@ -68,8 +85,11 @@ if (request.getAttribute("events") == null) {
             String rawDesc = rs.getString("event_description");
             event.put("eventDescription", rawDesc != null ? rawDesc : "");
 
-            byte[] imgBytes = rs.getBytes("image_blob");
-            if (imgBytes != null && imgBytes.length > 0) {
+            String evFileKey = evUseBucket ? rs.getString("file_key") : null;
+            byte[] imgBytes = (evFileKey != null && !evFileKey.trim().isEmpty()) ? null : rs.getBytes("image_blob");
+            if (evFileKey != null && !evFileKey.trim().isEmpty()) {
+                event.put("imageBase64", PhotoStore.url(evFileKey.trim()));
+            } else if (imgBytes != null && imgBytes.length > 0) {
                 String mimeType = "image/jpeg";
 
                 if (imgBytes.length >= 8 &&
