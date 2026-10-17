@@ -161,3 +161,4 @@
 </footer>
 
 <script src="${pageContext.request.contextPath}/js/reveal.js" defer></script>
+<script src="${pageContext.request.contextPath}/js/protect-photos.js" defer></script>
