@@ -52,7 +52,7 @@
             position: relative;
             max-width: 1180px; margin: 0 auto;
             padding: 54px 24px 58px;
-            display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end;
+            display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
         }
         .alu-eyebrow {
             display: inline-flex; align-items: center; gap: 12px;
@@ -69,11 +69,50 @@
             margin: 16px 0 0; max-width: 620px;
             color: rgba(255,255,255,.78); font-size: 15.5px; line-height: 1.8;
         }
-        .alu-facts { display: flex; gap: 0; border: 1px solid rgba(255,255,255,.18); }
-        .alu-facts div { padding: 14px 22px; min-width: 128px; }
-        .alu-facts div + div { border-left: 1px solid rgba(255,255,255,.18); }
-        .alu-facts b { display: block; font-size: 22px; font-weight: 900; color: #fff; }
-        .alu-facts span { display: block; margin-top: 3px; color: rgba(255,255,255,.62); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; }
+        /* ---------- year-wise dashboard ---------- */
+        .alu-dash {
+            width: 440px; max-width: 100%;
+            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(0,0,0,.18);
+        }
+        .alu-dash-hd {
+            display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+            padding: 16px 20px 14px; border-bottom: 1px solid rgba(255,255,255,.12);
+        }
+        .alu-dash .k { display: block; color: var(--gold); font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+        .alu-dash .total { display: block; margin-top: 4px; font-size: 36px; font-weight: 900; line-height: 1; color: #fff; }
+        .alu-dash .side { display: flex; }
+        .alu-dash .side div { padding: 0 0 0 16px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,.14); text-align: right; }
+        .alu-dash .side b { display: block; font-size: 17px; font-weight: 900; color: #fff; }
+        .alu-dash .side span { display: block; margin-top: 2px; color: rgba(255,255,255,.55); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+        .alu-chart {
+            display: flex; align-items: flex-end; gap: 5px;
+            height: 150px; padding: 14px 20px 0;
+            overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent;
+        }
+        .alu-chart .col {
+            flex: 1 0 26px; max-width: 46px; height: 100%;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+        }
+        .alu-chart .track { flex: 1; width: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-top: 20px; }
+        .alu-chart .v { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.85); margin-bottom: 4px; }
+        .alu-chart .bar {
+            display: block; width: 100%; flex: none;
+            background: linear-gradient(180deg, var(--orange), #b9530d);
+            transform-origin: bottom; animation: alu-grow .7s cubic-bezier(.2,.8,.2,1) both;
+            transition: background .2s ease;
+        }
+        .alu-chart .col:nth-child(2) .bar { animation-delay: .04s; } .alu-chart .col:nth-child(3) .bar { animation-delay: .08s; }
+        .alu-chart .col:nth-child(4) .bar { animation-delay: .12s; } .alu-chart .col:nth-child(5) .bar { animation-delay: .16s; }
+        .alu-chart .col:nth-child(n+6) .bar { animation-delay: .2s; }
+        @keyframes alu-grow { from { transform: scaleY(0); } to { transform: none; } }
+        .alu-chart .y { margin-top: 6px; padding-bottom: 8px; font-size: 10px; color: rgba(255,255,255,.6); letter-spacing: .02em; }
+        .alu-chart .col:hover .bar { background: var(--gold); }
+        .alu-chart .col.mine .bar { background: #fff; }
+        .alu-chart .col.mine .y { color: #fff; font-weight: 700; }
+        .alu-dash-ft { margin: 0; padding: 8px 20px 12px; border-top: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.5); font-size: 11px; }
+        .alu-dash-empty { margin: 0; padding: 26px 20px 28px; color: rgba(255,255,255,.75); font-size: 14px; line-height: 1.6; }
+        .alu-dash-empty i { color: var(--gold); margin-right: 10px; }
 
         /* ---------- layout ---------- */
         .alu-body {
@@ -328,6 +367,8 @@
 
         /* ---------- small screens ---------- */
         @media (max-width: 1000px) {
+            .alu-band-in { grid-template-columns: minmax(0, 1fr); }
+            .alu-dash { width: 100%; max-width: 560px; }
             .alu-body { grid-template-columns: 1fr; gap: 24px; padding-top: 24px; }
             .alu-side { position: static; grid-template-columns: 1fr; }
             .alu-side .alu-steps, .alu-side .alu-help { display: none; }
@@ -342,8 +383,13 @@
         .alu-mobbar p { margin: 0 0 8px; display: flex; justify-content: space-between; }
         .alu-mobbar p b { color: var(--brown); }
         @media (max-width: 760px) {
-            .alu-band-in { grid-template-columns: 1fr; padding: 38px 18px 42px; gap: 24px; }
-            .alu-facts div { padding: 12px 16px; min-width: 0; flex: 1; }
+            .alu-band-in { grid-template-columns: minmax(0, 1fr); padding: 38px 18px 42px; gap: 24px; }
+            .alu-band-in > * { min-width: 0; }
+            .alu-dash-hd { padding: 14px 16px 12px; }
+            .alu-dash .side div { margin-left: 12px; padding-left: 12px; }
+            .alu-chart { padding: 14px 16px 0; }
+            .alu-dash { width: 100%; }
+            .alu-dash .total { font-size: 30px; }
             .alu-body { padding: 18px 12px 56px; }
             .alu-sec { grid-template-columns: 1fr; padding: 26px 18px 28px; }
             .alu-sec .num { font-size: 13px; margin-bottom: 8px; letter-spacing: .14em; }
@@ -379,13 +425,40 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <c:if test="${empty doneNo}">
-                <div class="alu-facts" aria-hidden="true">
-                    <div><b>1959</b><span>Established</span></div>
-                    <div><b>6</b><span>Short sections</span></div>
-                    <div><b>3 min</b><span>To complete</span></div>
+            <%-- year-wise count of registered alumni --%>
+            <div class="alu-dash">
+                <div class="alu-dash-hd">
+                    <div>
+                        <span class="k">Registered alumni</span>
+                        <b class="total">${alumniTotal}</b>
+                    </div>
+                    <c:if test="${alumniTotal > 0}">
+                        <div class="side">
+                            <div><b>${batchTotal}</b><span>${batchTotal == 1 ? 'Batch' : 'Batches'}</span></div>
+                            <div><b>${topBatch.year}</b><span>Largest batch</span></div>
+                        </div>
+                    </c:if>
                 </div>
-            </c:if>
+                <c:choose>
+                    <c:when test="${alumniTotal > 0}">
+                        <div class="alu-chart" id="aluChart" role="img" aria-label="Registered alumni by batch year">
+                            <c:forEach var="b" items="${batchCounts}">
+                                <div class="col" data-year="${b.year}" title="Batch of ${b.year}: ${b.count} registered">
+                                    <span class="track">
+                                        <span class="v">${b.count}</span>
+                                        <span class="bar" style="height:${b.pct}%"></span>
+                                    </span>
+                                    <span class="y">${b.year}</span>
+                                </div>
+                            </c:forEach>
+                        </div>
+                        <p class="alu-dash-ft">Registrations by batch year</p>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="alu-dash-empty"><i class="fa-solid fa-user-graduate"></i>No registrations yet. Be the first from your batch.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
     </section>
 
@@ -661,6 +734,13 @@
         if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, done); else done();
     });
 
+    var chart = $('aluChart');
+    if (chart) chart.scrollLeft = chart.scrollWidth;      // newest batches in view
+    function markBatch(year) {
+        if (!chart) return;
+        chart.querySelectorAll('.col').forEach(function (c) { c.classList.toggle('mine', String(year) === c.getAttribute('data-year')); });
+    }
+
     var form = $('aluForm');
     if (!form) return;
 
@@ -754,6 +834,7 @@
         $('mcYears').textContent = f && t && t >= f ? f + ' – ' + t : (f ? f + ' – ' : '—');
         var batch = yr('passingXii') || yr('passingX') || (t && t >= (f || 0) ? t : null);
         $('mcBatch').textContent = batch || '—';
+        markBatch(batch);
 
         var note = $('batchNote');
         if (f && t && t >= f && f >= 1959) {

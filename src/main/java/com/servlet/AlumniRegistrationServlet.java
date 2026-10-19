@@ -204,9 +204,50 @@ public class AlumniRegistrationServlet extends HttpServlet {
         pageData.setSlug("alumni");
         req.setAttribute("pageData", pageData);
         req.setAttribute("pagesList", loadMenu());
+        loadBatchCounts(req);
 
         resp.setHeader("Cache-Control", "no-store");
         req.getRequestDispatcher("/alumni_registration.jsp").forward(req, resp);
+    }
+
+    /**
+     * Year-wise count of registered alumni for the small dashboard at the top.
+     * Batch year = year of passing XII / PUC, else X Class, else last year at SRS.
+     * Rejected registrations are not counted.
+     */
+    private void loadBatchCounts(HttpServletRequest req) {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        int total = 0, max = 0;
+        String sql = "SELECT COALESCE(passing_year_xii, passing_year_x, study_to_year) AS batch, COUNT(*) AS cnt "
+                   + "FROM alumni_registrations WHERE status <> 'REJECTED' "
+                   + "GROUP BY batch ORDER BY batch ASC";
+        try (Connection conn = DBUtil.getConnection("SRS");
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int n = rs.getInt("cnt");
+                Map<String, Object> r = new LinkedHashMap<>();
+                r.put("year", rs.getInt("batch"));
+                r.put("count", n);
+                rows.add(r);
+                total += n;
+                max = Math.max(max, n);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();            // e.g. table not created yet: show an empty dashboard
+        }
+        for (Map<String, Object> r : rows) {
+            int n = (Integer) r.get("count");
+            r.put("pct", max == 0 ? 0 : Math.max(6, Math.round(n * 100f / max)));
+        }
+        req.setAttribute("batchCounts", rows);
+        req.setAttribute("alumniTotal", total);
+        req.setAttribute("batchTotal", rows.size());
+        Map<String, Object> top = null;
+        for (Map<String, Object> r : rows) {
+            if (top == null || (Integer) r.get("count") > (Integer) top.get("count")) top = r;
+        }
+        req.setAttribute("topBatch", top);
     }
 
     /** the website menu, same as on every other page */
