@@ -124,6 +124,21 @@
       gap: 40px;
     }
   }
+
+  /* credit line at the very bottom */
+  .footer-credit {
+    max-width: 1250px;
+    margin: 40px auto 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.78);
+    position: relative;
+    z-index: 1;
+  }
+  .footer-credit strong { color: #ffffff; font-weight: 700; }
 </style>
 
 <footer>
@@ -158,6 +173,11 @@
         </div>
 
     </div>
+
+    <div class="footer-credit">
+        Developed and Maintained by : <strong>SSS IT - Office Central</strong>
+    </div>
 </footer>
 
 <script src="${pageContext.request.contextPath}/js/reveal.js" defer></script>
+<script src="${pageContext.request.contextPath}/js/protect-photos.js" defer></script>

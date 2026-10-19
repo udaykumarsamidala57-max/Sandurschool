@@ -601,7 +601,7 @@
                 <a href="#"><i class="fa-solid fa-user-lock"></i>Portal Login</a>
                 <a href="${pageContext.request.contextPath}/homepage?slug=admissions"><i class="fa-solid fa-school"></i>Admissions</a>
                 <a href="${pageContext.request.contextPath}/homepage?slug=Current job openings"><i class="fa-solid fa-briefcase"></i>Recruitment</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=alumni"><i class="fa-solid fa-user-graduate"></i>Alumni</a>
+                <a href="${pageContext.request.contextPath}/alumni-registration"><i class="fa-solid fa-user-graduate"></i>Alumni</a>
             </div>
         </div>
 
@@ -629,8 +629,12 @@
                                 </c:forEach>
                             </c:if>
 
+                            <c:set var="pgHref" value="${pageContext.request.contextPath}/homepage?slug=${pg.slug}" />
+                            <c:if test="${fn:toLowerCase(fn:trim(pg.slug)) eq 'alumni'}">
+                                <c:set var="pgHref" value="${pageContext.request.contextPath}/alumni-registration" />
+                            </c:if>
                             <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
-                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">
+                                <a href="${pgHref}">
                                     <c:out value="${pg.title}" />
                                     <c:if test="${not empty pg.children}">
                                         <i class="fa fa-angle-down"></i>
@@ -647,12 +651,16 @@
                                             <div class="mega-lead">
                                                 <strong><c:out value="${pg.title}" /></strong>
                                                 <span>Sandur Residential School</span>
-                                                <a href="${pageContext.request.contextPath}/homepage?slug=${pg.slug}">Go to <c:out value="${pg.title}" /> &rarr;</a>
+                                                <a href="${pgHref}">Go to <c:out value="${pg.title}" /> &rarr;</a>
                                             </div>
                                             <ul class="mega-links">
                                                 <c:forEach var="child" items="${pg.children}">
+                                                    <c:set var="childHref" value="${pageContext.request.contextPath}/homepage?slug=${child.slug}" />
+                                                    <c:if test="${fn:toLowerCase(fn:trim(child.slug)) eq 'alumni'}">
+                                                        <c:set var="childHref" value="${pageContext.request.contextPath}/alumni-registration" />
+                                                    </c:if>
                                                     <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
-                                                        <a href="${pageContext.request.contextPath}/homepage?slug=${child.slug}">
+                                                        <a href="${childHref}">
                                                             <c:out value="${child.title}" />
                                                         </a>
                                                     </li>
