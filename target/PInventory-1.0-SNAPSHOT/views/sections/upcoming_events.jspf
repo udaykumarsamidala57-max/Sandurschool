@@ -8,22 +8,22 @@ if (request.getAttribute("events") == null) {
     List<Map<String, Object>> eventList = new ArrayList<>();
 
     // photos come from the bucket: MySQL only stores where each photo is (file_key)
-    String sql = "SELECT id, event_date, event_name, time_from, time_to, " +
-                 "place, event_description, file_key " +
-                 "FROM upcoming_events " +
-                 "WHERE event_date >= CURDATE() " +
-                 "ORDER BY event_date ASC";
-
     SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMMM yyyy");
     SimpleDateFormat inputTimeFormat = new SimpleDateFormat("HH:mm:ss");
     SimpleDateFormat displayTimeFormat = new SimpleDateFormat("hh:mm a");
 
-    try (
-        Connection conn = DBUtil.getConnection("SRS");
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery()
-    ) {
+    try (Connection conn = DBUtil.getConnection("SRS")) {
+        boolean hasEventKey = PhotoStore.hasColumn(conn, "upcoming_events", "file_key");
+        boolean hasEventImage = PhotoStore.hasColumn(conn, "upcoming_events", "image_blob");
+        String sql = "SELECT id, event_date, event_name, time_from, time_to, " +
+                     "place, event_description, " + (hasEventKey ? "file_key" : "NULL AS file_key") + ", " +
+                     (hasEventImage ? "image_blob" : "NULL AS image_blob") + " " +
+                     "FROM upcoming_events " +
+                     "WHERE event_date >= CURDATE() " +
+                     "ORDER BY event_date ASC";
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
             Map<String, Object> event = new HashMap<>();
 
@@ -70,13 +70,15 @@ if (request.getAttribute("events") == null) {
             event.put("eventDescription", rawDesc != null ? rawDesc : "");
 
             String evFileKey = rs.getString("file_key");
-            if (evFileKey != null && !evFileKey.trim().isEmpty() && PhotoStore.enabled()) {
-                event.put("imageBase64", PhotoStore.url(evFileKey.trim()));
+            byte[] legacyImage = hasEventImage ? rs.getBytes("image_blob") : null;
+            if ((evFileKey != null && !evFileKey.trim().isEmpty()) || (legacyImage != null && legacyImage.length > 0)) {
+                event.put("imageBase64", request.getContextPath() + "/imageStream?type=event&id=" + rs.getInt("id"));
             } else {
                 event.put("imageBase64", "");
             }
 
             eventList.add(event);
+        }
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -235,7 +237,7 @@ if (request.getAttribute("events") == null) {
         var imgElem = document.getElementById("ceModalImg");
         var imgContainer = document.getElementById("ceModalImgContainer");
 
-        if (imgSrc && imgSrc.length > 30) {
+        if (imgSrc && imgSrc.indexOf("/imageStream?") !== -1) {
             imgElem.src = imgSrc;
             imgContainer.style.display = "block";
         } else {

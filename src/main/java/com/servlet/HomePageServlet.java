@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.bean.PhotoStore;
 import com.bean.PageBean;
 import com.bean.PageBean.Section;
 import com.bean.PageBean.SectionImage;
@@ -17,7 +18,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -171,8 +171,13 @@ public class HomePageServlet extends HttpServlet {
                     pageBean.setSections(new ArrayList<>(sectionMap.values()));
                 }
 
-                // 4. Latest News (Updated for LONGBLOB)
-                String latestNewsSql = "SELECT id, event_name, description, image, created_at " +
+                // 4. Latest News: imageStream serves photos from the bucket using file_key.
+                boolean hasNewsKey = PhotoStore.hasColumn(conn, "latest_news", "file_key");
+                boolean hasNewsImage = PhotoStore.hasColumn(conn, "latest_news", "image");
+                String latestNewsSql = "SELECT id, event_name, description, "
+                                     + (hasNewsKey ? "file_key" : "NULL AS file_key") + ", "
+                                     + (hasNewsImage ? "image" : "NULL AS legacy_image") + ", "
+                                     + "created_at " +
                                        "FROM latest_news ORDER BY created_at DESC LIMIT 5";
 
                 try (PreparedStatement psLatestNews = conn.prepareStatement(latestNewsSql);
@@ -185,14 +190,13 @@ public class HomePageServlet extends HttpServlet {
                         news.put("title", rsLatestNews.getString("event_name"));
                         news.put("description", rsLatestNews.getString("description"));
 
-                        // Read binary stream and encode to Base64
-                        byte[] imgBytes = rsLatestNews.getBytes("image");
-                        if (imgBytes != null && imgBytes.length > 0) {
-                            String base64Image = Base64.getEncoder().encodeToString(imgBytes);
-                            news.put("image", "data:image/jpeg;base64," + base64Image);
-                        } else {
-                            news.put("image", null);
+                        String fileKey = rsLatestNews.getString("file_key");
+                        boolean hasImage = fileKey != null && !fileKey.trim().isEmpty();
+                        if (!hasImage && hasNewsImage) {
+                            byte[] legacyImage = rsLatestNews.getBytes("image");
+                            hasImage = legacyImage != null && legacyImage.length > 0;
                         }
+                        news.put("hasImage", hasImage);
 
                         news.put("created_at", rsLatestNews.getTimestamp("created_at"));
 

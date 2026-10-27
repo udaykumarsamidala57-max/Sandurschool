@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.bean.PhotoStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +37,35 @@ public class NewsImageServlet extends HttpServlet {
 
         String sql = "SELECT image FROM latest_news WHERE id = ?";
 
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection conn = DBUtil.getConnection("SRS")) {
+                if (PhotoStore.hasColumn(conn, "latest_news", "file_key")) {
+                    try (PreparedStatement keyPs = conn.prepareStatement(
+                            "SELECT file_key FROM latest_news WHERE id = ?")) {
+                        keyPs.setInt(1, Integer.parseInt(newsIdParam.trim()));
+                        try (ResultSet keyRs = keyPs.executeQuery()) {
+                            if (keyRs.next()) {
+                                String key = keyRs.getString(1);
+                                if (key != null && !key.trim().isEmpty()) {
+                                    key = key.trim();
+                                    if (!PhotoStore.isSrsKey(key)) {
+                                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "News image not found.");
+                                        return;
+                                    }
+                                    if (!PhotoStore.enabled()) {
+                                        response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
+                                                "Bucket settings are missing on this server.");
+                                        return;
+                                    }
+                                    response.setHeader("Cache-Control", "private, max-age=2400");
+                                    response.sendRedirect(PhotoStore.url(key));
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, Integer.parseInt(newsIdParam.trim()));
 
@@ -124,6 +152,7 @@ public class NewsImageServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "News record not found.");
                 }
             }
+                }
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error rendering image.");

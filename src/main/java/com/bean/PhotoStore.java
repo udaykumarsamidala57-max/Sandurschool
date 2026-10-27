@@ -15,6 +15,10 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -59,6 +63,27 @@ public final class PhotoStore {
     /** true when the bucket settings are present */
     public static boolean enabled() {
         return BUCKET != null && KEY_ID != null && SECRET != null;
+    }
+
+    /** Returns whether a table has a column, allowing the public site to work before migration. */
+    public static boolean hasColumn(Connection conn, String table, String column) throws SQLException {
+        if (!table.matches("[A-Za-z0-9_]+") || !column.matches("[A-Za-z0-9_]+")) {
+            throw new IllegalArgumentException("Invalid database identifier");
+        }
+        String sql = "SELECT 1 FROM information_schema.columns "
+                + "WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, table);
+            ps.setString(2, column);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    /** Bucket keys are scoped to this public site's namespace. */
+    public static boolean isSrsKey(String key) {
+        return key != null && key.startsWith("srs/") && !key.contains("..") && !key.startsWith("/");
     }
 
     // =========================================================
