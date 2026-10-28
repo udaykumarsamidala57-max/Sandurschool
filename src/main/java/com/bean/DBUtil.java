@@ -6,30 +6,31 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-    private static final String USER = "root";
-    private static final String PASSWORD = "fSPcwMERVlpBdtrGEzxQwKjqYiXqTeWU"; // Add your Railway DB password here if required
+    private static final String URL = System.getenv("SRS_DB_URL");
+    private static final String USER = System.getenv("SRS_DB_USER");
+    private static final String PASSWORD = System.getenv("SRS_DB_PASSWORD");
 
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new ExceptionInInitializerError(e);
         }
     }
 
     public static Connection getConnection(String branch) throws SQLException {
-        String url;
-
-        if ("SRS".equalsIgnoreCase(branch)) {
-            url = "jdbc:mysql://altaria.proxy.rlwy.net:53217/website"
-                    + "?useSSL=false"
-                    + "&allowPublicKeyRetrieval=true"
-                    + "&serverTimezone=UTC"
-                    + "&tcpKeepAlive=true";
-        } else {
+        if (!"SRS".equalsIgnoreCase(branch)) {
             throw new SQLException("Invalid Branch: " + branch);
         }
 
-        return DriverManager.getConnection(url, USER, PASSWORD);
+        if (isBlank(URL) || isBlank(USER) || isBlank(PASSWORD)) {
+            throw new SQLException("Missing required environment variables: SRS_DB_URL, SRS_DB_USER, and SRS_DB_PASSWORD");
+        }
+
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }
