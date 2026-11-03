@@ -83,16 +83,30 @@ public final class PhotoStore {
 
     /** Bucket keys are scoped to this public site's namespace. */
     public static boolean isSrsKey(String key) {
-        return key != null && key.startsWith("srs/") && !key.contains("..") && !key.startsWith("/");
+        return isSiteKey(key, "srs");
+    }
+
+    /**
+     * True when the key is inside the given site's bucket folder
+     * (sites.properties: <site>.folder, default the site key), e.g. "SANPOLY-WEBSITE/sections/1-ab.jpg".
+     */
+    public static boolean isSiteKey(String key, String siteKey) {
+        if (key == null || siteKey == null) return false;
+        com.site.Site site = com.site.SiteConfig.resolve(siteKey);
+        String folder = site != null ? site.getFolder() : siteKey;
+        if (!folder.matches("[A-Za-z0-9_-]+")) return false;
+        return key.startsWith(folder + "/") && !key.contains("..") && !key.startsWith("/");
     }
 
     // =========================================================
     // NAMES
     // =========================================================
 
-    /** e.g. srs/sections/123-1a2b3c4d.jpg */
+    /** e.g. srs/sections/123-1a2b3c4d.jpg or SANPOLY-WEBSITE/sections/45-1a2b3c4d.jpg */
     public static String newKey(String branch, String kind, long id, String contentType) {
-        String b = branch == null ? "site" : branch.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_-]", "");
+        com.site.Site site = com.site.SiteConfig.resolve(branch);
+        String b = site != null ? site.getFolder()
+                : branch == null ? "site" : branch.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_-]", "");
         String k = kind == null ? "files" : kind.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_-]", "");
         return b + "/" + k + "/" + id + "-" + UUID.randomUUID().toString().substring(0, 8) + extension(contentType);
     }

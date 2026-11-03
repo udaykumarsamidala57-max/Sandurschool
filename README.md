@@ -18,3 +18,17 @@ $env:HR_DB_PASSWORD = 'your-HR-database-password'
 ```
 
 These PowerShell values apply only to that session. Add the corresponding variables to the hosting service for deployed runs.
+
+
+## Website URLs (one project, many sites)
+
+| URL (Eclipse) | Loads | Database variables |
+|---|---|---|
+| `/PInventory/srs/` | Sandur Residential School site | `SRS_DB_URL`, `SRS_DB_USER`, `SRS_DB_PASSWORD` |
+| `/PInventory/sanpoly/` | Sanpoly site | `SANPOLY_DB_URL`, `SANPOLY_DB_USER`, `SANPOLY_DB_PASSWORD` |
+| `/PInventory/admin/` | Admin panel (page builder, news, events) | branch of the logged-in user |
+| `/PInventory/` | redirects to `/srs/` | |
+
+Old links such as `/PInventory/homepage?slug=...` still open the SRS site.
+Sites (name, address, logo, database key) are listed in `src/main/webapp/WEB-INF/sites.properties`.
+Routing is done by `com.site.SiteFilter`; admin servlets are in `com.admin`, mapped under `/admin/`.

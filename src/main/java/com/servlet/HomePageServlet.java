@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.site.SiteConfig;
 import com.bean.PhotoStore;
 import com.bean.PageBean;
 import com.bean.PageBean.Section;
@@ -41,14 +42,16 @@ public class HomePageServlet extends HttpServlet {
         List<Map<String, Object>> latestNewsList = new ArrayList<>();
         List<Map<String, Object>> eventList = new ArrayList<>();
 
-        try (Connection conn = DBUtil.getConnection("SRS")) {
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(request))) {
 
             if (conn != null) {
 
                 // 1. Navigation Pages
-                String navSql = "SELECT id, title, slug, parent_id FROM pages ORDER BY id ASC";
-                try (PreparedStatement psNav = conn.prepareStatement(navSql);
-                     ResultSet rsNav = psNav.executeQuery()) {
+                String site = SiteConfig.current(request).getKey();
+                String navSql = "SELECT id, title, slug, parent_id FROM pages WHERE site = ? ORDER BY id ASC";
+                try (PreparedStatement psNav = conn.prepareStatement(navSql)) {
+                  psNav.setString(1, site);
+                  try (ResultSet rsNav = psNav.executeQuery()) {
 
                     Map<Long, PageBean> pageMap = new LinkedHashMap<>();
                     Map<Long, Long> parentChildRelationships = new LinkedHashMap<>();
@@ -78,14 +81,16 @@ public class HomePageServlet extends HttpServlet {
                             parentBean.getChildren().add(childBean);
                         }
                     }
+                  }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 // 2. Selected Page Target
-                String pageSql = "SELECT id, title, slug FROM pages WHERE slug = ?";
+                String pageSql = "SELECT id, title, slug FROM pages WHERE slug = ? AND site = ?";
                 try (PreparedStatement psPage = conn.prepareStatement(pageSql)) {
                     psPage.setString(1, pageSlug);
+                    psPage.setString(2, site);
 
                     try (ResultSet rsPage = psPage.executeQuery()) {
                         if (rsPage.next()) {
@@ -178,10 +183,11 @@ public class HomePageServlet extends HttpServlet {
                                      + (hasNewsKey ? "file_key" : "NULL AS file_key") + ", "
                                      + (hasNewsImage ? "image" : "NULL AS legacy_image") + ", "
                                      + "created_at " +
-                                       "FROM latest_news ORDER BY created_at DESC LIMIT 5";
+                                       "FROM latest_news WHERE site = ? ORDER BY created_at DESC LIMIT 5";
 
-                try (PreparedStatement psLatestNews = conn.prepareStatement(latestNewsSql);
-                     ResultSet rsLatestNews = psLatestNews.executeQuery()) {
+                try (PreparedStatement psLatestNews = conn.prepareStatement(latestNewsSql)) {
+                  psLatestNews.setString(1, site);
+                  try (ResultSet rsLatestNews = psLatestNews.executeQuery()) {
 
                     while (rsLatestNews.next()) {
                         Map<String, Object> news = new HashMap<>();
@@ -202,6 +208,7 @@ public class HomePageServlet extends HttpServlet {
 
                         latestNewsList.add(news);
                     }
+                  }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

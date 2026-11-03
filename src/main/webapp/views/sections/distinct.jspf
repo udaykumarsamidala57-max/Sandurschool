@@ -35,11 +35,11 @@
                     ? 'distinct-card-second'
                     : ''}"
             data-title="<c:out value='${not empty img.heading1 ? img.heading1 : img.altText}' />"
-            data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+            data-img="${siteBase}/imageStream?id=${img.id}"
             data-desc-id="distinct-desc-${img.id}-${status.index}">
 
             <img
-                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                src="${siteBase}/imageStream?id=${img.id}"
                 alt="${not empty img.altText
                       ? img.altText
                       : sec.title}">

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <c:out value="${not empty pageData.title ? pageData.title : 'Sandur Residential School'}" />
+        <c:out value="${not empty pageData.title ? pageData.title : site.name}" />
     </title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -593,24 +593,24 @@
         <!-- Top brown strip -->
         <div class="top-ribbon">
             <div class="ribbon-left">
-                <i class="fa-solid fa-location-dot"></i> Shivapur, Sandur &middot; Ballari District, Karnataka &middot; Affiliated to CISCE
+                <i class="fa-solid fa-location-dot"></i> <c:out value="${site.tagline}"/>
             </div>
             <div class="ribbon-right">
-                <a href="${pageContext.request.contextPath}/homepage?slug=calendar"><i class="fa-regular fa-calendar"></i>Calendar</a>
+                <a href="${siteBase}/homepage?slug=calendar"><i class="fa-regular fa-calendar"></i>Calendar</a>
                 <a href="#"><i class="fa-solid fa-link"></i>Quick Links</a>
                 <a href="#"><i class="fa-solid fa-user-lock"></i>Portal Login</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=admissions"><i class="fa-solid fa-school"></i>Admissions</a>
-                <a href="${pageContext.request.contextPath}/homepage?slug=Current job openings"><i class="fa-solid fa-briefcase"></i>Recruitment</a>
-                <a href="${pageContext.request.contextPath}/alumni-registration"><i class="fa-solid fa-user-graduate"></i>Alumni</a>
+                <a href="${siteBase}/homepage?slug=admissions"><i class="fa-solid fa-school"></i>Admissions</a>
+                <a href="${siteBase}/homepage?slug=Current job openings"><i class="fa-solid fa-briefcase"></i>Recruitment</a>
+                <a href="${siteBase}/alumni-registration"><i class="fa-solid fa-user-graduate"></i>Alumni</a>
             </div>
         </div>
 
         <!-- Logo, menu and search in one line -->
         <div class="hdr-bar">
 
-            <a class="hdr-logo" href="${pageContext.request.contextPath}/homepage">
-                <img src="${pageContext.request.contextPath}/Home/logo.png" alt="Sandur Residential School Logo">
-                <h1 class="hdr-name">Sandur Residential School</h1>
+            <a class="hdr-logo" href="${siteBase}/homepage">
+                <img src="${pageContext.request.contextPath}${site.logo}" alt="<c:out value="${site.name}"/> Logo">
+                <h1 class="hdr-name"><c:out value="${site.name}"/></h1>
             </a>
 
             <nav class="hdr-nav" aria-label="Main menu">
@@ -629,9 +629,9 @@
                                 </c:forEach>
                             </c:if>
 
-                            <c:set var="pgHref" value="${pageContext.request.contextPath}/homepage?slug=${pg.slug}" />
+                            <c:set var="pgHref" value="${siteBase}/homepage?slug=${pg.slug}" />
                             <c:if test="${fn:toLowerCase(fn:trim(pg.slug)) eq 'alumni'}">
-                                <c:set var="pgHref" value="${pageContext.request.contextPath}/alumni-registration" />
+                                <c:set var="pgHref" value="${siteBase}/alumni-registration" />
                             </c:if>
                             <li class="${(currentSlug eq pg.slug or isChildActive) ? 'active-tab' : ''}">
                                 <a href="${pgHref}">
@@ -650,14 +650,14 @@
                                         <div class="mega-inner">
                                             <div class="mega-lead">
                                                 <strong><c:out value="${pg.title}" /></strong>
-                                                <span>Sandur Residential School</span>
+                                                <span><c:out value="${site.name}"/></span>
                                                 <a href="${pgHref}">Go to <c:out value="${pg.title}" /> &rarr;</a>
                                             </div>
                                             <ul class="mega-links">
                                                 <c:forEach var="child" items="${pg.children}">
-                                                    <c:set var="childHref" value="${pageContext.request.contextPath}/homepage?slug=${child.slug}" />
+                                                    <c:set var="childHref" value="${siteBase}/homepage?slug=${child.slug}" />
                                                     <c:if test="${fn:toLowerCase(fn:trim(child.slug)) eq 'alumni'}">
-                                                        <c:set var="childHref" value="${pageContext.request.contextPath}/alumni-registration" />
+                                                        <c:set var="childHref" value="${siteBase}/alumni-registration" />
                                                     </c:if>
                                                     <li class="${currentSlug eq child.slug ? 'active-child' : ''}">
                                                         <a href="${childHref}">

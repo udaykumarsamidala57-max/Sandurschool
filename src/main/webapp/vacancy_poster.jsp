@@ -534,7 +534,7 @@
                 windowWidth: 1080
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'SRS-Recruitment_Instagram_A4.jpg';
+                link.download = '${site.shortName}-Recruitment_Instagram_A4.jpg';
                 link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
             });

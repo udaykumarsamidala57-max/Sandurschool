@@ -9,7 +9,7 @@
         <c:if test="${not empty sec.images}">
             <div class="page-desc-image-box">
                 <c:forEach var="img" items="${sec.images}">
-                    <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                    <img src="${siteBase}/imageStream?id=${img.id}"
                          alt="${not empty img.altText ? img.altText : 'Section Image'}" />
                 </c:forEach>
             </div>

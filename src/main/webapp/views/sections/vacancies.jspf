@@ -449,15 +449,15 @@
     <div class="container">
         <div class="header">
             <h2>Current Openings</h2>
-            <p class="tagline">Explore opportunities and build a meaningful career with SRS</p>
+            <p class="tagline">Explore opportunities and build a meaningful career with ${site.shortName}</p>
             
             <!-- View Notification Navigation Button -->
             
         </div>
 
         <div class="notice-card">
-            <p>We seek to recruit dedicated professionals to support the SRS mission. Explore our open roles below to join our team!</p>
-            <p><strong>Safeguarding Statement:</strong> SRS is committed to safeguarding children. Background screening may be conducted prior to or during employment.</p>
+            <p>We seek to recruit dedicated professionals to support the ${site.shortName} mission. Explore our open roles below to join our team!</p>
+            <p><strong>Safeguarding Statement:</strong> ${site.shortName} is committed to safeguarding children. Background screening may be conducted prior to or during employment.</p>
         </div>
 
         <form class="search-bar" method="GET" action="">

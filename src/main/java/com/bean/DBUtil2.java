@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBUtil2 {
 
-    private static final String URL = System.getenv("HR_DB_URL");
+    private static final String URL = System.getenv("HR_DB_URL2") != null ? System.getenv("HR_DB_URL2") : System.getenv("HR_DB_URL");
     private static final String USER = System.getenv("HR_DB_USER");
     private static final String PASSWORD = System.getenv("HR_DB_PASSWORD");
 

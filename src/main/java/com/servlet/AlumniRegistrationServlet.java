@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.site.SiteConfig;
 import com.bean.PageBean;
 
 import javax.servlet.ServletException;
@@ -92,7 +93,7 @@ public class AlumniRegistrationServlet extends HttpServlet {
             errors.add("Your session expired. Please submit the form again.");
         }
         if (!isEmpty(req.getParameter("website"))) {          // hidden field only robots fill in
-            resp.sendRedirect("alumni-registration?done=1");
+            resp.sendRedirect(siteBase(req) + "/alumni-registration?done=1");
             return;
         }
 
@@ -149,7 +150,7 @@ public class AlumniRegistrationServlet extends HttpServlet {
         }
 
         // ---- save with the stored procedure ----
-        try (Connection conn = DBUtil.getConnection("SRS");
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(req));
              CallableStatement cs = conn.prepareCall("{CALL sp_enroll_alumni(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}")) {
 
             cs.setString(1, f.get("fullName"));
@@ -171,12 +172,23 @@ public class AlumniRegistrationServlet extends HttpServlet {
             cs.execute();
 
             long id = cs.getLong(16);
-            String regNo = String.format("SRS/ALU/%d/%04d", thisYear, id);
+
+            // The procedure saves the row for the default site; mark it with this website.
+            String site = SiteConfig.current(req).getKey();
+            try (PreparedStatement up = conn.prepareStatement(
+                    "UPDATE alumni_registrations SET site = ? WHERE id = ?")) {
+                up.setString(1, site);
+                up.setLong(2, id);
+                up.executeUpdate();
+            }
+            String regNo = String.format("%s/ALU/%d/%04d",
+                    SiteConfig.current(req).getShortName().toUpperCase(java.util.Locale.ROOT).replaceAll("[^A-Z0-9]", ""),
+                    thisYear, id);
 
             session.removeAttribute("alumniToken");
             session.setAttribute("alumniDoneNo", regNo);
             session.setAttribute("alumniDoneName", f.get("fullName"));
-            resp.sendRedirect("alumni-registration?done=1");
+            resp.sendRedirect(siteBase(req) + "/alumni-registration?done=1");
 
         } catch (SQLException e) {
             if ("45000".equals(e.getSQLState())) {
@@ -203,7 +215,7 @@ public class AlumniRegistrationServlet extends HttpServlet {
         pageData.setTitle("Alumni Registration");
         pageData.setSlug("alumni");
         req.setAttribute("pageData", pageData);
-        req.setAttribute("pagesList", loadMenu());
+        req.setAttribute("pagesList", loadMenu(req));
         loadBatchCounts(req);
 
         resp.setHeader("Cache-Control", "no-store");
@@ -219,10 +231,10 @@ public class AlumniRegistrationServlet extends HttpServlet {
         List<Map<String, Object>> rows = new ArrayList<>();
         int total = 0, max = 0;
         String sql = "SELECT COALESCE(passing_year_xii, passing_year_x, study_to_year) AS batch, COUNT(*) AS cnt "
-                   + "FROM alumni_registrations WHERE status <> 'REJECTED' "
+                   + "FROM alumni_registrations WHERE status <> 'REJECTED' AND site = ? "
                    + "GROUP BY batch ORDER BY batch ASC";
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(req));
+             PreparedStatement ps = prepareForSite(conn, sql, SiteConfig.current(req).getKey());
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 int n = rs.getInt("cnt");
@@ -251,12 +263,12 @@ public class AlumniRegistrationServlet extends HttpServlet {
     }
 
     /** the website menu, same as on every other page */
-    private List<PageBean> loadMenu() {
+    private List<PageBean> loadMenu(HttpServletRequest req) {
         List<PageBean> roots = new ArrayList<>();
         Map<Long, PageBean> all = new LinkedHashMap<>();
         Map<Long, Long> parents = new LinkedHashMap<>();
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement ps = conn.prepareStatement("SELECT id, title, slug, parent_id FROM pages ORDER BY id ASC");
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(req));
+             PreparedStatement ps = prepareForSite(conn, "SELECT id, title, slug, parent_id FROM pages WHERE site = ? ORDER BY id ASC", SiteConfig.current(req).getKey());
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 PageBean p = new PageBean();
@@ -302,5 +314,17 @@ public class AlumniRegistrationServlet extends HttpServlet {
         String fwd = req.getHeader("X-Forwarded-For");
         String ip = (fwd != null && !fwd.isEmpty()) ? fwd.split(",")[0].trim() : req.getRemoteAddr();
         return ip.length() > 45 ? ip.substring(0, 45) : ip;
+    }
+
+    /** Absolute base URL of the current site, e.g. /ctx/srs (redirects must keep the site prefix). */
+    private static String siteBase(HttpServletRequest req) {
+        Object base = req.getAttribute(SiteConfig.ATTR_SITE_BASE);
+        return base != null ? base.toString() : req.getContextPath();
+    }
+
+    private static PreparedStatement prepareForSite(Connection conn, String sql, String site) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, site);
+        return ps;
     }
 }

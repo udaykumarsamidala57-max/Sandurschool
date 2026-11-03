@@ -17,7 +17,7 @@
             <c:if test="${not empty sec.images}">
                 <c:forEach var="img" items="${sec.images}" varStatus="status">
                     <c:if test="${status.first}">
-                        <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                        <img src="${siteBase}/imageStream?id=${img.id}"
                              alt="${not empty img.altText ? img.altText : sec.title}">
                     </c:if>
                 </c:forEach>

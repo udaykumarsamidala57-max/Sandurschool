@@ -22,9 +22,9 @@
         <c:forEach var="img" items="${sec.images}" varStatus="st">
             <div class="d3-card${st.first ? ' d3-feature' : ''}" role="button" tabindex="0"
                     data-title="<c:out value='${not empty img.heading1 ? img.heading1 : img.altText}' />"
-                    data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}">
+                    data-img="${siteBase}/imageStream?id=${img.id}">
 
-                <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                <img src="${siteBase}/imageStream?id=${img.id}"
                      alt="<c:out value='${not empty img.altText ? img.altText : img.heading1}' />"
                      loading="lazy">
 

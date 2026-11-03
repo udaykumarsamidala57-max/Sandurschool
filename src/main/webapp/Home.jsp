@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <c:out value="${not empty pageData.title ? pageData.title : 'Sandur Residential School'}" />
+        <c:out value="${not empty pageData.title ? pageData.title : site.name}" />
     </title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -244,7 +244,7 @@
                                 <c:forEach var="subItem" items="${dynamicSubMenuItems}">
                                     <c:set var="itemSlug" value="${fn:toLowerCase(fn:trim(subItem.slug))}" />
                                     <li class="${currentSlug eq itemSlug ? 'active' : ''}">
-                                        <a href="${pageContext.request.contextPath}/homepage?slug=${subItem.slug}">
+                                        <a href="${siteBase}/homepage?slug=${subItem.slug}">
                                             <c:out value="${subItem.title}" />
                                         </a>
                                     </li>

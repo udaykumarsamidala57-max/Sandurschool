@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.site.SiteConfig;
 import com.bean.PageBean;
 
 import javax.servlet.ServletException;
@@ -69,11 +70,11 @@ public class NavigationServlet extends HttpServlet {
          */
         String query =
                 "SELECT id, title, slug, parent_id " +
-                "FROM pages " +
+                "FROM pages WHERE site = ? " +
                 "ORDER BY id ASC";
 
-        try (Connection conn = DBUtil.getConnection("SRS");
-             PreparedStatement stmt = conn.prepareStatement(query);
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(request));
+             PreparedStatement stmt = prepareForSite(conn, query, SiteConfig.current(request).getKey());
              ResultSet rs = stmt.executeQuery()) {
 
             /*
@@ -191,5 +192,12 @@ public class NavigationServlet extends HttpServlet {
          */
         request.getRequestDispatcher("/index.jsp")
                .forward(request, response);
+    }
+
+    private static PreparedStatement prepareForSite(Connection conn, String sql, String site)
+            throws java.sql.SQLException {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, site);
+        return ps;
     }
 }

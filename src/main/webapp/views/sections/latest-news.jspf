@@ -36,7 +36,7 @@
                                         <c:when test="${news.hasImage eq true || not empty news.image}">
 
                                             <img
-                                                src="${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}"
+                                                src="${siteBase}/imageStream?type=news&id=${news.id}"
                                                 alt="<c:out value='${news.event_name}'/>"
                                                 loading="lazy"
                                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="modal-payload-image-src">
                                         <c:if test="${news.hasImage eq true || not empty news.image}">
-                                            ${pageContext.request.contextPath}/imageStream?type=news&id=${news.id}
+                                            ${siteBase}/imageStream?type=news&id=${news.id}
                                         </c:if>
                                     </div>
                                     <div class="modal-payload-description">

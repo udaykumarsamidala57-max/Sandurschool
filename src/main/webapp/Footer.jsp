@@ -145,16 +145,16 @@
     <div class="footer-container">
 
         <div class="footer-left">
-            <h2>Sandur Residential School</h2>
-            <p class="address">Shivapur, Sandur – 583119 · Ballari District, Karnataka ·<br>India</p>
+            <h2><c:out value="${site.name}"/></h2>
+            <p class="address"><c:out value="${site.address}"/></p>
 
-         <a href="${pageContext.request.contextPath}/contact.jsp" style="color: #ffffff;"> 
+         <a href="${siteBase}/contact.jsp" style="color: #ffffff;"> 
     CONTACT US <i class="fa-solid fa-arrow-right"></i>
 </a>
 
             <div class="disclaimer">
-                <p>This official site of Sandur Residential School has been developed to provide general public information. The documents and information displayed on this site are for reference purposes only.</p>
-                <p>Whilst Sandur Residential School attempts to keep it's web information accurate and timely, it neither guarantees nor endorses the content, accuracy or completeness of the information, text, graphics, hyperlinks and other matter contained on this server or any other server. Information and content is subject to change without notice from Sandur Residential School.</p>
+                <p>This official site of <c:out value="${site.name}"/> has been developed to provide general public information. The documents and information displayed on this site are for reference purposes only.</p>
+                <p>Whilst <c:out value="${site.name}"/> attempts to keep it's web information accurate and timely, it neither guarantees nor endorses the content, accuracy or completeness of the information, text, graphics, hyperlinks and other matter contained on this server or any other server. Information and content is subject to change without notice from <c:out value="${site.name}"/>.</p>
                 <p>Commercial use of web materials displayed on our website is prohibited without the written permission of the school.</p>
             </div>
         </div>
@@ -165,10 +165,10 @@
             </a>
 
             <div class="footer-nav-links">
-                <a href="${pageContext.request.contextPath}/calendar.jsp">School Calendar</a>
-                <a href="${pageContext.request.contextPath}/map.jsp">Map & Directions</a>
-                <a href="${pageContext.request.contextPath}/news.jsp">News</a>
-                <a href="${pageContext.request.contextPath}/careers.jsp">Job vacancies</a>
+                <a href="${siteBase}/calendar.jsp">School Calendar</a>
+                <a href="${siteBase}/map.jsp">Map & Directions</a>
+                <a href="${siteBase}/news.jsp">News</a>
+                <a href="${siteBase}/careers.jsp">Job vacancies</a>
             </div>
         </div>
 
@@ -180,4 +180,4 @@
 </footer>
 
 <script src="${pageContext.request.contextPath}/js/reveal.js" defer></script>
-<script src="${pageContext.request.contextPath}/js/protect-photos.js" defer></script>
+<script src="${pageContext.request.contextPath}/js/protect-photos.js" defer></script>

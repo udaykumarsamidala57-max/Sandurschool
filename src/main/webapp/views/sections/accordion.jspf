@@ -39,7 +39,7 @@
                 <c:forEach var="img" items="${sec.images}" varStatus="status">
                     <c:if test="${status.first}">
                         <figure class="accordion-image">
-                            <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                            <img src="${siteBase}/imageStream?id=${img.id}"
                                  alt="<c:out value='${not empty img.altText ? img.altText : accHeading}' />"
                                  loading="lazy">
                             <c:if test="${not empty img.heading2}">

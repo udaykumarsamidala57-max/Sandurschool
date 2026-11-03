@@ -47,7 +47,7 @@
                     <%-- Case 1: Video binary stream stored directly in DB --%>
                     <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0 and (not empty firstImg.imageType and fn:startsWith(fn:toLowerCase(firstImg.imageType), 'video/'))}">
                         <video class="video-player" controls preload="metadata" playsinline>
-                            <source src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}" type="${firstImg.imageType}">
+                            <source src="${siteBase}/imageStream?id=${firstImg.id}" type="${firstImg.imageType}">
                             Your browser does not support the video tag.
                         </video>
                     </c:when>
@@ -82,7 +82,7 @@
                     <%-- Case 3: Fallback Image stored in DB --%>
                     <c:when test="${not empty firstImg and not empty firstImg.id and firstImg.id > 0}">
                         <img
-                            src="${pageContext.request.contextPath}/imageStream?id=${firstImg.id}"
+                            src="${siteBase}/imageStream?id=${firstImg.id}"
                             alt="Director Desk"
                             class="video-thumbnail"
                         />
@@ -91,7 +91,7 @@
                     <%-- Case 4: Default Static Fallback Image --%>
                     <c:otherwise>
                         <img
-                            src="${pageContext.request.contextPath}/images/director-thumbnail.jpg"
+                            src="${siteBase}/images/director-thumbnail.jpg"
                             alt="Director Desk Video"
                             class="video-thumbnail"
                         />
@@ -109,7 +109,7 @@
                     <c:out value="${firstImg.heading2}" />
                 </c:when>
                 <c:otherwise>
-                    Welcome to Sandur Residential School
+                    Welcome to ${site.name}
                 </c:otherwise>
             </c:choose>
         </h1>
@@ -126,7 +126,7 @@
                 </c:when>
                 <c:otherwise>
                     <p>
-                        Sandur Residential School is proud to present itself
+                        ${site.name} is proud to present itself
                         spanning over 60 years since its inception in 1959.
                     </p>
                     <p>

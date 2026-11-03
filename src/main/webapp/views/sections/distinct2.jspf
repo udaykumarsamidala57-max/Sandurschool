@@ -12,13 +12,13 @@
             <div class="house-card">
                 <div class="house-img-container">
                     
-                    <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
+                    <img src="${siteBase}/imageStream?id=${img.id}" 
                          alt="<c:out value='${img.heading1}' />">
                 </div>
 
                 <h3 class="house-title-link" 
                     data-title="<c:out value='${img.heading1}' />" 
-                    data-img="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                    data-img="${siteBase}/imageStream?id=${img.id}"
                     data-desc-id="desc-content-${img.id}-${status.index}">
                     <c:out value="${img.heading1}" />
                 </h3>

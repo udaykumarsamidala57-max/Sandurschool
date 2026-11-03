@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.site.SiteConfig;
 import com.bean.PhotoStore;
 
 import javax.servlet.ServletException;
@@ -53,7 +54,7 @@ public class ImageStreamServlet extends HttpServlet {
         String blobColumn = news ? null : event ? "image_blob" : "image_data";
         String typeColumn = news || event ? null : "image_type";
 
-        try (Connection conn = DBUtil.getConnection("SRS")) {
+        try (Connection conn = DBUtil.getConnection(SiteConfig.db(request))) {
             boolean hasKey = PhotoStore.hasColumn(conn, table, "file_key");
             boolean hasBlob = blobColumn != null && PhotoStore.hasColumn(conn, table, blobColumn);
             boolean hasType = typeColumn != null && PhotoStore.hasColumn(conn, table, typeColumn);
@@ -62,14 +63,22 @@ public class ImageStreamServlet extends HttpServlet {
                 return;
             }
 
+            // Only photos that belong to this website (site column, or the page a section is on).
             StringBuilder sql = new StringBuilder("SELECT ");
-            if (hasKey) sql.append("file_key"); else sql.append("NULL AS file_key");
-            if (hasBlob) sql.append(", ").append(blobColumn);
-            if (hasType) sql.append(", ").append(typeColumn);
-            sql.append(" FROM ").append(table).append(" WHERE id = ?");
+            if (hasKey) sql.append("t.file_key"); else sql.append("NULL AS file_key");
+            if (hasBlob) sql.append(", t.").append(blobColumn);
+            if (hasType) sql.append(", t.").append(typeColumn);
+            sql.append(" FROM ").append(table).append(" t");
+            if ("section_images".equals(table)) {
+                sql.append(" JOIN sections s ON s.id = t.section_id JOIN pages p ON p.id = s.page_id")
+                   .append(" WHERE t.id = ? AND p.site = ?");
+            } else {
+                sql.append(" WHERE t.id = ? AND t.site = ?");
+            }
 
             try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
                 ps.setLong(1, id);
+                ps.setString(2, SiteConfig.current(request).getKey());
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found.");
@@ -79,7 +88,7 @@ public class ImageStreamServlet extends HttpServlet {
                     String key = rs.getString("file_key");
                     if (key != null && !key.trim().isEmpty()) {
                         key = key.trim();
-                        if (!PhotoStore.isSrsKey(key)) {
+                        if (!PhotoStore.isSiteKey(key, SiteConfig.current(request).getKey())) {
                             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found.");
                             return;
                         }

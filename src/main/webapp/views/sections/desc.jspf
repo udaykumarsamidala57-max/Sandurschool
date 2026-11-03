@@ -29,7 +29,7 @@
         </c:if>
 
                     <div class="desc-image-wrapper">
-                        <img src="${pageContext.request.contextPath}/imageStream?id=${img.id}" 
+                        <img src="${siteBase}/imageStream?id=${img.id}" 
                              alt="<c:out value='${img.altText}' />" 
                              class="desc-image" />
                     </div>

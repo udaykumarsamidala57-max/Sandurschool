@@ -15,7 +15,7 @@
         <div class="hero-slide ${status.first ? 'active' : ''}">
 
             <img
-                src="${pageContext.request.contextPath}/imageStream?id=${img.id}"
+                src="${siteBase}/imageStream?id=${img.id}"
                 alt="${not empty img.altText ? img.altText : sec.title}">
 
             <div class="slide-content">

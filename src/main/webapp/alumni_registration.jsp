@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alumni Registration &middot; Sandur Residential School</title>
+    <title>Alumni Registration &middot; ${site.name}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
@@ -414,14 +414,14 @@
     <section class="alu-band">
         <div class="alu-band-in">
             <div>
-                <p class="alu-eyebrow">SRS Alumni Association</p>
-                <h1><c:choose><c:when test="${not empty doneNo}">Welcome back to SRS</c:when><c:otherwise>Alumni Registration</c:otherwise></c:choose></h1>
+                <p class="alu-eyebrow">${site.shortName} Alumni Association</p>
+                <h1><c:choose><c:when test="${not empty doneNo}">Welcome back to ${site.shortName}</c:when><c:otherwise>Alumni Registration</c:otherwise></c:choose></h1>
                 <c:choose>
                     <c:when test="${not empty doneNo}">
                         <p class="lead">Your registration is now with the school office. We look forward to staying in touch.</p>
                     </c:when>
                     <c:otherwise>
-                        <p class="lead">Studied at Sandur Residential School? Register with the Alumni Association and stay connected with your batch, your teachers and the school.</p>
+                        <p class="lead">Studied at ${site.name}? Register with the Alumni Association and stay connected with your batch, your teachers and the school.</p>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -485,7 +485,7 @@
                         <div><b><em>03</em>Stay connected</b><p>Receive news of reunions, events and alumni activities.</p></div>
                     </div>
                     <div class="foot">
-                        <a class="alu-btn" href="${pageContext.request.contextPath}/homepage">Back to home <i class="fa-solid fa-arrow-right"></i></a>
+                        <a class="alu-btn" href="${siteBase}/homepage">Back to home <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -504,13 +504,13 @@
                 <aside class="alu-side">
                     <div class="alu-mcard" aria-hidden="true">
                         <div class="top">
-                            <div class="org">Sandur Residential School<br>Alumni Association</div>
+                            <div class="org">${site.name}<br>Alumni Association</div>
                             <div class="crest"><i class="fa-solid fa-graduation-cap"></i></div>
                         </div>
                         <div class="who">
                             <div class="name empty" id="mcName">Your name</div>
                             <div class="meta">
-                                <div><span>At SRS</span><b id="mcYears">&mdash;</b></div>
+                                <div><span>At ${site.shortName}</span><b id="mcYears">&mdash;</b></div>
                                 <div><span>Batch</span><b id="mcBatch">&mdash;</b></div>
                             </div>
                         </div>
@@ -524,7 +524,7 @@
                         </div>
                         <ol>
                             <li data-step="s1"><a href="#s1"><span class="n"><em>1</em><i class="fa-solid fa-check"></i></span>Personal details</a></li>
-                            <li data-step="s2"><a href="#s2"><span class="n"><em>2</em><i class="fa-solid fa-check"></i></span>Years at SRS</a></li>
+                            <li data-step="s2"><a href="#s2"><span class="n"><em>2</em><i class="fa-solid fa-check"></i></span>Years at ${site.shortName}</a></li>
                             <li data-step="s3"><a href="#s3"><span class="n"><em>3</em><i class="fa-solid fa-check"></i></span>Education &amp; work</a></li>
                             <li data-step="s4"><a href="#s4"><span class="n"><em>4</em><i class="fa-solid fa-check"></i></span>Contact</a></li>
                             <li data-step="s5"><a href="#s5"><span class="n"><em>5</em><i class="fa-solid fa-check"></i></span>Anything else</a></li>
@@ -539,7 +539,7 @@
                 </aside>
 
                 <%-- ----- right: the form ----- --%>
-                <form class="alu-card" id="aluForm" method="post" action="${pageContext.request.contextPath}/alumni-registration" novalidate>
+                <form class="alu-card" id="aluForm" method="post" action="${siteBase}/alumni-registration" novalidate>
                     <input type="hidden" name="token" value="${fn:escapeXml(token)}">
                     <div class="alu-trap" aria-hidden="true">
                         <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
@@ -584,7 +584,7 @@
                     <section class="alu-sec" id="s2">
                         <div class="num">02</div>
                         <div>
-                            <h2>Years at SRS</h2>
+                            <h2>Years at ${site.shortName}</h2>
                             <p class="sub">The years you studied here, and the years you passed your board exams.</p>
                             <div class="alu-grid">
                                 <div class="alu-f" id="fStudy">
@@ -709,7 +709,7 @@
                     <div class="alu-submit">
                         <p><i class="fa-solid fa-lock"></i>Fields marked <b style="color:var(--orange)">*</b> are required. Your details are kept by the school only.</p>
                         <div class="alu-actions">
-                            <a class="alu-btn ghost" href="${pageContext.request.contextPath}/homepage">Cancel</a>
+                            <a class="alu-btn ghost" href="${siteBase}/homepage">Cancel</a>
                             <button type="submit" class="alu-btn" id="submitBtn">Submit registration <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </div>
@@ -839,7 +839,7 @@
         var note = $('batchNote');
         if (f && t && t >= f && f >= 1959) {
             var y = t - f + 1;
-            note.querySelector('span').textContent = y + (y === 1 ? ' year' : ' years') + ' at SRS' + (batch ? ' · Batch of ' + batch : '');
+            note.querySelector('span').textContent = y + (y === 1 ? ' year' : ' years') + ' at ${site.shortName}' + (batch ? ' · Batch of ' + batch : '');
             note.classList.add('show');
         } else note.classList.remove('show');
 

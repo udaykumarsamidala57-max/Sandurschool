@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.bean.DBUtil;
+import com.site.SiteConfig;
 import com.bean.PhotoStore;
 
 import javax.servlet.ServletException;
@@ -35,19 +36,20 @@ public class NewsImageServlet extends HttpServlet {
             return;
         }
 
-        String sql = "SELECT image FROM latest_news WHERE id = ?";
+        String sql = "SELECT image FROM latest_news WHERE id = ? AND site = ?";
 
-            try (Connection conn = DBUtil.getConnection("SRS")) {
+            try (Connection conn = DBUtil.getConnection(SiteConfig.db(request))) {
                 if (PhotoStore.hasColumn(conn, "latest_news", "file_key")) {
                     try (PreparedStatement keyPs = conn.prepareStatement(
-                            "SELECT file_key FROM latest_news WHERE id = ?")) {
+                            "SELECT file_key FROM latest_news WHERE id = ? AND site = ?")) {
                         keyPs.setInt(1, Integer.parseInt(newsIdParam.trim()));
+                        keyPs.setString(2, SiteConfig.current(request).getKey());
                         try (ResultSet keyRs = keyPs.executeQuery()) {
                             if (keyRs.next()) {
                                 String key = keyRs.getString(1);
                                 if (key != null && !key.trim().isEmpty()) {
                                     key = key.trim();
-                                    if (!PhotoStore.isSrsKey(key)) {
+                                    if (!PhotoStore.isSiteKey(key, SiteConfig.current(request).getKey())) {
                                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "News image not found.");
                                         return;
                                     }
@@ -68,6 +70,7 @@ public class NewsImageServlet extends HttpServlet {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, Integer.parseInt(newsIdParam.trim()));
+            ps.setString(2, SiteConfig.current(request).getKey());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
