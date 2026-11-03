@@ -2,8 +2,8 @@
    GLOBAL DESIGN VARIABLES & RESET
    ========================================== */
 :root {
-    --sec-brand-orange: #e06d38;
-    --sec-brand-dark: #5b2d0a;
+    --sec-brand-orange: var(--brand2, #e06d38);
+    --sec-brand-dark: var(--brand1, #5b2d0a);
     --sec-bg-light: #f7f5f2;
     --sec-text-dark: #222222;
     --sec-text-muted: #666666;
@@ -441,14 +441,14 @@
 .person-details-content h2 {
     font-family: 'Merriweather', serif;
     font-size: 28px;
-    color: var(--sec-brand-dark, #5b2d0a);
+    color: var(--sec-brand-dark, var(--brand1, #5b2d0a));
     margin-top: 0;
     margin-bottom: 10px;
 }
 
 .person-details-content h3 {
     font-size: 18px;
-    color: var(--sec-brand-orange, #e06d38);
+    color: var(--sec-brand-orange, var(--brand2, #e06d38));
     margin-top: 0;
     margin-bottom: 20px;
     font-weight: 600;

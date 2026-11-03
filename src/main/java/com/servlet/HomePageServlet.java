@@ -217,23 +217,9 @@ public class HomePageServlet extends HttpServlet {
                     newsList.addAll(latestNewsList);
                 }
 
-                // 5. Events
-                String eventSql = "SELECT title, description, event_date FROM events ORDER BY event_date ASC LIMIT 5";
-
-                try (PreparedStatement psEv = conn.prepareStatement(eventSql);
-                     ResultSet rsEv = psEv.executeQuery()) {
-
-                    while (rsEv.next()) {
-                        Map<String, Object> event = new HashMap<>();
-                        event.put("title", rsEv.getString("title"));
-                        event.put("description", rsEv.getString("description"));
-                        event.put("event_date", rsEv.getTimestamp("event_date"));
-
-                        eventList.add(event);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // 5. Events / calendar: shown by views/sections/upcoming_events.jspf from the
+                //    upcoming_events table, filtered by site. (The old "events" table, which had
+                //    no site column, is no longer read; eventList stays empty.)
             }
 
         } catch (Exception e) {

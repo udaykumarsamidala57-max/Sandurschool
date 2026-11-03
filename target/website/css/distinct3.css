@@ -9,8 +9,8 @@
    ========================================================= */
 
 .d3-section {
-    --d3-brown: #612405;
-    --d3-orange: #e0701b;
+    --d3-brown: var(--brand1, #612405);
+    --d3-orange: var(--brand2, #e0701b);
     --d3-gold: #c99a3c;
     --d3-gap: clamp(10px, 1.2vw, 14px);
 

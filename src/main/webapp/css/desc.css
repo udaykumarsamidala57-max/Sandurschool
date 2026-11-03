@@ -23,7 +23,7 @@
 /* heading 1: brown, with a short orange-gold bar underneath */
 .desc-v1 .desc-heading1 {
     margin: 0 0 10px;
-    color: #612405;
+    color: var(--brand1, #612405);
     font-weight: 700;
 }
 .desc-v1 .desc-heading1::after {
@@ -33,7 +33,7 @@
     height: 4px;
     margin-top: 14px;
     border-radius: 2px;
-    background: linear-gradient(90deg, #e0701b, #c99a3c);
+    background: linear-gradient(90deg, var(--brand2, #e0701b), #c99a3c);
 }
 
 /* heading 2: warm orange-brown sub-heading */
@@ -51,9 +51,9 @@
 .desc-v1 .desc-content p { margin: 0 0 16px; }
 .desc-v1 .desc-content p:last-child { margin-bottom: 0; }
 .desc-v1 .desc-content strong,
-.desc-v1 .desc-content b { color: #3b1603; }
+.desc-v1 .desc-content b { color: var(--brand1, #3b1603); }
 .desc-v1 .desc-content a {
-    color: #b8542b;
+    color: var(--brand2, #b8542b);
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -61,7 +61,7 @@
 .desc-v1 .desc-content ul,
 .desc-v1 .desc-content ol { margin: 0 0 16px; padding-left: 22px; }
 .desc-v1 .desc-content li { margin-bottom: 6px; }
-.desc-v1 .desc-content li::marker { color: #e0701b; }
+.desc-v1 .desc-content li::marker { color: var(--brand2, #e0701b); }
 
 /* image: rounded with a soft shadow */
 .desc-v1 .desc-image-wrapper {

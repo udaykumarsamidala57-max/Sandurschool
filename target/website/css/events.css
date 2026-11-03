@@ -5,9 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #612405;
-    --primary-dark: #471a03;
-    --primary-deep: #351202;
+    --primary: var(--brand1, #612405);
+    --primary-dark: var(--brand1, #471a03);
+    --primary-deep: var(--brand1, #351202);
     --primary-light: rgba(97, 36, 5, 0.08);
     --primary-medium: rgba(97, 36, 5, 0.16);
     --primary-soft: #f6efe9;
@@ -21,7 +21,7 @@
 
     --border-subtle: #e2dbd5;
     --border-medium: #d1c5bc;
-    --border-strong: #612405;
+    --border-strong: var(--brand1, #612405);
 
     --text-primary: #1c130e;
     --text-secondary: #423630;
@@ -242,7 +242,7 @@
 }
 
 .event-card:hover .event-badge {
-    background: #e26a2c;
+    background: var(--brand2, #e26a2c);
     color: #ffffff;
 }
 
@@ -250,7 +250,7 @@
     margin: 0 0 12px;
     font-size: 26px;
     font-weight: 700;
-    color: #3d1e0b;
+    color: var(--brand1, #3d1e0b);
     line-height: 1.35;
     letter-spacing: -0.01em;
     display: -webkit-box;

@@ -1,6 +1,6 @@
 :root {
-            --primary-brand: #5c1d06;
-            --primary-hover: #421202;
+            --primary-brand: var(--brand1, #5c1d06);
+            --primary-hover: var(--brand1, #421202);
             --accent-gold: #d4af37;
             --text-dark: #0f172a;
             --text-muted: #64748b;

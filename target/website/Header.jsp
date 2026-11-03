@@ -28,9 +28,9 @@
            ========================================================= */
 
         header.srs-header {
-            --h-brown: #612405;
-            --h-brown-deep: #3b1603;
-            --h-orange: #e0701b;
+            --h-brown: var(--brand1, #612405);
+            --h-brown-deep: var(--brand1, #3b1603);
+            --h-orange: var(--brand2, #e0701b);
             --h-gold: #c99a3c;
             --h-line: #eadfd3;
 
@@ -473,7 +473,7 @@
 
         /* menu: hover turns the text orange-brown, rounded gradient underline */
         header.srs-header nav.hdr-nav .main-menu > li > a { transition: color 0.2s ease, min-height 0.3s ease; }
-        header.srs-header nav.hdr-nav .main-menu > li:hover > a { color: #b8542b; }
+        header.srs-header nav.hdr-nav .main-menu > li:hover > a { color: var(--brand2, #b8542b); }
         header.srs-header nav.hdr-nav .main-menu > li.active-tab > a { color: var(--h-brown); }
         header.srs-header nav.hdr-nav .main-menu > li > a::after {
             border-radius: 2px;
@@ -549,7 +549,7 @@
             position: absolute;
             inset: 0;
             z-index: -1;
-            background: url('${pageContext.request.contextPath}/Home/peacock/pattern.svg') repeat;
+            background: var(--pattern1, url('${pageContext.request.contextPath}/Home/peacock/pattern.svg')) repeat;
             background-size: 46px 52px;
             opacity: 0.07;
             -webkit-mask-image: linear-gradient(90deg, transparent 22%, #000 70%);
@@ -573,7 +573,7 @@
         header.srs-header nav.hdr-nav .main-menu > li > a { font-weight: 700; letter-spacing: 0.01em; }
 
         /* school name: a touch more presence */
-        header.srs-header .hdr-name { color: #57210a; text-shadow: 0 1px 0 #ffffff; }
+        header.srs-header .hdr-name { color: var(--brand1, #57210a); text-shadow: 0 1px 0 #ffffff; }
 
         @media (max-width: 1100px) {
             header.srs-header nav.hdr-nav .main-menu > li + li > a::before { display: none; }
@@ -584,6 +584,18 @@
             }
         }
     </style>
+    <%-- Per-website colours and patterns from WEB-INF/sites.properties (<key>.color1 / color2 / pattern1 / pattern2).
+         Not set = the SRS look stays as it is. Values are checked in SiteConfig (#RRGGBB and image paths only). --%>
+    <c:if test="${site.themed}">
+    <style>
+        :root {
+            <c:if test="${not empty site.color1}">--brand1: ${site.color1};</c:if>
+            <c:if test="${not empty site.color2}">--brand2: ${site.color2};</c:if>
+            <c:if test="${not empty site.pattern1}">--pattern1: url('${pageContext.request.contextPath}${site.pattern1}');</c:if>
+            <c:if test="${not empty site.pattern2}">--pattern2: url('${pageContext.request.contextPath}${site.pattern2}');</c:if>
+        }
+    </style>
+    </c:if>
 </head>
 
 <body>

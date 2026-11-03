@@ -2,8 +2,8 @@
    GLOBAL DESIGN VARIABLES & RESET
    ========================================== */
 :root {
-    --sec-brand-orange: #FA8405;
-    --sec-brand-dark: #5b2d0a;
+    --sec-brand-orange: var(--brand2, #FA8405);
+    --sec-brand-dark: var(--brand1, #5b2d0a);
     --sec-bg-light: #f7f5f2;
     --sec-text-dark: #222222;
     --sec-text-muted: #666666;
@@ -562,7 +562,7 @@ footer {
 }
 
 .contact-btn:hover {
-    background: #d67102;
+    background: var(--brand2, #d67102);
 }
 
 .disclaimer {

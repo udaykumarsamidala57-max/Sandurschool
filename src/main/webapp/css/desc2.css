@@ -18,7 +18,7 @@
 /* title with a short orange-gold bar */
 .page-desc-section.desc-v2 .page-desc-title {
     margin: 0 0 12px;
-    color: #612405;
+    color: var(--brand1, #612405);
     font-weight: 700;
 }
 .page-desc-section.desc-v2 .page-desc-title::after {
@@ -28,7 +28,7 @@
     height: 3px;
     margin-top: 8px;
     border-radius: 2px;
-    background: linear-gradient(90deg, #e0701b, #c99a3c);
+    background: linear-gradient(90deg, var(--brand2, #e0701b), #c99a3c);
 }
 
 /* text box: orange border all round, thicker orange line at the bottom */
@@ -36,8 +36,8 @@
     position: relative;
     padding: clamp(14px, 2.2vw, 20px) clamp(16px, 2.8vw, 26px);
     background-color: #ffffff;
-    border: 1px solid #f07832;
-    border-bottom: 6px solid #f07832;
+    border: 1px solid var(--brand2, #f07832);
+    border-bottom: 6px solid var(--brand2, #f07832);
     border-radius: 0;
     box-shadow: 0 16px 36px -22px rgba(59, 22, 3, 0.30);
     box-sizing: border-box;
@@ -51,9 +51,9 @@
 .page-desc-section.desc-v2 .page-desc-content > :last-child { margin-bottom: 0; }
 .page-desc-section.desc-v2 .page-desc-content p:last-child { margin-bottom: 0; }
 .page-desc-section.desc-v2 .page-desc-content strong,
-.page-desc-section.desc-v2 .page-desc-content b { color: #3b1603; }
+.page-desc-section.desc-v2 .page-desc-content b { color: var(--brand1, #3b1603); }
 .page-desc-section.desc-v2 .page-desc-content a {
-    color: #b8542b;
+    color: var(--brand2, #b8542b);
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -61,7 +61,7 @@
 .page-desc-section.desc-v2 .page-desc-content ul,
 .page-desc-section.desc-v2 .page-desc-content ol { margin: 0 0 10px; padding-left: 22px; }
 .page-desc-section.desc-v2 .page-desc-content li { margin-bottom: 4px; }
-.page-desc-section.desc-v2 .page-desc-content li::marker { color: #e0701b; }
+.page-desc-section.desc-v2 .page-desc-content li::marker { color: var(--brand2, #e0701b); }
 .page-desc-section.desc-v2 .page-desc-content img {
     max-width: 100%;
     height: auto;

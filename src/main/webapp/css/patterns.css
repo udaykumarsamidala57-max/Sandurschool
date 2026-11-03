@@ -21,7 +21,7 @@ html body .house-grid-section,
 html body .director-welcome-section,
 html body .latest-news-section,
 html body .campus-events-section {
-    background-image: url('../Home/peacock/soft-lattice.svg') !important;
+    background-image: var(--pattern2, url('../Home/peacock/soft-lattice.svg')) !important;
     background-repeat: repeat !important;
     background-size: 36px 36px !important;
     background-position: 0 0 !important;

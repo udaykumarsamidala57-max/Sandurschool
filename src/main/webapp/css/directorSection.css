@@ -3,9 +3,9 @@
    ========================================================= */
 
 :root {
-    --primary-brown:#612405;
-    --accent-orange: #E26A2C;
-    --accent-orange-hover: #D0591B;
+    --primary-brown:var(--brand1, #612405);
+    --accent-orange: var(--brand2, #E26A2C);
+    --accent-orange-hover: var(--brand2, #D0591B);
     --text-body: #4A4A4A;
     --bg-light: #FDFBF7;
 

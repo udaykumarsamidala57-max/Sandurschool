@@ -48,7 +48,7 @@
     top: 310px;
     bottom: -45px;
 
-    background: #e87518;
+    background: var(--brand2, #e87518);
 
     z-index: -1;
     pointer-events: none;
@@ -92,7 +92,7 @@
     line-height: 1.25;
     font-weight: 700;
 
-    color:#612405;
+    color:var(--brand1, #612405);
 
     text-align: left;
 }
@@ -475,7 +475,7 @@
     width: 100%;
     height: 5px;
 
-    background: #e87518;
+    background: var(--brand2, #e87518);
 
     transform: scaleX(0);
 
@@ -572,7 +572,7 @@
 
 
 .distinct-modal-close:hover {
-    color: #e87518;
+    color: var(--brand2, #e87518);
 }
 
 

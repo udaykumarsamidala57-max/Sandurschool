@@ -80,7 +80,11 @@ public final class SiteConfig {
                     p.getProperty(key + ".address", ""),
                     p.getProperty(key + ".tagline", ""),
                     p.getProperty(key + ".logo", "/Home/logo.png"),
-                    folder));
+                    folder,
+                    color(p, key, "color1"),
+                    color(p, key, "color2"),
+                    pattern(p, key, "pattern1"),
+                    pattern(p, key, "pattern2")));
         }
         if (map.isEmpty()) {
             throw new IOException("sites.properties defines no sites");
@@ -105,6 +109,26 @@ public final class SiteConfig {
         byDomain = Collections.unmodifiableMap(domains);
         sites = Collections.unmodifiableMap(map);
         defaultSite = map.containsKey(def) ? map.get(def) : map.values().iterator().next();
+    }
+
+    /** "#RGB" or "#RRGGBB" only (it is written into the page's CSS), or "" when not set. */
+    private static String color(Properties p, String key, String name) throws IOException {
+        String v = p.getProperty(key + "." + name, "").trim();
+        if (v.isEmpty()) return "";
+        if (!v.matches("#[0-9A-Fa-f]{3}|#[0-9A-Fa-f]{6}")) {
+            throw new IOException("Invalid " + name + " for site " + key + " (use #RRGGBB): " + v);
+        }
+        return v;
+    }
+
+    /** Image path inside the web app, e.g. /Home/sanpoly/pattern1.svg, or "" when not set. */
+    private static String pattern(Properties p, String key, String name) throws IOException {
+        String v = p.getProperty(key + "." + name, "").trim();
+        if (v.isEmpty()) return "";
+        if (!v.matches("/[A-Za-z0-9_./-]+\\.(svg|png|jpg|jpeg|webp)") || v.contains("..")) {
+            throw new IOException("Invalid " + name + " for site " + key + " (use a path like /Home/x/pattern.svg): " + v);
+        }
+        return v;
     }
 
     /** Site by URL key, or null. */

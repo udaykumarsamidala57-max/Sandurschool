@@ -48,8 +48,8 @@
     margin: 0;
     padding: clamp(14px, 2vw, 20px) clamp(16px, 2.4vw, 22px);
     background-color: #ffffff;
-    border: 1px solid #f07832;
-    border-bottom: 6px solid #f07832;
+    border: 1px solid var(--brand2, #f07832);
+    border-bottom: 6px solid var(--brand2, #f07832);
     border-radius: 0;
     box-shadow: 0 16px 36px -22px rgba(59, 22, 3, 0.30);
     box-sizing: border-box;
@@ -59,7 +59,7 @@
 .page-desc-section.side-v .page-desc-title {
     margin: 0 0 10px;
     padding: 0;
-    color: #612405;
+    color: var(--brand1, #612405);
     font-weight: 700;
     text-align: left;
 }
@@ -70,7 +70,7 @@
     height: 3px;
     margin-top: 8px;
     border-radius: 2px;
-    background: linear-gradient(90deg, #e0701b, #c99a3c);
+    background: linear-gradient(90deg, var(--brand2, #e0701b), #c99a3c);
 }
 
 /* text */
@@ -88,9 +88,9 @@
 .page-desc-section.side-v .page-desc-content p { margin: 0 0 10px; }
 .page-desc-section.side-v .page-desc-content p:last-child { margin-bottom: 0; }
 .page-desc-section.side-v .page-desc-content strong,
-.page-desc-section.side-v .page-desc-content b { color: #3b1603; }
+.page-desc-section.side-v .page-desc-content b { color: var(--brand1, #3b1603); }
 .page-desc-section.side-v .page-desc-content a {
-    color: #b8542b;
+    color: var(--brand2, #b8542b);
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -98,7 +98,7 @@
 .page-desc-section.side-v .page-desc-content ul,
 .page-desc-section.side-v .page-desc-content ol { margin: 0 0 10px; padding-left: 20px; }
 .page-desc-section.side-v .page-desc-content li { margin-bottom: 4px; }
-.page-desc-section.side-v .page-desc-content li::marker { color: #e0701b; }
+.page-desc-section.side-v .page-desc-content li::marker { color: var(--brand2, #e0701b); }
 
 /* sizes that suit the narrow side column */
 html body .page-desc-section.side-v .page-desc-title {

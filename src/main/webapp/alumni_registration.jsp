@@ -17,9 +17,9 @@
             --ink: #22140b;
             --ink-2: #4b3a2e;
             --muted: #85756a;
-            --brown: #612405;
+            --brown: var(--brand1, #612405);
             --brown-deep: #2e1102;
-            --orange: #e0701b;
+            --orange: var(--brand2, #e0701b);
             --gold: #c99a3c;
             --line: #e7ddd3;
             --line-2: #d4c5b7;

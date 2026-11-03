@@ -30,7 +30,7 @@
     border-bottom: 1px solid #d6d6d6;
 }
 .accordion-item[open] {
-    border-top: 3px solid #4a2a0b;
+    border-top: 3px solid var(--brand1, #4a2a0b);
 }
 
 /* ---------- Header ---------- */
@@ -66,7 +66,7 @@
     line-height: 1.4;
 }
 .accordion-item[open] .accordion-title {
-    color: #4a2a0b;
+    color: var(--brand1, #4a2a0b);
 }
 
 /* plus / minus icon drawn with two bars */
@@ -94,7 +94,7 @@
 }
 .accordion-item[open] .accordion-icon::before,
 .accordion-item[open] .accordion-icon::after {
-    background: #4a2a0b;
+    background: var(--brand1, #4a2a0b);
 }
 .accordion-item[open] .accordion-icon::after {
     transform: rotate(0deg);          /* vertical bar folds flat: + becomes − */
@@ -178,7 +178,7 @@
     border-top: 1px solid #e6dcd2;
 }
 .accordion-attached .accordion-item[open] {
-    border-top: 3px solid #4a2a0b;
+    border-top: 3px solid var(--brand1, #4a2a0b);
 }
 
 /* last attached item closes the card */
